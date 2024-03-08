@@ -1,0 +1,8 @@
+{
+  "name": "FarmaSys",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "f9da2857"
+}
