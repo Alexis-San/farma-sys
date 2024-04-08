@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonIcon, IonItem, IonItemGroup, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from '@ionic/react';
+import { IonApp, IonButton, IonContent, IonHeader, IonIcon, IonItem, IonItemGroup, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import { appsOutline, bagAddOutline, bagCheckOutline, cartOutline, cogOutline, homeOutline, logOutOutline } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router';
@@ -8,6 +8,7 @@ import Inventario from './Inventario';
 import Tab3 from './Venta';
 import Conf from './Conf';
 import Venta from './Venta';
+import { IonSearchbar} from '@ionic/react';
 
 const Menu: React.FC = () => {
     const paths =[
@@ -16,8 +17,14 @@ const Menu: React.FC = () => {
         {name: 'Ventas', URL:'/menu/Venta', icon: cartOutline},
         {name: 'Configuración', URL:'/menu/Conf', icon: cogOutline},
     ]
+    
   return (
+
+
+
   <IonPage>
+ 
+
       <IonSplitPane contentId='main'>
         <IonMenu contentId='main'type='overlay'>
             <IonHeader>

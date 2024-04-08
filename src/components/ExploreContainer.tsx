@@ -1,13 +1,17 @@
+import { ReactNode } from 'react';
 import './ExploreContainer.css';
 
 interface ContainerProps {
-  name: string;
+  contenido: ReactNode
 }
 
-const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
+
+const ExploreContainer: React.FC<ContainerProps> = (parametro ) => {
   return (
     <div className="container">
-      <strong>{name}</strong>
+      {
+        parametro.contenido
+      }
       
     </div>
   );
