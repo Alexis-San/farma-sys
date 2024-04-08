@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab2.css';
 
@@ -7,6 +7,9 @@ const Tab2: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+        <IonButton slot='start'>
+            <IonMenuButton></IonMenuButton>
+          </IonButton>
           <IonTitle>Tab 2</IonTitle>
         </IonToolbar>
       </IonHeader>
