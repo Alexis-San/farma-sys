@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
+import { IonButton, IonCheckbox, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 
 const Login: React.FC = () => {
@@ -12,12 +12,22 @@ const doLogin =() => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login</IonTitle>
+          <IonTitle>Iniciar Sesion</IonTitle>
         </IonToolbar>
       </IonHeader>
+      <form className="block">
+      <IonItem>
+        <IonLabel position="floating">Usuario</IonLabel>
+        <IonInput />
+      </IonItem>
+      <IonItem>
+        <IonLabel position="floating">Contrasenha</IonLabel>
+        <IonInput type="password" />
+      </IonItem>
+      </form>
       <IonContent className='ion-padding'>
-       <IonButton onClick={() => doLogin()} expand='full'>
-        Login
+       <IonButton onClick={() => doLogin()} expand='block'>
+        Iniciar
        </IonButton>
       </IonContent>
     </IonPage>
