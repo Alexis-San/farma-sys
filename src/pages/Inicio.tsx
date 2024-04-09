@@ -5,7 +5,7 @@ import CustomPage from '../components/CustomPage';
 
 const Inicio: React.FC = () => {
   return (
-    <CustomPage titulo='Inicio' contenido={<ExploreContainer name='Inicio'/>}/>
+    <CustomPage titulo='Inicio' contenido={<ExploreContainer/>}/>
   );
 };
 

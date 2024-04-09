@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import './ExploreContainer.css';
 
 interface ContainerProps {
-  contenido: ReactNode
+  contenido?: ReactNode
 }
 
 
