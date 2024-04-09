@@ -4,6 +4,7 @@ import './Tab1.css';
 
 const Tab1: React.FC = () => {
   return (
+    
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -16,7 +17,8 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Tab 1</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <ExploreContainer name="Tab 1 page"algo="sexo" />
+       
       </IonContent>
     </IonPage>
   );
