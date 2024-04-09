@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { ReactNode } from 'react';
 import './ExploreContainer.css';
 
 interface ContainerProps {
-  name: string;
-  algo: string;
+  contenido?: ReactNode
 }
 
-const ExploreContainer: React.FC<ContainerProps> = ({ name, algo }) => {
-  
+
+const ExploreContainer: React.FC<ContainerProps> = (parametro ) => {
   return (
     <div className="container">
-      <strong>{name + algo}</strong>
-      <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      {
+        parametro.contenido
+      }
+      
     </div>
   );
 };
