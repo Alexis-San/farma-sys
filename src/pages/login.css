@@ -1,0 +1,14 @@
+.centrado{
+    text-align: center;
+    width: 200px;
+  }
+
+.prueba{
+  background-color: white;
+}  
+ion-col {
+  background-color: #697c7e;
+  border: solid 1px #fff;
+  color: #fff;
+  text-align: center;
+}
