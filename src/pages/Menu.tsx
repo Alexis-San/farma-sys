@@ -9,6 +9,7 @@ import Tab3 from './Venta';
 import Conf from './Conf';
 import Venta from './Venta';
 import { IonSearchbar} from '@ionic/react';
+import { Icon } from 'ionicons/dist/types/components/icon/icon';
 
 const Menu: React.FC = () => {
     const paths =[
@@ -29,8 +30,8 @@ const Menu: React.FC = () => {
         <IonMenu contentId='main'type='overlay'>
             <IonHeader>
             <IonToolbar>
-                <IonTitle >
-                    Menu
+                <IonTitle  >
+                      PARMA-SYS
                 </IonTitle>
             </IonToolbar>
             </IonHeader>
