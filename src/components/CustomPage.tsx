@@ -6,15 +6,16 @@ import { SearchBar } from './Search';
 interface Parametros {
     titulo: string,
    contenido:ReactNode,
-   searchbar ?: ReactNode
+   searchbar ?: true
+
 
 }
 const CustomPage: React.FC <Parametros> = (parametros) => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonButton slot='start'>
+        <IonToolbar  >
+          <IonButton slot='start' color={'light'} >
             <IonMenuButton></IonMenuButton>
           </IonButton>
           <IonRow>
@@ -22,13 +23,14 @@ const CustomPage: React.FC <Parametros> = (parametros) => {
             <IonTitle > {parametros.titulo} </IonTitle>
             </IonCol>
             <IonCol sizeLg='10' sizeMd='7'>
-            <SearchBar></SearchBar>
+              {(parametros.searchbar)&&(<SearchBar></SearchBar>)
+                }
             </IonCol>
           </IonRow>
        
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen >
+      <IonContent fullscreen  >
         {parametros.contenido}
       </IonContent>
     </IonPage>

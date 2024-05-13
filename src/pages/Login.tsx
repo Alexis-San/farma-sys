@@ -1,9 +1,11 @@
 import { IonButton, IonCheckbox, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './login.css';
 
 const Login: React.FC = () => {
 const navigation = useIonRouter();
+
+const doRegistro =() => {
+  navigation.push('/Registro','forward','replace');
+}
 
 const doLogin =() => {
     navigation.push('/menu','forward','replace');
@@ -13,32 +15,34 @@ const doLogin =() => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle class="centrado">Login</IonTitle>
+          <IonTitle >Login</IonTitle>
         </IonToolbar>
       </IonHeader>
       
       <IonContent >
-      <IonGrid color='white' >
+      <IonGrid  >
         <IonRow>
-          <IonCol class="prueba" >1</IonCol>
-          <IonCol size="4">
-            <br />
+          <IonCol size="4" offset='4'>
+            <IonInput label="Usuario" labelPlacement="floating" fill="outline" placeholder=""></IonInput>
+          </IonCol>
 
-            <br />
-
-            <IonInput label="Usuario" labelPlacement="floating" fill="outline" placeholder="Texto"></IonInput>
-
-            <br />
-
-            <IonInput label="Contraseña" labelPlacement="floating" fill="outline" placeholder="Texto" color="dark"></IonInput>
-
-            <br />
-
-            <IonButton onClick={() => doLogin()} expand='full' color="primary">
+        </IonRow>
+        <IonRow>
+          <IonCol size="4" offset='4' >
+          <IonInput label="Contraseña" labelPlacement="floating" fill="outline" placeholder="" color="dark"></IonInput>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol size='2' offset='4'>
+          <IonButton onClick={() => doLogin()} expand='full' color="primary">
              Ingresar
             </IonButton>
           </IonCol>
-          <IonCol class="prueba" >Holaaaaa</IonCol>
+          <IonCol size='2'>
+          <IonButton onClick={() => doRegistro()} expand='full' color="primary">
+             Registro
+            </IonButton>
+          </IonCol>
         </IonRow>
       </IonGrid>
 
