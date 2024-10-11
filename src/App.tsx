@@ -33,9 +33,9 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Tab4 from './pages/Conf';
 import Login from './pages/Login';
 import Menu from './pages/Menu';
+import Registro from './pages/Registro';
 
 setupIonicReact();
 
@@ -43,7 +43,9 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
      <IonRouterOutlet>
+
       <Route exact path="/" component={Login} />
+      <Route path="/Registro" component={Registro} />
       <Route path="/menu" component={Menu} />
      </IonRouterOutlet> 
     </IonReactRouter>
