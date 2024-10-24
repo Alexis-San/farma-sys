@@ -1,0 +1,81 @@
+.productContainer {
+
+    padding: 1rem;
+    border: 2px solid rgb(231, 231, 231);
+    background-color: rgb(255, 255, 255);
+    // height: 17.5rem;
+    border-radius: 10px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+}
+
+
+.productInfo {
+
+	ion-badge {
+
+		margin-top: 0.6rem;
+	}
+
+	padding-right: 1rem;
+}
+
+.productTitle {
+
+	text-align: left;
+    font-size: 0.75rem;
+    letter-spacing: -0.03rem;
+	
+}
+
+
+.emptyCartContainer {
+    height: 100vh; // Ocupa toda la pantalla para centrar verticalmente
+    display: flex;
+    flex-direction: column; // Coloca los elementos en columna
+    justify-content: center; // Centra verticalmente
+    align-items: center; // Centra horizontalmente
+    background-color: #ffffff; // Color de fondo opcional para mayor visibilidad
+}
+
+.emptyCartText {
+    font-size: 1rem; // Tamaño de fuente del texto
+    color: #666; // Color del texto
+    margin-top: 1rem; // Espaciado superior para separar los elementos
+    text-align: center; // Centra el texto
+    line-height: 1.5; // Espaciado entre líneas
+}
+
+.cartImage {
+    margin-top: 50px;
+    width: 200px; // Tamaño de la imagen
+    height: 200px;
+    margin-bottom: 1rem; // Separación entre imagen y texto
+}
+
+.bottom {
+    width: 20%;
+    margin-top: 10px; // Ajusta el espaciado superior
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+}
+
+.contenedortcarrito {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fbfbfb; 
+    font-weight: bold;
+}
+
+//ion-col { *para ver las columnas con color
+    //background-color: #135d54;
+    //border: solid 1px #fff;
+    //color: #fff;
+    //text-align: center;
+  //}

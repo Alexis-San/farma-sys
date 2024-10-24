@@ -11,7 +11,7 @@ const RegistroView: React.FC <RegistroProps>= (props) => {
 
     return (
     
-        <  >
+        < >
        
         <IonRow>
           <IonCol size="4" offset='4'>

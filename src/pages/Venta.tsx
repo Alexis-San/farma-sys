@@ -5,7 +5,7 @@ import CustomPage from '../components/CustomPage';
 
 const Venta: React.FC = () => {
   return (
-     <CustomPage titulo='Ventas' contenido={<ExploreContainer/>} searchbar/>
+     <CustomPage titulo='Ventas' contenido={<ExploreContainer/>} searchbar cartItemCount=''/>
   );
 };
 

@@ -6,7 +6,7 @@ import ConfContent from '../components/ConfContent';
 
 const Conf: React.FC = () => {
     return (
-      <CustomPage titulo='Configuración' contenido={<ConfContent/>} />
+      <CustomPage titulo='Configuración' contenido={<ConfContent/>} cartItemCount='0' />
     );
 
     

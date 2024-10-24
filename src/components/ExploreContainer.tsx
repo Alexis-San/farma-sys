@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import './ExploreContainer.css';
+import '../theme/ExploreContainer.css';
 
 interface ContainerProps {
   contenido?: ReactNode

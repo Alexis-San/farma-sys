@@ -1,33 +1,37 @@
 import { IonButton, IonCol, IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import ExploreContainer from './ExploreContainer';
 import { Children, ReactNode } from 'react';
+import { IonButtons, IonIcon, IonBadge } from '@ionic/react';
+import { heartOutline, cartOutline, logInOutline } from 'ionicons/icons';
 import { SearchBar } from './Search';
+import "../theme/ExploreContainer.css"
 
 interface Parametros {
-    titulo: string,
-   contenido:ReactNode,
-   searchbar ?: true
-
+  titulo: string,
+  contenido: ReactNode,
+  searchbar?: boolean;
+  cartItemCount: string;
 
 }
-const CustomPage: React.FC <Parametros> = (parametros) => {
+const CustomPage: React.FC<Parametros> = (parametros) => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar  >
-          <IonButton slot='start' color={'light'} >
-            <IonMenuButton></IonMenuButton>
-          </IonButton>
+        <IonToolbar  > {/* Envuelve el IonMenuButton en IonButtons */}
+              <IonMenuButton slot='start' autoHide={false} className='boton-a'/>
           <IonRow>
-            <IonCol sizeLg='2' sizeMd='5' >
-            <IonTitle > {parametros.titulo} </IonTitle>
+            <IonCol sizeLg='2' sizeMd='5' className='container-inicio'>
+              <IonTitle className='container-inicio'> {parametros.titulo} </IonTitle>
             </IonCol>
             <IonCol sizeLg='10' sizeMd='7'>
-              {(parametros.searchbar)&&(<SearchBar></SearchBar>)
-                }
+              {(parametros.searchbar) && (<SearchBar></SearchBar>)
+              }
             </IonCol>
           </IonRow>
-       
+          <IonButton slot='end' color={'light'} routerLink='/menu/carrito' className='Boton'>
+            <IonIcon icon={cartOutline} />
+            <IonBadge>{parametros.cartItemCount}</IonBadge>
+          </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen  >
