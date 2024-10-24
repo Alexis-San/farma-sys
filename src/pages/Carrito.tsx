@@ -45,7 +45,7 @@ const Carrito: React.FC = () => {
           <img src="../public/Carrito.png" alt="no cart" className={styles.cartImage} />
           <h2>Espera aqui</h2>
           <p>Tu Carrito está vacío</p>
-          <IonButton color="secondary" shape="round" className={styles.bottom} routerLink="/menu/Inicio">
+          <IonButton color="primary" shape="round" className={styles.bottom} routerLink="/menu/Inicio">
             Vender &rarr;
           </IonButton>
         </div>

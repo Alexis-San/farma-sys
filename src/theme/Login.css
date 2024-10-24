@@ -35,7 +35,7 @@
 }
 
 :root{
-  --ion-color-primary: #29b1e3;
+  --ion-color-primary: #000000;
 }
 
 .custom-image {
@@ -57,6 +57,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  color: black;
 }
 
 .password-input {
@@ -77,4 +78,11 @@
 .ion-input {
   width: 100%;
   box-sizing: border-box;
+  color: black;
+}
+
+.ion-button {
+  --ion-color-primary: #09204846;
+  color: rgb(0, 4, 7);
+  padding-right: 0;
 }

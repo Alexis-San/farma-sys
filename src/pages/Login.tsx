@@ -61,8 +61,7 @@ const Login: React.FC = () => {
       <IonButton 
         fill="clear" 
         className="password-toggle-button" 
-        onClick={() => setShowPassword(!showPassword)}
-      >
+        onClick={() => setShowPassword(!showPassword)} >
         <IonIcon icon={showPassword ? eyeOff : eye} />
       </IonButton>
     </div>
@@ -72,12 +71,12 @@ const Login: React.FC = () => {
 
           <IonRow>
             <IonCol size='2' offset='4'>
-              <IonButton onClick={() => doLogin()} expand='full' >
+              <IonButton onClick={() => doLogin()} expand='full' className='ion-button' >
                 Ingresar
               </IonButton>
             </IonCol>
             <IonCol size='2'>
-              <IonButton onClick={() => doRegistro()} expand='full'>
+              <IonButton onClick={() => doRegistro()} expand='full' className='ion-button'>
                 Registro
               </IonButton>
             </IonCol>

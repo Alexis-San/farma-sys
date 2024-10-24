@@ -28,8 +28,8 @@ const CustomPage: React.FC<Parametros> = (parametros) => {
               }
             </IonCol>
           </IonRow>
-          <IonButton slot='end' color={'light'} routerLink='/menu/carrito' className='Boton'>
-            <IonIcon icon={cartOutline} />
+          <IonButton slot='end' routerLink='/menu/carrito' className='Boton'>
+            <IonIcon icon={cartOutline} className='boton' />
             <IonBadge>{parametros.cartItemCount}</IonBadge>
           </IonButton>
         </IonToolbar>

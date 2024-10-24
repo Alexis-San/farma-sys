@@ -1,7 +1,7 @@
 import {  IonButton, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from '@ionic/react';
 import { appsOutline, bagAddOutline, cartOutline, cogOutline, logOutOutline, personOutline, barChartOutline } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router';
-
+import "../theme/ExploreContainer.css"
 import Inicio from './Inicio';
 import Inventario from './Inventario';
 import Conf from './Conf';
@@ -45,7 +45,7 @@ const Menu: React.FC = () => {
                         </IonItem>
                     </IonMenuToggle>
                 ))}
-                <IonButton routerLink="/" routerDirection="back" expand="full">
+                <IonButton routerLink="/" routerDirection="back" expand="full" className='ion-button'>
                     <IonIcon icon={logOutOutline} slot='start'></IonIcon>
                     Logout
                 </IonButton>
