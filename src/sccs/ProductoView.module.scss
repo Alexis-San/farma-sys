@@ -1,0 +1,32 @@
+.productoCard {
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    
+    &:hover {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .productoImg {
+    height: 150px;
+    object-fit: contain;
+    padding: 1rem;
+  }
+  
+  .productoContent {
+    text-align: center;
+  }
+  
+  .oferta {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: red;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+  }
+  
+  

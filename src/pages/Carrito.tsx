@@ -76,7 +76,7 @@ const Carrito: React.FC = () => {
             <IonRow>
               <IonCol size="12">
                 <IonButton color="primary" expand="block">
-                  Checkout (£{amount})
+                  Cobrar (${amount})
                 </IonButton>
               </IonCol>
             </IonRow>

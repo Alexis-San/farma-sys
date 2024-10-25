@@ -1,8 +1,8 @@
 .productContainer {
 
     padding: 1rem;
-    border: 2px solid rgb(231, 231, 231);
-    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(250, 11, 11);
+    background-color: rgb(214, 15, 15);
     // height: 17.5rem;
     border-radius: 10px;
 
@@ -25,7 +25,7 @@
 }
 
 .productTitle {
-
+    color: #04256e;
 	text-align: left;
     font-size: 0.75rem;
     letter-spacing: -0.03rem;
@@ -70,7 +70,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fbfbfb; 
+    color: #ffffff; 
     font-weight: bold;
 }
 
