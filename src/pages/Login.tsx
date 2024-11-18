@@ -28,54 +28,57 @@ const Login: React.FC = () => {
 
       <IonContent >
         <IonGrid  >
-
-          <IonImg
-            src="../public/Presentacion.png"
-            alt="The Wisconsin State Capitol building in Madison, WI at night"
-            className='custom-image'></IonImg>
+          <IonRow>
+            <IonCol sizeXs="12" sizeSm="8" sizeMd="6" sizeLg="4" offsetSm="2" offsetMd="3" offsetLg="4">
+              <IonImg
+                src="../public/Farmapueblo.png"
+                alt="The Wisconsin State Capitol building in Madison, WI at night"
+                className='custom-image'>
+              </IonImg>
+            </IonCol>
+          </IonRow>
 
           <IonRow>
-  <IonCol size="4" offset="4">
-    <IonInput 
-      label="Usuario" 
-      labelPlacement="floating" 
-      fill="outline" 
-      placeholder=""
-      className="ion-input"
-    />
-  </IonCol>
-</IonRow>
+            <IonCol sizeXs="12" sizeSm="8" sizeMd="6" sizeLg="4" offsetSm="2" offsetMd="3" offsetLg="4">
+              <IonInput
+                label="Usuario"
+                labelPlacement="floating"
+                fill="outline"
+                placeholder=""
+                className="ion-input"
+              />
+            </IonCol>
+          </IonRow>
 
-<IonRow>
-  <IonCol size="4" offset="4">
-    <div className="password-item">
-      <IonInput
-        type={showPassword ? 'text' : 'password'}
-        label="Contraseña"
-        labelPlacement="floating"
-        fill="outline"
-        placeholder=""
-        color="dark"
-        className="password-input"
-      />
-      <IonButton 
-        fill="clear" 
-        className="password-toggle-button" 
-        onClick={() => setShowPassword(!showPassword)} >
-        <IonIcon icon={showPassword ? eyeOff : eye} />
-      </IonButton>
-    </div>
-  </IonCol>
-</IonRow>
+          <IonRow>
+            <IonCol sizeXs="12" sizeSm="8" sizeMd="6" sizeLg="4" offsetSm="2" offsetMd="3" offsetLg="4">
+              <div className="password-item">
+                <IonInput
+                  type={showPassword ? 'text' : 'password'}
+                  label="Contraseña"
+                  labelPlacement="floating"
+                  fill="outline"
+                  placeholder=""
+                  className="password-input"
+                />
+                <IonButton
+                  fill="clear"
+                  className="password-toggle-button"
+                  onClick={() => setShowPassword(!showPassword)}>
+                  <IonIcon icon={showPassword ? eyeOff : eye} />
+                </IonButton>
+              </div>
+            </IonCol>
+          </IonRow>
 
 
           <IonRow>
-            <IonCol size='2' offset='4'>
+            <IonCol sizeXs="12" sizeSm="6" offsetSm="3" sizeMd="4" offsetMd="4">
               <IonButton onClick={() => doLogin()} expand='full' className='ion-button' >
                 Ingresar
               </IonButton>
             </IonCol>
-            <IonCol size='2'>
+            <IonCol sizeXs="12" sizeSm="6" offsetSm="3" sizeMd="4" offsetMd="4">
               <IonButton onClick={() => doRegistro()} expand='full' className='ion-button'>
                 Registro
               </IonButton>

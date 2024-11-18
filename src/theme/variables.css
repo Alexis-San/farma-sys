@@ -485,7 +485,7 @@ http://ionicframework.com/docs/theming/ */
 }
 
 :root {
-
+  --primary-text-color: #04256e;
   --ion-background-color: #ffffff;
   --ion-text-color: #04256e;
   --ion-tab-bar-background: #04256e;

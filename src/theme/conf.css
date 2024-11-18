@@ -31,7 +31,12 @@ ion-avatar {
 .modificar-button {
     margin-top: 20px; /* Espacio adicional antes del botón */
     margin: left 0;
+    color: aqua;
+    --ion-color-primary: #04256e;
 }
+
+
+
 ion-col {
     text-align: center;
   }
@@ -62,4 +67,13 @@ ion-avatar {
     justify-content: center;
     align-items: center;
     color: #04256e;
+}
+
+ion-input {
+    --color: black; /* Cambia el color del texto */
+    --placeholder-color: grey; /* Cambia el color del texto del placeholder si es necesario */
+  }
+  
+.letras{
+    color: rgb(0, 0, 0);
 }

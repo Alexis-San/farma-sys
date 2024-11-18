@@ -10,6 +10,7 @@ interface Producto {
   imagen: string;
   descuento?: number;
   oferta?: boolean;
+  cantidad: number;
 }
 
 interface ProdViewProps {
@@ -25,6 +26,7 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
       title: producto.nombre,
       price: producto.precio,
       image: producto.imagen,
+      quantity: producto.cantidad || 1
     };
     addToCart(productToAdd); // Agrega el producto al carrito
   };

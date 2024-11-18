@@ -6,6 +6,7 @@ interface Product {
     title: string;
     price: number;
     image: string;
+    quantity: number;
 }
 
 // Definimos el tipo del estado del carrito

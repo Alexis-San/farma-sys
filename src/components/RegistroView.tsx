@@ -1,6 +1,7 @@
 import { IonButton, IonCol, IonGrid, IonInput, IonRow, useIonRouter } from "@ionic/react";
 import CustomModal from "./CustomModal";
 import React, { ReactNode } from "react";
+import "../theme/conf.css";
 
 interface RegistroProps {
     registroAction?: void,
@@ -15,19 +16,19 @@ const RegistroView: React.FC <RegistroProps>= (props) => {
        
         <IonRow>
           <IonCol size="4" offset='4'>
-            <IonInput label="Usuario" labelPlacement="floating" fill="outline" placeholder="" disabled={props.noEditable}></IonInput><br />
+            <IonInput label="Usuario" labelPlacement="floating" fill="outline" placeholder="" disabled={props.noEditable} className="letras"></IonInput><br />
           </IonCol>
         </IonRow>
 
         <IonRow>
           <IonCol size="4" offset='4'>
-            <IonInput label="Gmail" labelPlacement="floating" fill="outline" placeholder=""  disabled={props.noEditable}></IonInput><br/>
+            <IonInput label="Gmail" labelPlacement="floating" fill="outline" placeholder=""  disabled={props.noEditable} className="letras"></IonInput><br/>
           </IonCol>
         </IonRow>
 
         <IonRow>
           <IonCol size="4" offset='4'>
-            <IonInput label="Telefono" labelPlacement="floating" fill="outline" placeholder="" disabled={props.noEditable}></IonInput><br />
+            <IonInput label="Telefono" labelPlacement="floating" fill="outline" placeholder="" disabled={props.noEditable} className="letras"></IonInput><br />
           </IonCol>
         </IonRow>
        
@@ -38,18 +39,18 @@ const RegistroView: React.FC <RegistroProps>= (props) => {
             <>
              <IonRow>
           <IonCol size="4" offset='4'>
-            <IonInput label="Contraseña" labelPlacement="floating" fill="outline" placeholder="" ></IonInput><br />
+            <IonInput label="Contraseña" labelPlacement="floating" fill="outline" placeholder="" className="letras"></IonInput><br />
           </IonCol>
         </IonRow>
         <IonRow>
           <IonCol size="4" offset='4'>
-            <IonInput label="Confirmar Contraseña" labelPlacement="floating" fill="outline" placeholder="" ></IonInput><br />
+            <IonInput label="Confirmar Contraseña" labelPlacement="floating" fill="outline" placeholder="" className="letras"></IonInput><br />
           </IonCol>
         </IonRow>
            
             <IonRow>
             <IonCol size='2' offset='5'>
-            <IonButton id="RegistroButton" onClick={()=>props.registroAction} expand='full' color="primary">
+            <IonButton id="RegistroButton" onClick={()=>props.registroAction} expand='full'className="modificar-button">
                Aceptar
               </IonButton>
             </IonCol>
