@@ -21,6 +21,7 @@
     "@ionic/react-router": "^7.0.0",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
+    "chart.js": "^4.4.6",
     "ionicons": "^7.0.0",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
@@ -29,7 +30,8 @@
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "reselect": "^5.1.1"
+    "reselect": "^5.1.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@capacitor/cli": "5.7.2",
@@ -37,6 +39,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/chart.js": "^2.9.41",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-legacy": "^5.0.0",

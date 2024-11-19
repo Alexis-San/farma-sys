@@ -88,8 +88,8 @@ const Carrito: React.FC = () => {
                 <IonCardContent>
                   <h2>Mi lista de productos</h2>
                   {cart.length > 0 ? (
-                    cart.map((product, index) => (
-                      <IonRow key={index} className={styles.productRow}>
+                    cart.map((product) => (
+                      <IonRow key={product.id} className={styles.productRow}>
                         <IonCol size="4" sizeSm="3" className={styles.imageCol}>
                           <img
                             src={product.image}
@@ -130,6 +130,7 @@ const Carrito: React.FC = () => {
                         </IonCol>
                       </IonRow>
                     ))
+                    
                   ) : (
                     <div>
                       <img
@@ -138,7 +139,7 @@ const Carrito: React.FC = () => {
                         className={styles.cartImage}
                       />
                       <p>Tu carrito está vacío</p>
-                      <IonButton>Ver Productos</IonButton>
+                      <IonButton expand="block" fill="outline" routerLink="/menu/Inicio" >Ver Productos</IonButton>
                     </div>
                   )}
                 </IonCardContent>
@@ -177,7 +178,8 @@ const Carrito: React.FC = () => {
                     Comprar Ya
                   </IonButton>
 
-                  <PDFGenerator cart={cart} />
+                  <PDFGenerator cart={cart} customerName={customerName} />
+
 
                   <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
                     Agregar más productos

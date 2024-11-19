@@ -1,0 +1,46 @@
+.header-row {
+    background-color: #3b82f6; /* Azul */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .data-row {
+    text-align: center;
+  }
+  
+  .data-row.even {
+    background-color: #f1f5f9; /* Gris claro */
+  }
+  
+  .data-row.odd {
+    background-color: #ffffff; /* Blanco */
+  }
+  
+  .data-row:hover {
+    background-color: #dbeafe; /* Azul claro */
+    cursor: pointer;
+  }
+  
+  .data-row, .header-row {
+    color: black; /* Color del texto negro */
+    -webkit-text-stroke: 0.5px white; /* Contorno blanco */
+  }
+  
+  strong {
+    font-size: 1.1em;
+  }
+  
+  .letrita{
+    color: black;
+  }
+
+  .grafica-ventas{
+    max-width: 65%; /* Ajusta el ancho máximo */
+    max-height: 300px; /* Limita la altura */
+    margin: 0 auto; /* Centra el gráfico */
+    display: block;
+  }
+
+  
