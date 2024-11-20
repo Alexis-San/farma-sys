@@ -1,46 +1,77 @@
+/* Mantengo los estilos base y añado mejoras */
+
+/* Header de la tabla */
 .header-row {
-    background-color: #3b82f6; /* Azul */
-    color: white;
+    background-color: #04256e; /* Azul más oscuro */
+    color: #ffffff; /* Letras blancas */
     font-weight: bold;
     text-align: center;
     padding: 10px 0;
+    border-radius: 8px; /* Bordes redondeados */
   }
   
+  /* Filas de datos */
   .data-row {
     text-align: center;
+    color: #000000; /* Texto más oscuro */
+    transition: background-color 0.3s ease; /* Transición suave */
   }
   
   .data-row.even {
-    background-color: #f1f5f9; /* Gris claro */
+    background-color: #e2e8f0; /* Gris claro */
   }
   
   .data-row.odd {
-    background-color: #ffffff; /* Blanco */
+    background-color: #f8fafc; /* Blanco más claro */
   }
   
   .data-row:hover {
     background-color: #dbeafe; /* Azul claro */
+    color: #1e40af; /* Azul oscuro para resaltar */
+    font-weight: bold;
     cursor: pointer;
   }
   
-  .data-row, .header-row {
-    color: black; /* Color del texto negro */
-    -webkit-text-stroke: 0.5px white; /* Contorno blanco */
+  /* Contorno para header y data */
+  .data-row,
+  .header-row {
+    -webkit-text-stroke: 0.5px white;
   }
   
+  /* Resaltado de títulos */
   strong {
-    font-size: 1.1em;
+    font-size: 1.2em;
+  }
+  
+  /* Ajustes para dispositivos móviles */
+  .ion-grid {
+    overflow-x: auto; /* Desplazamiento horizontal si es necesario */
+  }
+  
+
+  
+  /* Separación entre tablas */
+  .table-container {
+    margin-bottom: 30px;
   }
   
   .letrita{
-    color: black;
+    color: #000000;
+    font-weight: bold;
+    font-size: 1em;
   }
 
-  .grafica-ventas{
-    max-width: 65%; /* Ajusta el ancho máximo */
-    max-height: 300px; /* Limita la altura */
-    margin: 0 auto; /* Centra el gráfico */
-    display: block;
+  .chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
   }
-
+  
+  .chart-wrapper {
+    width: 100%; /* Ajusta al 100% del contenedor padre */
+    max-width: 600px; /* Tamaño máximo para evitar que crezca demasiado */
+    height: 400px; /* Altura fija para las gráficas */
+    position: relative; /* Requerido para la responsividad de Chart.js */
+  }
   

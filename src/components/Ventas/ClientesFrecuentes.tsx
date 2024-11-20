@@ -9,22 +9,24 @@ const ClientesFrecuentes: React.FC = () => {
   ];
 
   return (
-    <IonGrid>
-      {/* Header de la tabla */}
-      <IonRow className="header-row">
-        <IonCol size="4"><strong>Nombre</strong></IonCol>
-        <IonCol size="4"><strong>Compras</strong></IonCol>
-        <IonCol size="4"><strong>Total Gastado</strong></IonCol>
-      </IonRow>
-      {/* Contenido de la tabla */}
-      {customers.map((customer, index) => (
-        <IonRow key={customer.id} className={`data-row ${index % 2 === 0 ? "even" : "odd"}`}>
-          <IonCol size="4" className="letrita">{customer.name}</IonCol>
-          <IonCol size="4" className="letrita">{customer.totalPurchases}</IonCol>
-          <IonCol size="4" className="letrita">{`₡${customer.totalSpent.toFixed(2)}`}</IonCol>
+    <div className="table-container">
+      <IonGrid>
+        {/* Header de la tabla */}
+        <IonRow className="header-row">
+          <IonCol size="4"><strong>Nombre</strong></IonCol>
+          <IonCol size="4"><strong>Compras</strong></IonCol>
+          <IonCol size="4"><strong>Total Gastado</strong></IonCol>
         </IonRow>
-      ))}
-    </IonGrid>
+        {/* Contenido de la tabla */}
+        {customers.map((customer, index) => (
+          <IonRow key={customer.id} className={`data-row ${index % 2 === 0 ? "even" : "odd"}`}>
+            <IonCol size="4" className="letrita">{customer.name}</IonCol>
+            <IonCol size="4" className="letrita">{customer.totalPurchases}</IonCol>
+            <IonCol size="4" className="letrita">{`₡${customer.totalSpent.toFixed(2)}`}</IonCol>
+          </IonRow>
+        ))}
+      </IonGrid>
+    </div>
   );
 };
 
