@@ -13,7 +13,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { cartOutline, diamondOutline, ellipse, heartHalfOutline, idCardOutline, medkitOutline, square, triangle, } from 'ionicons/icons';
 import Tab1 from './pages/Inicio';
 import Tab2 from './pages/Inventario';
-import Tab3 from './pages/Venta';
+import Tab3 from './pages/Ventas';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

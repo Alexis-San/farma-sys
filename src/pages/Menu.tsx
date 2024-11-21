@@ -5,7 +5,7 @@ import "../theme/ExploreContainer.css"
 import Inicio from './Inicio';
 import Inventario from './Inventario';
 import Conf from './Conf';
-import Venta from './Venta';
+import Venta from './Ventas';
 import Funcionarios from './Funcionarios';
 import Carrito from './Carrito';
 
@@ -31,7 +31,7 @@ const Menu: React.FC = () => {
             <IonHeader>
             <IonToolbar>
                 <IonTitle className='container-inicio' >
-                      FARMASYS
+                      FARMA PUEBLO
                 </IonTitle>
             </IonToolbar>
             </IonHeader>
