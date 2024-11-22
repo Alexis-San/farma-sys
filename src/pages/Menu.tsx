@@ -1,5 +1,5 @@
 import {  IonButton, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from '@ionic/react';
-import { appsOutline, bagAddOutline, cartOutline, cogOutline, logOutOutline, personOutline, barChartOutline } from 'ionicons/icons';
+import { appsOutline, bagAddOutline, cartOutline, fileTrayFullOutline, cogOutline, logOutOutline, personOutline, barChartOutline } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router';
 import "../theme/ExploreContainer.css"
 import Inicio from './Inicio';
@@ -8,13 +8,16 @@ import Conf from './Conf';
 import Venta from './Ventas';
 import Funcionarios from './Funcionarios';
 import Carrito from './Carrito';
+import Productos from './Productos';
 
 const Menu: React.FC = () => {
+    //  Para la vista del Menu
     const paths =[
         { name: 'Inicio', URL:'/menu/Inicio', icon: appsOutline},        
         {name: 'Funcionarios', URL:'/menu/Funcionarios', icon: personOutline},
         {name: 'Inventario', URL:'/menu/Inventario', icon: bagAddOutline},
         {name: 'Ventas', URL:'/menu/Venta', icon: barChartOutline}, 
+        {name: 'Productos', URL:'/menu/Productos', icon: fileTrayFullOutline}, 
         {name: 'Configuración', URL:'/menu/Conf', icon: cogOutline},
       
     ]
@@ -57,6 +60,7 @@ const Menu: React.FC = () => {
             <Route exact path="/menu/Venta" component={Venta}/>
             <Route exact path="/menu/Funcionarios" component={Funcionarios}/>
             <Route exact path="/menu/Conf" component={Conf}/>
+            <Route exact path="/menu/Productos" component={Productos}/>
             <Route exact path="/menu/Carrito" component={Carrito}/>
             <Route exact path="/menu"> 
                 <Redirect to="/menu/Inicio" />
