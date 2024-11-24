@@ -10,47 +10,64 @@ interface PDFGeneratorProps {
     quantity: number;
   }>;
   customerName: string;
+  CI: string; //para traer numero de cedula
 }
 
-const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName }) => {
+const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName, CI }) => {
   const generatePDF = () => {
-    // Crear una instancia de jsPDF
     const doc = new jsPDF({
       orientation: "portrait",
       unit: "mm",
-      format: [80, 200],
+      format: [80, 200], // Formato ticket
     });
 
-    // Cargar la imagen como base64 desde /public
-    const imgPath = "/Farmapueblo.png";  // Ruta relativa directa
+    const imgPath = "/Farmapueblo.png";
     const image = new Image();
     image.src = imgPath;
 
     image.onload = () => {
-      // Agregar la imagen al PDF después de cargarla
-      doc.addImage(image, "PNG", 25, 5, 30, 20); // Ajusta las coordenadas según sea necesario
+      // Logo
+      doc.addImage(image, "PNG", 25, 5, 30, 20);
 
-      // Encabezado de texto
-      doc.setFontSize(12);
-      doc.text("Farma Pueblo", 5, 30);
+      // Encabezado
+      doc.setFontSize(14);
+      doc.text("***Uso interno***", 22, 27);
       doc.setFontSize(10);
       doc.text("Tel.: +595 982 126400", 5, 35);
       doc.text(`Cliente: ${customerName}`, 5, 40);
+      doc.text(`CI/RUC: ${CI}`, 5, 44);
+
+      // Línea divisoria
+      doc.line(5, 46, 75, 46);
+
+      // Tabla encabezado
+      doc.setFontSize(10);
+      doc.text("Cant", 5, 50);
+      doc.text("Artículo", 15, 50);
+      doc.text("Subtotal", 50, 50);
+      doc.line(5, 52, 75, 52); // Línea bajo el encabezado
 
       // Productos
-      let y = 50; // Margen inicial vertical después del encabezado
-      cart.forEach((product, index) => {
-        const productLine = `${index + 1}. ${product.title} - ${product.quantity} x $${product.price.toFixed(2)}`;
-        doc.text(doc.splitTextToSize(productLine, 70), 5, y);
-        y += 10; // Incrementar posición para evitar solapamiento
+      let y = 57; // Posición inicial para productos
+      cart.forEach((product) => {
+        const subtotal = product.price * product.quantity;
+        doc.setFontSize(8);
+        doc.text(`${product.quantity}`, 5, y);
+        doc.text(doc.splitTextToSize(product.title, 30), 15, y);
+        doc.text(`${subtotal.toFixed(2)}`, 65, y, { align: "right" });
+        y += 9;
       });
+
+      // Línea divisoria antes del total
+      doc.line(5, y+=2, 75, y);
 
       // Total
       const total = cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
+      y += 8;
       doc.setFontSize(12);
-      doc.text(`Total: $${total.toFixed(2)}`, 5, y + 10);
+      doc.text(`Total: $${total.toFixed(2)}`, 5, y);
 
-      // Descargar PDF
+      // Guardar PDF
       doc.save("Recibo.pdf");
     };
 
@@ -67,4 +84,3 @@ const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName }) => {
 };
 
 export default PDFGenerator;
-

@@ -1,0 +1,66 @@
+.card-grid {
+    margin-top: 45px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .clickable-card {
+    margin-top: 10px;
+    height: 150px; /* Asegúrate de que las tarjetas sean visibles */
+    cursor: pointer;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .clickable-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    height: 100%;
+    color: white; /* Resalta el texto sobre los colores */
+  }
+  
+
+  /*CAM*/
+  .card-red {
+    background-color: #f72f02;
+  }
+  
+  .card-yellow {
+    background-color: #006205;
+  }
+  
+  .card-green {
+    background-color: #041350;
+  }
+  
+  .card-blue {
+    background-color: #fbe202; /*INVETARIO*/
+  }
+  
+  .card-purple {
+    background-color: #E74C3C; /*LABORATORIOS*/
+  }
+  
+  .card-teal {
+    background-color: #28B463; /*PRODUCTOS*/
+  }
+  
+  .card-light-red {
+    background-color: #045f7a; /*PROVEEDORES*/
+  }
+  
+  .card-orange {
+    background-color: #e6ff01; /*USUARIOS*/
+  }
+  
