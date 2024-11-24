@@ -1,6 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
+  IonButton,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
@@ -9,11 +10,6 @@ import {
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { cartOutline, diamondOutline, ellipse, heartHalfOutline, idCardOutline, medkitOutline, square, triangle, } from 'ionicons/icons';
-import Tab1 from './pages/Inicio';
-import Tab2 from './pages/Inventario';
-import Tab3 from './pages/Ventas';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,22 +29,12 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Login from './pages/Login';
-import Menu from './pages/Menu';
-import Registro from './pages/Registro';
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-     <IonRouterOutlet>
-
-      <Route exact path="/" component={Login} />
-      <Route path="/Registro" component={Registro} />
-      <Route path="/menu" component={Menu} />
-     </IonRouterOutlet> 
-    </IonReactRouter>
+    
   </IonApp>
 );
 
