@@ -31,7 +31,7 @@ const Inventario: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <CustomPage titulo='Productos' searchbar />
+        <CustomPage titulo='Productos' searchbar contenido={undefined} cartItemCount={''} />
       </IonHeader>
 
       <IonContent className="ion-padding">
