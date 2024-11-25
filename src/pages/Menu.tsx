@@ -25,7 +25,7 @@ import Inventario from './Inventario';
 
 import Productos from './Productos';
 import Venta from './Ventas';
-
+import menu from './Menu.css';
 
 const Menu: React.FC = () => {
     const catalogo = [
@@ -59,9 +59,8 @@ const Menu: React.FC = () => {
                             </IonItem>
                         </IonMenuToggle>
 
-                        {/* Transacciones */}
                         <IonAccordionGroup>
-                            <IonAccordion value="transacciones">
+                                        <IonAccordion value="transacciones">
                                 <IonItem slot="header">
                                     <IonIcon icon={cartOutline} slot="start" />
                                     <IonLabel>Transacciones</IonLabel>
@@ -69,7 +68,8 @@ const Menu: React.FC = () => {
                                 <div slot="content">
                                     {transacciones.map((item, index) => (
                                         <IonMenuToggle key={index}>
-                                            <IonItem routerLink={item.URL} routerDirection="none">
+                                            {/* Aplicando sangría a cada item dentro del acordeón */}
+                                            <IonItem style={{ paddingLeft: '20px' }} routerLink={item.URL} routerDirection="none">
                                                 <IonIcon icon={item.icon} slot="start" />
                                                 {item.name}
                                             </IonItem>
@@ -78,7 +78,6 @@ const Menu: React.FC = () => {
                                 </div>
                             </IonAccordion>
 
-                            {/* Catálogo */}
                             <IonAccordion value="catalogo">
                                 <IonItem slot="header">
                                     <IonIcon icon={fileTrayFullOutline} slot="start" />
@@ -87,7 +86,8 @@ const Menu: React.FC = () => {
                                 <div slot="content">
                                     {catalogo.map((item, index) => (
                                         <IonMenuToggle key={index}>
-                                            <IonItem routerLink={item.URL} routerDirection="none">
+                                            {/* Aplicando sangría a cada item dentro del acordeón */}
+                                            <IonItem style={{ paddingLeft: '20px' }} routerLink={item.URL} routerDirection="none">
                                                 <IonIcon icon={item.icon} slot="start" />
                                                 {item.name}
                                             </IonItem>
@@ -96,6 +96,7 @@ const Menu: React.FC = () => {
                                 </div>
                             </IonAccordion>
                         </IonAccordionGroup>
+
 
                         {/* Clientes */}
                         <IonMenuToggle>

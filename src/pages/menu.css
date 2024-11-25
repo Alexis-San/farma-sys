@@ -1,0 +1,4 @@
+/* Añadir sangría a los ítems dentro del acordeón */
+.accordion-item {
+    padding-left: 20px; /* Puedes ajustar este valor para cambiar la cantidad de sangría */
+}
