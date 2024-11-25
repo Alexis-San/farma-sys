@@ -1,78 +1,118 @@
-import { IonActionSheet, IonButton, IonCol, IonGrid, IonIcon, IonRow, IonText } from "@ionic/react";
+import {
+  IonButton,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonRow,
+  IonText,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+} from "@ionic/react";
 import { InventarioType } from "../types/InventarioType";
-import './InventarioList.css'
+import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
-import { createOutline } from "ionicons/icons";
 
 interface InventarioListProps {
-    data: InventarioType []
-  }
-  
-  
-  const InventarioList : React.FC<InventarioListProps> = (props ) => {
-   const [ocultar,setOcultar]=useState(false) 
-    return (
+  data: InventarioType[];
+}
 
-    <IonGrid className="tabla">
-        <IonActionSheet
-        isOpen={ocultar}
-        header="Actions"
-        buttons={[
-          {
-            text: 'Agregar',
-            
-            data: {
-              action: 'Agregar',
-            },
-          },
-          {
-            text: 'Modificar',
-            data: {
-              action: 'Modificar',
-            },
-          },
-          {
-            text: 'Eliminar',
-            data: {
-              action: 'Eliminar',
-            },
-          },
-          {
-            text: 'Cancelar',
-            data: {
-              action: 'Cancelar',
-            },
-          },
-        ]}
-      ></IonActionSheet>
-        <IonRow className="encabezado" color="primary">
-         <IonCol>ID</IonCol>   
-         <IonCol>Descripcion</IonCol>   
-         <IonCol>Precio Compra</IonCol>   
-         <IonCol>Precio Venta</IonCol>   
-         <IonCol>Vencimiento</IonCol>   
-         <IonCol>Stock</IonCol>   
-         <IonCol>Lote</IonCol>   
-         <IonCol>Acciones</IonCol>   
-         
-        </IonRow>
-            {(props.data)?.map((valor)=>
-            (
-                <IonRow>
-                 <IonCol><IonText>{valor.id_producto_inventario}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.descripcion}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.precio_compra}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.precio_venta}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.fecha_vencimiento}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.stock}</IonText></IonCol>   
-                 <IonCol><IonText>{valor.lote}</IonText></IonCol> 
-                 <IonCol><IonButton onClick={()=>setOcultar(!ocultar)}><IonIcon icon={createOutline}></IonIcon></IonButton></IonCol>   
-                 
-                </IonRow>
-            ))}
-    </IonGrid>
-    );
+const InventarioList: React.FC<InventarioListProps> = (props) => {
+  // Handlers para acciones
+  const handleAgregar = () => {
+    console.log("Agregar producto");
   };
-  
-  export default InventarioList;
-  
+
+  const handleModificar = (id: number) => {
+    console.log("Modificar producto con ID:", id);
+  };
+
+  const handleEliminar = (id: number) => {
+    console.log("Eliminar producto con ID:", id);
+  };
+
+  return (
+    <IonGrid className="tabla">
+  {/* Botón Agregar */}
+  <IonHeader>
+    <IonToolbar>
+      <IonButton
+        onClick={handleAgregar}
+        color="success"
+        size="default"
+        style={{ margin: "10px 0" }}
+      >
+        <IonIcon slot="start" icon={addCircleOutline} />
+        Agregar Producto
+      </IonButton>
+    </IonToolbar>
+  </IonHeader>
+
+  {/* Encabezado */}
+  <IonRow
+    className="encabezado"
+    style={{
+      background: "#f0f0f0",
+      fontWeight: "bold",
+      textAlign: "center",
+    }}
+  >
+    <IonCol size="1">ID</IonCol>
+    <IonCol size="3">Descripción</IonCol>
+    <IonCol size="2">Precio Compra</IonCol>
+    <IonCol size="2">Precio Venta</IonCol>
+    <IonCol size="2">Vencimiento</IonCol>
+    <IonCol size="2">Acciones</IonCol>
+  </IonRow>
+
+  {/* Filas */}
+  {props.data?.map((valor) => (
+    <IonRow
+      key={valor.id_producto_inventario}
+      style={{
+        textAlign: "center",
+        verticalAlign: "middle",
+      }}
+    >
+      <IonCol size="1">
+        <IonText>{valor.id_producto_inventario}</IonText>
+      </IonCol>
+      <IonCol size="3">
+        <IonText>{valor.descripcion}</IonText>
+      </IonCol>
+      <IonCol size="2">
+        <IonText>{valor.precio_compra}</IonText>
+      </IonCol>
+      <IonCol size="2">
+        <IonText>{valor.precio_venta}</IonText>
+      </IonCol>
+      <IonCol size="2">
+        <IonText>{valor.fecha_vencimiento}</IonText>
+      </IonCol>
+      <IonCol size="2">
+        {/* Botón Modificar */}
+        <IonButton
+          color="primary"
+          size="small"
+          onClick={() => handleModificar(valor.id_producto_inventario)}
+        >
+          <IonIcon slot="icon-only" icon={createOutline} />
+        </IonButton>
+        {/* Botón Eliminar */}
+        <IonButton
+          color="danger"
+          size="small"
+          onClick={() => handleEliminar(valor.id_producto_inventario)}
+          style={{ marginLeft: "5px" }}
+        >
+          <IonIcon slot="icon-only" icon={trashOutline} />
+        </IonButton>
+      </IonCol>
+    </IonRow>
+  ))}
+</IonGrid>
+
+  );
+};
+
+export default InventarioList;
