@@ -178,7 +178,7 @@ const Carrito: React.FC = () => {
                     Comprar Ya
                   </IonButton>
 
-                  <PDFGenerator cart={cart} customerName={customerName} />
+                  <PDFGenerator cart={cart} customerName={customerName} CI={""} />
 
 
                   <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">

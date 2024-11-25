@@ -91,7 +91,7 @@ const Productos: React.FC = () => {
   return (
 
    
-      <CustomPage titulo='Productos' contenido={<InventarioList data={data}/>} searchbar/>
+      <CustomPage titulo='Productos' contenido={<InventarioList data={data} />} searchbar cartItemCount={''}/>
     
   );
 };
