@@ -2,6 +2,8 @@
 http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 :root {
   /** primary **/
   --ion-color-primary: #50cdfa;
@@ -241,7 +243,7 @@ html {
   --ion-dynamic-font: var(--ion-default-dynamic-font);
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 
 * {
 
