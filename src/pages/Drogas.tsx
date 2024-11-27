@@ -8,7 +8,7 @@ interface DrogasListProps {
 const Drogas: React.FC = () => {
   return (
     <CustomPage
-      titulo="Productos"
+      titulo="Drogas"
       contenido={<DrogasList />}
       searchbar
       cartItemCount={""}
