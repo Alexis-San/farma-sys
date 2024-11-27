@@ -38,6 +38,7 @@ import Productos from "./Productos";
 import Venta from "./Ventas";
 import menu from "./Menu.css";
 import Drogas from "./Drogas";
+import Carrito from "./Carrito";
 
 const Menu: React.FC = () => {
   const catalogo = [
@@ -168,6 +169,7 @@ const Menu: React.FC = () => {
 
         <IonRouterOutlet id="main">
           <Route exact path="/menu/Inicio" component={Inicio} />
+          <Route exact path="/menu/Carrito" component={Carrito} />
           <Route exact path="/menu/Funcionarios" component={Funcionarios} />
           <Route exact path="/menu/Configuracion" component={Configuracion} />
           <Route exact path="/menu/Clientes" component={Inicio} />

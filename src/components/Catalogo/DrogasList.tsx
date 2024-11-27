@@ -200,7 +200,7 @@ const DrogasList: React.FC = () => {
               onClick={abrirModalAgregar}
             >
               <IonIcon slot="start" icon={addCircleOutline} />
-              Agregar Producto
+              Agregar nueva Droga
             </IonButton>
           </IonToolbar>
         </IonHeader>
