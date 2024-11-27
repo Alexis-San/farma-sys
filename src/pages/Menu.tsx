@@ -38,7 +38,9 @@ import Productos from "./Productos";
 import Venta from "./Ventas";
 import menu from "./Menu.css";
 import Drogas from "./Drogas";
-
+import Categorias from "./Categorias";
+import Laboratorios from "./Laboratorios";
+import Proveedores from "./Proveedores"; 
 const Menu: React.FC = () => {
   const catalogo = [
     { name: "Drogas", URL: "/menu/Drogas", icon: fileTrayFullOutline },
@@ -171,11 +173,11 @@ const Menu: React.FC = () => {
           <Route exact path="/menu/Funcionarios" component={Funcionarios} />
           <Route exact path="/menu/Configuracion" component={Configuracion} />
           <Route exact path="/menu/Clientes" component={Inicio} />
-          <Route exact path="/menu/Proveedores" component={Inicio} />
+          <Route exact path="/menu/Proveedores" component={Proveedores} />
           <Route exact path="/menu/Drogas" component={Drogas} />
-          <Route exact path="/menu/Categorias" component={Inicio} />
+          <Route exact path="/menu/Categorias" component={Categorias} />
           <Route exact path="/menu/Inventario" component={Inventario} />
-          <Route exact path="/menu/Laboratorios" component={Inicio} />
+          <Route exact path="/menu/Laboratorios" component={Laboratorios} />
           <Route exact path="/menu/Productos" component={Productos} />
           <Route exact path="/menu/Compra" component={Inicio} />
           <Route exact path="/menu/Venta" component={Venta} />
