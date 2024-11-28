@@ -214,9 +214,9 @@ const DrogasList: React.FC = () => {
             textAlign: "center",
           }}
         >
-          <IonCol size="1">ID</IonCol>
-          <IonCol size="3">Nombre</IonCol>
-          <IonCol size="2">Acciones</IonCol>
+          <IonCol size="2">ID</IonCol>
+          <IonCol size="6">Nombre</IonCol>
+          <IonCol size="4">Acciones</IonCol>
         </IonRow>
 
         {/* Mostrar mensaje de carga */}
@@ -234,13 +234,13 @@ const DrogasList: React.FC = () => {
             key={droga.id}
             style={{ textAlign: "center", verticalAlign: "middle" }}
           >
-            <IonCol size="1">
+            <IonCol size="2">
               <IonText>{droga.id}</IonText>
             </IonCol>
-            <IonCol size="3">
+            <IonCol size="6">
               <IonText>{droga.nombre}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="4">
               {/* Botón Modificar */}
               <IonButton
                 color="primary"

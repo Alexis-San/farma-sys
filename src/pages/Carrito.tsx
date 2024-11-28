@@ -1,3 +1,5 @@
+import axios from "axios";
+import { debounce } from "lodash"; // Asegúrate de instalar lodash
 import {
   IonButton,
   IonCard,
@@ -17,6 +19,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonModal,
 } from "@ionic/react";
 import { useStoreState } from "pullstate";
 import { useEffect, useState } from "react";
@@ -24,30 +27,52 @@ import { CarritoStore } from "../store";
 import styles from "../sccs/CarritoProducto.module.scss";
 import PDFGenerator from "../components/PDFGenerator"; // Importa tu componente PDFGenerator
 
+const API_CLIENTES = "http://localhost:8000/api/clientes/";
+
 const Carrito: React.FC = () => {
   const cart = useStoreState(CarritoStore, (s) => s.cart);
   const [amount, setAmount] = useState<string>("0.00");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [customerName, setCustomerName] = useState<string>("");
+  const [clientesSugeridos, setClientesSugeridos] = useState<any[]>([]);
+  const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
+
+  // Buscar clientes con debounce
+  const buscarClientes = debounce(async (nombre: string) => {
+    try {
+      const response = await axios.get(`${API_CLIENTES}?nombre=${nombre}`);
+      setClientesSugeridos(response.data.clientes || []);
+    } catch (error) {
+      console.error("Error buscando clientes:", error);
+      setClientesSugeridos([]);
+    }
+  }, 300);
 
   // Calcular el total del carrito
   useEffect(() => {
     if (cart && cart.length > 0) {
       let total = 0.0;
-      cart.forEach((product) => (total += product.price * product.quantity));
+      cart.forEach((product) => {
+        total += (product.price || 0) * (product.quantity || 0);
+      });
       setAmount(total.toFixed(2));
     } else {
       setAmount("0.00");
     }
   }, [cart]);
 
-  const updateQuantity = (productId: string, change: number) => {
-    CarritoStore.update((s) => {
-      const product = s.cart.find((p) => p.id === productId);
-      if (product) {
-        product.quantity = Math.max(1, product.quantity + change); // Evitar cantidades menores a 1
-      }
-    });
+  const handleInputChange = (value: string) => {
+    setCustomerName(value);
+    if (value.trim().length > 2) {
+      buscarClientes(value.trim());
+    } else {
+      setClientesSugeridos([]);
+    }
+  };
+
+  const handleClienteSeleccionado = (cliente: any) => {
+    setCustomerName(`${cliente.nombre} ${cliente.apellido}`);
+    setClientesSugeridos([]);
   };
 
   const clearCart = () => {
@@ -58,14 +83,12 @@ const Carrito: React.FC = () => {
 
   const handleBuyNow = () => {
     if (cart.length === 0) {
-      alert("El carrito está vacío. Agrega productos antes de continuar.");
+      alert("El carrito está vacío, agrega productos antes de comprar.");
       return;
     }
-    if (!customerName.trim()) {
-      alert("Por favor, ingresa el nombre del cliente.");
-      return;
-    }
-    setIsConfirmed(true); // Mostrar el mensaje de confirmación
+    setIsConfirmed(true);
+
+    // Aquí puedes agregar lógica adicional, como enviar datos al backend.
   };
 
   return (
@@ -82,7 +105,6 @@ const Carrito: React.FC = () => {
       <IonContent>
         <IonGrid>
           <IonRow>
-            {/* Lista de productos */}
             <IonCol sizeMd="8" sizeSm="12">
               <IonCard>
                 <IonCardContent>
@@ -90,80 +112,70 @@ const Carrito: React.FC = () => {
                   {cart.length > 0 ? (
                     cart.map((product) => (
                       <IonRow key={product.id} className={styles.productRow}>
-                        <IonCol size="4" sizeSm="3" className={styles.imageCol}>
-                          <img
-                            src={product.image}
-                            alt={product.title}
-                            className={styles.productImage}
-                          />
-                        </IonCol>
-                        <IonCol size="5" sizeSm="6" className={styles.productInfo}>
-                          <h4>{product.title}</h4>
-                        </IonCol>
-                        <IonCol size="3" className="ion-text-center">
-                          <IonButton
-                            color="secondary"
-                            size="small"
-                            onClick={() => updateQuantity(product.id, -1)}
-                          >
-                            -
-                          </IonButton>
-                          <IonText> {product.quantity} </IonText>
-                          <IonButton
-                            color="secondary"
-                            size="small"
-                            onClick={() => updateQuantity(product.id, 1)}
-                          >
-                            +
-                          </IonButton>
-                        </IonCol>
-                        <IonCol size="3" className={styles.letrita}>
-                          <p>{`₡ ${(product.price * product.quantity).toFixed(2)}`}</p>
-                          <IonButton
-                            fill="clear"
-                            color="danger"
-                            size="small"
-                            onClick={() => updateQuantity(product.id, 0)}
-                          >
-                            🗑️
-                          </IonButton>
-                        </IonCol>
+                        <IonCol>{product.title}</IonCol>
+                        <IonCol>₡ {product.price}</IonCol>
+                        <IonCol>Cantidad: {product.quantity}</IonCol>
                       </IonRow>
                     ))
-                    
                   ) : (
                     <div>
                       <img
-                        src="../public/Carrito.png"
+                        src="/Carrito.png"
                         alt="no cart"
                         className={styles.cartImage}
                       />
                       <p>Tu carrito está vacío</p>
-                      <IonButton expand="block" fill="outline" routerLink="/menu/Inicio" >Ver Productos</IonButton>
+                      <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
+                        Ver Productos
+                      </IonButton>
                     </div>
                   )}
                 </IonCardContent>
               </IonCard>
             </IonCol>
 
-            {/* Resumen del carrito */}
             <IonCol sizeMd="4" sizeSm="12">
-              {/* Formulario de nombre del cliente */}
               <IonCard>
                 <IonCardContent>
                   <IonItem>
                     <IonLabel position="stacked">Nombre del cliente</IonLabel>
                     <IonInput
                       value={customerName}
-                      onIonChange={(e) => setCustomerName(e.detail.value!)}
+                      onIonChange={(e) => handleInputChange(e.detail.value!)}
                       placeholder="Ingresa el nombre"
                       clearInput
                     ></IonInput>
                   </IonItem>
+
+                  {clientesSugeridos.length > 0 && (
+                    <IonCard>
+                      <IonCardContent>
+                        <IonText>Clientes sugeridos:</IonText>
+                        {clientesSugeridos.map((cliente: any) => (
+                          <IonItem
+                            key={cliente.id}
+                            button
+                            onClick={() => handleClienteSeleccionado(cliente)}
+                          >
+                            {cliente.nombre} {cliente.apellido} - {cliente.email}
+                          </IonItem>
+                        ))}
+                      </IonCardContent>
+                    </IonCard>
+                  )}
+
+                  {customerName.trim().length > 2 && clientesSugeridos.length === 0 && (
+                    <IonButton
+                      expand="block"
+                      color="primary"
+                      onClick={() => setMostrarModalAgregar(true)}
+                    >
+                      Agregar nuevo cliente
+                    </IonButton>
+                  )}
                 </IonCardContent>
               </IonCard>
 
-              {/* Resumen */}
               <IonCard>
                 <IonCardContent>
                   <h2>Resumen del carrito</h2>
@@ -179,7 +191,6 @@ const Carrito: React.FC = () => {
                   </IonButton>
 
                   <PDFGenerator cart={cart} customerName={customerName} CI={""} />
-
 
                   <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
                     Agregar más productos
@@ -198,7 +209,23 @@ const Carrito: React.FC = () => {
           </IonRow>
         </IonGrid>
 
-        {/* IonAlert para confirmar la compra */}
+        <IonModal
+          isOpen={mostrarModalAgregar}
+          onDidDismiss={() => setMostrarModalAgregar(false)}
+        >
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Agregar Cliente</IonTitle>
+              <IonButton slot="end" onClick={() => setMostrarModalAgregar(false)}>
+                Cerrar
+              </IonButton>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            {/* Aquí puedes insertar el formulario para agregar cliente */}
+          </IonContent>
+        </IonModal>
+
         <IonAlert
           isOpen={isConfirmed}
           onDidDismiss={() => setIsConfirmed(false)}
@@ -212,3 +239,4 @@ const Carrito: React.FC = () => {
 };
 
 export default Carrito;
+
