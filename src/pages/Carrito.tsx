@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import { debounce } from "lodash"; // Asegúrate de instalar lodash
 import {
@@ -25,7 +26,7 @@ import { useStoreState } from "pullstate";
 import { useEffect, useState } from "react";
 import { CarritoStore } from "../store";
 import styles from "../sccs/CarritoProducto.module.scss";
-import PDFGenerator from "../components/PDFGenerator"; // Importa tu componente PDFGenerator
+import PDFGenerator from "../components/PDFGenerator";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/";
 
@@ -75,6 +76,24 @@ const Carrito: React.FC = () => {
     setClientesSugeridos([]);
   };
 
+  const incrementQuantity = (productId: number) => {
+    CarritoStore.update((s) => {
+      const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
+      if (product) {
+        product.quantity += 1;
+      }
+    });
+  };
+  
+  const decrementQuantity = (productId: number) => {
+    CarritoStore.update((s) => {
+      const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
+      if (product && product.quantity > 1) {
+        product.quantity -= 1;
+      }
+    });
+  };
+  
   const clearCart = () => {
     CarritoStore.update((s) => {
       s.cart = [];
@@ -114,7 +133,13 @@ const Carrito: React.FC = () => {
                       <IonRow key={product.id} className={styles.productRow}>
                         <IonCol>{product.title}</IonCol>
                         <IonCol>₡ {product.price}</IonCol>
-                        <IonCol>Cantidad: {product.quantity}</IonCol>
+                        <IonCol>
+                          <div className={styles.quantityControl}>
+                            <IonButton onClick={() => decrementQuantity(product.id)}>-</IonButton>
+                            <span>{product.quantity}</span>
+                            <IonButton onClick={() => incrementQuantity(product.id)}>+</IonButton>
+                          </div>
+                        </IonCol>
                       </IonRow>
                     ))
                   ) : (
