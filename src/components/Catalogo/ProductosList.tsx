@@ -149,8 +149,12 @@ const ProductosList: React.FC = () => {
   const guardarNuevoProducto = async () => {
     try {
       const response = await axios.post(URI, nuevoProducto);
-      setData([...data, response.data]);
-      console.log("Nuevo producto agregado:", response.data);
+
+      // Actualizar el estado data usando nuevoProducto y el id devuelto por el servidor
+      const productoConId = { ...nuevoProducto, id: response.data.id };
+      setData([...data, productoConId]);
+
+      console.log("Nuevo producto agregado:", productoConId);
       cerrarModalAgregar();
     } catch (error) {
       console.error("Error al agregar el nuevo producto:", error);
