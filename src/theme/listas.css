@@ -1,0 +1,59 @@
+ion-col {
+    color: black; /* Cambia el texto a negro para mayor contraste */
+  }
+  
+
+  .encabezado {
+    background-color: #03498f82 !important; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    font-weight: bold; /* Opcional: enfatiza el texto */
+  }
+  
+
+/* listas.css */
+
+/* Disminuir el tamaño de la tabla en pantallas pequeñas */
+@media (max-width: 768px) {
+    .tabla-personalizada {
+      display: block;
+      overflow-x: auto;
+    }
+  
+    .tabla-personalizada IonRow {
+      display: block;
+      margin-bottom: 10px;
+    }
+  
+    .tabla-personalizada IonCol {
+      display: block;
+      padding: 10px;
+      font-size: 12px;
+    }
+  
+    .tabla-personalizada IonCol:first-child {
+      font-weight: bold;
+    }
+  
+    /* Reorganiza la tabla en una vista tipo tarjeta */
+    .tabla-personalizada IonRow {
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+  }
+  
+  /* Mejorar la apariencia en pantallas medianas */
+  @media (max-width: 1024px) and (min-width: 768px) {
+    .tabla-personalizada IonRow {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .tabla-personalizada IonCol {
+      width: 48%;  /* 2 columnas por fila */
+      margin-bottom: 10px;
+    }
+  }
+  
