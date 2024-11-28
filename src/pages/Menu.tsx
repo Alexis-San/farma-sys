@@ -41,6 +41,8 @@ import Drogas from "./Drogas";
 import Categorias from "./Categorias";
 import Laboratorios from "./Laboratorios";
 import Proveedores from "./Proveedores"; 
+import Carrito from "./Carrito";
+import Clientes from "./Clientes";
 const Menu: React.FC = () => {
   const catalogo = [
     { name: "Drogas", URL: "/menu/Drogas", icon: fileTrayFullOutline },
@@ -171,8 +173,9 @@ const Menu: React.FC = () => {
         <IonRouterOutlet id="main">
           <Route exact path="/menu/Inicio" component={Inicio} />
           <Route exact path="/menu/Funcionarios" component={Funcionarios} />
+          <Route exact path="/menu/Carrito" component={Carrito} />
           <Route exact path="/menu/Configuracion" component={Configuracion} />
-          <Route exact path="/menu/Clientes" component={Inicio} />
+          <Route exact path="/menu/Clientes" component={Clientes} />
           <Route exact path="/menu/Proveedores" component={Proveedores} />
           <Route exact path="/menu/Drogas" component={Drogas} />
           <Route exact path="/menu/Categorias" component={Categorias} />

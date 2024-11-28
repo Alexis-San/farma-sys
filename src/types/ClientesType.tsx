@@ -1,9 +1,9 @@
 export interface ClientesType {
     id: number;
     nombre: string;
-    apellido: String;
-    email: String;
-    telefono:String;
-    tipo_cliente: String;
+    apellido: string;
+    email: string;
+    telefono:string;
+    tipo_cliente: string;
   }
   
