@@ -9,6 +9,10 @@ ion-col {
     font-weight: bold; /* Opcional: enfatiza el texto */
   }
   
+  :root{
+    --ion-color-success: rgb(13, 129, 129);
+  }
+ 
 
 /* listas.css */
 

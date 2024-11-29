@@ -28,6 +28,7 @@ import { CarritoStore } from "../store";
 import styles from "../sccs/CarritoProducto.module.scss";
 import PDFGenerator from "../components/PDFGenerator";
 import AgregarClienteForm from "../components/AgregarClienteForm";
+import { ClientesType } from "../types/ClientesType";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/";
 
@@ -39,6 +40,8 @@ const Carrito: React.FC = () => {
   const [CI, setCI] = useState<string>("");
   const [clientesSugeridos, setClientesSugeridos] = useState<any[]>([]);
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
+  const [data, setData] = useState<ClientesType[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Buscar clientes con debounce
   const buscarClientes = debounce(async (nombre: string) => {
@@ -63,6 +66,22 @@ const Carrito: React.FC = () => {
       setAmount("0.00");
     }
   }, [cart]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(API_CLIENTES);
+        console.log("Datos obtenidos:", response.data);
+        setData(response.data.clientes); // Asegúrate de usar la clave correcta
+      } catch (error) {
+        console.error("Error al cargar los datos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleInputChange = (value: string) => {
     setCustomerName(value);
@@ -178,6 +197,7 @@ const Carrito: React.FC = () => {
                     <IonLabel position="stacked">CI o RUC</IonLabel>
                     <IonInput
                       value={CI}
+                      onIonChange={(e) => setCI(e.detail.value!)}
                       placeholder="Ingresa el CI o RUC"
                       clearInput
                     // Aquí puedes agregar una lógica similar para manejar el CI o RUC
@@ -218,14 +238,14 @@ const Carrito: React.FC = () => {
 
                   <IonButton
                     expand="block"
-                    color="success"
+                    color="tertiary"
                     className={styles.buyNow}
                     onClick={handleBuyNow}
                   >
                     Comprar Ya
                   </IonButton>
 
-                  <PDFGenerator cart={cart} customerName={customerName} CI={""} />
+                  <PDFGenerator cart={cart} customerName={customerName} CI={CI} />
 
                   <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
                     Agregar más productos
@@ -269,11 +289,16 @@ const Carrito: React.FC = () => {
               </IonHeader>
               <IonContent>
                 <AgregarClienteForm
-                  onGuardarCliente={(nuevoCliente) => {
-                    // Aquí puedes guardar el cliente en el estado del carrito
-                    console.log("Nuevo cliente agregado desde el carrito:", nuevoCliente);
-                    setMostrarModalAgregar(false);
-                  }}
+            onGuardarCliente={async (nuevoCliente) => {
+              try {
+                const response = await axios.post(API_CLIENTES, nuevoCliente);
+                setData([...data, response.data]);
+                setMostrarModalAgregar(false);
+                console.log("Cliente agregado exitosamente:", response.data);
+              } catch (error) {
+                console.error("Error al agregar el cliente:", error);
+              }
+            }}
                 />
               </IonContent>
             </IonModal>

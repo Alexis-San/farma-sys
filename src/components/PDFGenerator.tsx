@@ -26,8 +26,15 @@ const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName, CI }) =
     image.src = imgPath;
 
     image.onload = () => {
-      // Logo
-      doc.addImage(image, "PNG", 25, 5, 30, 20);
+      // Ajustar el tamaño y centrar el logo
+      const logoWidth = 40; // Nuevo ancho del logo
+      const logoHeight = 25; // Nuevo alto del logo
+      const pageWidth = 80; // Ancho de la página
+      const xPosition = (pageWidth - logoWidth) / 2; // Centrar horizontalmente
+      const yPosition = 3; // Posición vertical
+    
+      // Agregar el logo al documento
+      doc.addImage(image, "PNG", xPosition, yPosition, logoWidth, logoHeight);
 
       // Encabezado
       doc.setFontSize(14);
