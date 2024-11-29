@@ -1,78 +1,54 @@
 import React, { useState, useEffect } from "react";
 import {
-  IonButton,
-  IonCol,
   IonGrid,
-  IonIcon,
   IonRow,
+  IonCol,
   IonText,
   IonHeader,
   IonToolbar,
+  IonButton,
+  IonIcon,
   IonModal,
   IonContent,
+  IonTitle,
   IonItem,
   IonLabel,
   IonInput,
-  IonTitle,
-  IonSelect,
-  IonSelectOption,
+  IonDatetime,
 } from "@ionic/react";
-import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
+import { InventarioType, ProductoType } from "../../types/InventarioType";
 import axios from "axios";
+import {
+  createOutline,
+  trashOutline,
+  addCircleOutline,
+  add,
+} from "ionicons/icons";
 
 const URI = "http://localhost:8000/api/inventario/";
-
-interface ProductoType {
-  id: number;
-  codigo_cafapar: number;
-  nombre_comercial: string;
-  presentacion: string;
-  descripcion: string;
-  precio_venta: number;
-  condicion_venta: string;
-  procedencia: string;
-  laboratorioId: number;
-}
-
-interface InventarioType {
-  id: number;
-  precio_venta: number;
-  precio_compra: number;
-  descripcion: string;
-  fecha_vencimiento: string;
-  stock: number;
-  estado: boolean;
-  productoId: number;
-  producto: ProductoType;
-}
+const PRODUCTOS_URI = "http://localhost:8000/api/productos/";
 
 const InventarioList: React.FC = () => {
   const [data, setData] = useState<InventarioType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [inventarioSeleccionado, setInventarioSeleccionado] =
-    useState<InventarioType | null>(null);
-  const [nuevoInventario, setNuevoInventario] = useState<InventarioType>({
-    id: 0,
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [productos, setProductos] = useState<ProductoType[]>([]);
+  const [loadingProductos, setLoadingProductos] = useState(false);
+  const [showInventarioModal, setShowInventarioModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<ProductoType | null>(
+    null
+  );
+  const [nuevoInventario, setNuevoInventario] = useState({
+    stock: 0,
+    lote: "",
     precio_venta: 0,
     precio_compra: 0,
-    descripcion: "",
-    fecha_vencimiento: "",
-    stock: 0,
-    estado: true,
+    fecha_vencimiento: new Date().toISOString(),
     productoId: 0,
-    producto: {
-      id: 0,
-      codigo_cafapar: 0,
-      nombre_comercial: "",
-      presentacion: "",
-      descripcion: "",
-      precio_venta: 0,
-      condicion_venta: "",
-      procedencia: "",
-      laboratorioId: 0,
-    },
   });
+  const [showModificarModal, setShowModificarModal] = useState(false);
+  const [inventarioSeleccionado, setInventarioSeleccionado] =
+    useState<InventarioType | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,32 +65,56 @@ const InventarioList: React.FC = () => {
     fetchData();
   }, []);
 
-  const deleteInventario = async (id: number) => {
+  const fetchProductos = async () => {
+    setLoadingProductos(true);
     try {
-      await axios.delete(`${URI}${id}`);
-      setData(data.filter((inventario) => inventario.id !== id));
+      const response = await axios.get<ProductoType[]>(PRODUCTOS_URI);
+      setProductos(response.data);
     } catch (error) {
-      console.error(`Error al eliminar el inventario con ID: ${id}`, error);
+      console.error("Error al cargar productos:", error);
+    } finally {
+      setLoadingProductos(false);
     }
   };
 
-  const abrirModal = (inventario: InventarioType | null) => {
-    setInventarioSeleccionado(inventario);
-    setMostrarModal(true);
+  const handleAddClick = () => {
+    setShowProductModal(true);
+    fetchProductos();
   };
 
-  const cerrarModal = () => {
-    setMostrarModal(false);
-    setInventarioSeleccionado(null);
+  const handleProductSelect = (producto: ProductoType) => {
+    setSelectedProduct(producto);
+    setNuevoInventario({
+      ...nuevoInventario,
+      productoId: producto.id || 0,
+      precio_venta: producto.precio_venta || 0,
+    });
+    setShowProductModal(false);
+    setShowInventarioModal(true);
   };
 
-  const manejarCambio = (e: CustomEvent) => {
+  const handleInventarioChange = (e: CustomEvent) => {
     const { name, value } = e.target as HTMLInputElement;
-    if (inventarioSeleccionado) {
-      setInventarioSeleccionado({
-        ...inventarioSeleccionado,
-        [name]: value,
-      });
+
+    if (name === "fecha_vencimiento") {
+      // Validar formato de fecha dd/mm/yyyy
+      const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+      if (!dateRegex.test(value) && value !== "") return;
+
+      // Convertir dd/mm/yyyy a ISO string si es una fecha válida
+      if (value && dateRegex.test(value)) {
+        const [day, month, year] = value.split("/");
+        const isoDate = `${year}-${month}-${day}T00:00:00.000Z`;
+        setNuevoInventario({
+          ...nuevoInventario,
+          fecha_vencimiento: isoDate,
+        });
+      } else {
+        setNuevoInventario({
+          ...nuevoInventario,
+          fecha_vencimiento: value,
+        });
+      }
     } else {
       setNuevoInventario({
         ...nuevoInventario,
@@ -123,52 +123,101 @@ const InventarioList: React.FC = () => {
     }
   };
 
-  const guardarCambios = async () => {
+  const guardarInventario = async () => {
     try {
-      if (inventarioSeleccionado) {
+      const response = await axios.post(URI, nuevoInventario);
+      // Agregamos el producto seleccionado al nuevo registro antes de actualizar el estado
+      const nuevoRegistro = {
+        ...response.data,
+        producto: selectedProduct,
+      };
+      setData([...data, nuevoRegistro]);
+      setShowInventarioModal(false);
+      // Reset form
+      setSelectedProduct(null);
+      setNuevoInventario({
+        stock: 0,
+        lote: "",
+        precio_venta: 0,
+        precio_compra: 0,
+        fecha_vencimiento: new Date().toISOString(),
+        productoId: 0,
+      });
+    } catch (error) {
+      console.error("Error al guardar el inventario:", error);
+    }
+  };
+
+  const handleModificarClick = (item: InventarioType) => {
+    setInventarioSeleccionado(item);
+    setShowModificarModal(true);
+  };
+
+  const handleModificarChange = (e: CustomEvent) => {
+    const { name, value } = e.target as HTMLInputElement;
+    if (inventarioSeleccionado) {
+      setInventarioSeleccionado({
+        ...inventarioSeleccionado,
+        [name]: value,
+      });
+    }
+  };
+
+  const guardarModificacion = async () => {
+    if (inventarioSeleccionado) {
+      try {
         await axios.put(
           `${URI}${inventarioSeleccionado.id}`,
           inventarioSeleccionado
         );
         setData(
-          data.map((inventario) =>
-            inventario.id === inventarioSeleccionado.id
+          data.map((item) =>
+            item.id === inventarioSeleccionado.id
               ? inventarioSeleccionado
-              : inventario
+              : item
           )
         );
-      } else {
-        const response = await axios.post(URI, nuevoInventario);
-        setData([...data, response.data]);
+        setShowModificarModal(false);
+        setInventarioSeleccionado(null);
+      } catch (error) {
+        console.error("Error al modificar el inventario:", error);
       }
-      cerrarModal();
-    } catch (error) {
-      console.error("Error al guardar los cambios:", error);
     }
   };
 
   return (
     <>
-      <IonGrid>
+      <IonGrid className="tabla">
+        {/* Botón Agregar */}
         <IonHeader>
           <IonToolbar>
-            <IonButton color="success" onClick={() => abrirModal(null)}>
+            <IonButton color="success" size="default" onClick={handleAddClick}>
               <IonIcon slot="start" icon={addCircleOutline} />
               Agregar Inventario
             </IonButton>
           </IonToolbar>
         </IonHeader>
 
-        <IonRow style={{ background: "#f0f0f0", fontWeight: "bold" }}>
-          <IonCol>ID</IonCol>
-          <IonCol>Producto</IonCol>
-          <IonCol>Stock</IonCol>
-          <IonCol>Precio Venta</IonCol>
-          <IonCol>Precio Compra</IonCol>
-          <IonCol>Fecha Vencimiento</IonCol>
-          <IonCol>Acciones</IonCol>
+        <IonRow
+          className="encabezado"
+          style={{
+            background: "#f0f0f0",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          <IonCol size="1">ID</IonCol>
+          <IonCol size="2">Nombre</IonCol>
+          <IonCol size="1">Stock</IonCol>
+          <IonCol size="1">Lote</IonCol>
+          <IonCol size="1.5">Precio Venta</IonCol>
+          <IonCol size="1.5">Precio Compra</IonCol>
+          <IonCol size="1.5">Vencimiento</IonCol>
+          <IonCol size="1">Condición Venta</IonCol>
+          <IonCol size="1.5">Acciones</IonCol>
         </IonRow>
 
+        {/* Mostrar mensaje de carga */}
         {loading && (
           <IonRow>
             <IonCol>
@@ -177,109 +226,271 @@ const InventarioList: React.FC = () => {
           </IonRow>
         )}
 
-        {data.map((inventario) => (
-          <IonRow key={inventario.id}>
-            <IonCol>{inventario.id}</IonCol>
-            <IonCol>{inventario.producto.nombre_comercial}</IonCol>
-            <IonCol>{inventario.stock}</IonCol>
-            <IonCol>{inventario.precio_venta}</IonCol>
-            <IonCol>{inventario.precio_compra}</IonCol>
-            <IonCol>
-              {new Date(inventario.fecha_vencimiento).toLocaleDateString()}
+        {/* Mostrar filas si hay datos */}
+        {data.map((item) => (
+          <IonRow
+            key={item.id}
+            style={{ textAlign: "center", verticalAlign: "middle" }}
+          >
+            <IonCol size="1">
+              <IonText>{item.id}</IonText>
             </IonCol>
-            <IonCol>
-              <IonButton color="primary" onClick={() => abrirModal(inventario)}>
-                <IonIcon slot="icon-only" icon={createOutline} />
-              </IonButton>
+            <IonCol size="2">
+              <IonText>{item.producto?.nombre_comercial}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.stock}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.lote}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.precio_venta}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.precio_compra}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {new Date(item.fecha_vencimiento).toLocaleDateString()}
+              </IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.producto?.condicion_venta}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
               <IonButton
-                color="danger"
-                onClick={() => deleteInventario(inventario.id)}
+                color="primary"
+                size="small"
+                onClick={() => handleModificarClick(item)}
               >
-                <IonIcon slot="icon-only" icon={trashOutline} />
+                <IonIcon slot="icon-only" icon={createOutline} />
               </IonButton>
             </IonCol>
           </IonRow>
         ))}
 
+        {/* Mostrar mensaje si no hay datos */}
         {!loading && data.length === 0 && (
           <IonRow>
-            <IonCol>No hay inventarios disponibles</IonCol>
+            <IonCol>
+              <IonText>No hay datos disponibles</IonText>
+            </IonCol>
           </IonRow>
         )}
       </IonGrid>
 
-      <IonModal isOpen={mostrarModal} onDidDismiss={cerrarModal}>
+      {/* Modal de selección de producto */}
+      <IonModal
+        isOpen={showProductModal}
+        onDidDismiss={() => setShowProductModal(false)}
+      >
         <IonHeader>
           <IonToolbar>
-            <IonTitle>
-              {inventarioSeleccionado
-                ? "Modificar Inventario"
-                : "Agregar Inventario"}
-            </IonTitle>
-            <IonButton slot="end" onClick={cerrarModal}>
+            <IonTitle>Seleccionar Producto</IonTitle>
+            <IonButton slot="end" onClick={() => setShowProductModal(false)}>
               Cerrar
             </IonButton>
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonItem>
-            <IonLabel position="stacked">Producto</IonLabel>
-            <IonInput
-              name="productoId"
-              value={
-                inventarioSeleccionado?.productoId ?? nuevoInventario.productoId
-              }
-              onIonChange={manejarCambio}
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Stock</IonLabel>
-            <IonInput
-              type="number"
-              name="stock"
-              value={inventarioSeleccionado?.stock ?? nuevoInventario.stock}
-              onIonChange={manejarCambio}
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Precio Venta</IonLabel>
-            <IonInput
-              type="number"
-              name="precio_venta"
-              value={
-                inventarioSeleccionado?.precio_venta ??
-                nuevoInventario.precio_venta
-              }
-              onIonChange={manejarCambio}
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Precio Compra</IonLabel>
-            <IonInput
-              type="number"
-              name="precio_compra"
-              value={
-                inventarioSeleccionado?.precio_compra ??
-                nuevoInventario.precio_compra
-              }
-              onIonChange={manejarCambio}
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Fecha Vencimiento</IonLabel>
-            <IonInput
-              type="date"
-              name="fecha_vencimiento"
-              value={
-                inventarioSeleccionado?.fecha_vencimiento ??
-                nuevoInventario.fecha_vencimiento
-              }
-              onIonChange={manejarCambio}
-            />
-          </IonItem>
-          <IonButton expand="full" onClick={guardarCambios}>
-            {inventarioSeleccionado ? "Guardar Cambios" : "Agregar Inventario"}
-          </IonButton>
+          <IonGrid>
+            <IonRow
+              className="encabezado"
+              style={{
+                background: "#f0f0f0",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              <IonCol size="2">ID</IonCol>
+              <IonCol size="6">Nombre Comercial</IonCol>
+              <IonCol size="2">Precio Venta</IonCol>
+              <IonCol size="2">Acción</IonCol>
+            </IonRow>
+
+            {loadingProductos ? (
+              <IonRow>
+                <IonCol>
+                  <IonText>Cargando productos...</IonText>
+                </IonCol>
+              </IonRow>
+            ) : (
+              productos.map((producto) => (
+                <IonRow key={producto.id} style={{ textAlign: "center" }}>
+                  <IonCol size="2">{producto.id}</IonCol>
+                  <IonCol size="6">{producto.nombre_comercial}</IonCol>
+                  <IonCol size="2">{producto.precio_venta}</IonCol>
+                  <IonCol size="2">
+                    <IonButton
+                      size="small"
+                      color="success"
+                      onClick={() => handleProductSelect(producto)}
+                    >
+                      <IonIcon slot="icon-only" icon={add} />
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              ))
+            )}
+          </IonGrid>
+        </IonContent>
+      </IonModal>
+
+      {/* Modal de agregar inventario */}
+      <IonModal
+        isOpen={showInventarioModal}
+        onDidDismiss={() => setShowInventarioModal(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Agregar al Inventario</IonTitle>
+            <IonButton slot="end" onClick={() => setShowInventarioModal(false)}>
+              Cerrar
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          {selectedProduct && (
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="stacked">
+                      Producto Seleccionado
+                    </IonLabel>
+                    <IonInput
+                      value={selectedProduct.nombre_comercial}
+                      readonly
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Stock</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="stock"
+                      value={nuevoInventario.stock}
+                      onIonChange={handleInventarioChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Lote</IonLabel>
+                    <IonInput
+                      name="lote"
+                      value={nuevoInventario.lote}
+                      onIonChange={handleInventarioChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Precio Venta</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="precio_venta"
+                      value={nuevoInventario.precio_venta}
+                      onIonChange={handleInventarioChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Precio Compra</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="precio_compra"
+                      value={nuevoInventario.precio_compra}
+                      onIonChange={handleInventarioChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">
+                      Fecha Vencimiento (dd/mm/yyyy)
+                    </IonLabel>
+                    <IonInput
+                      name="fecha_vencimiento"
+                      value={nuevoInventario.fecha_vencimiento
+                        .split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("/")}
+                      onIonChange={handleInventarioChange}
+                      placeholder="dd/mm/yyyy"
+                    />
+                  </IonItem>
+                  <IonButton expand="full" onClick={guardarInventario}>
+                    Guardar
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          )}
+        </IonContent>
+      </IonModal>
+
+      {/* Modal de modificar inventario */}
+      <IonModal
+        isOpen={showModificarModal}
+        onDidDismiss={() => setShowModificarModal(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Modificar Inventario</IonTitle>
+            <IonButton slot="end" onClick={() => setShowModificarModal(false)}>
+              Cerrar
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          {inventarioSeleccionado && (
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="stacked">Producto</IonLabel>
+                    <IonInput
+                      value={inventarioSeleccionado.producto?.nombre_comercial}
+                      readonly
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Stock</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="stock"
+                      value={inventarioSeleccionado.stock}
+                      onIonChange={handleModificarChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Lote</IonLabel>
+                    <IonInput
+                      name="lote"
+                      value={inventarioSeleccionado.lote}
+                      onIonChange={handleModificarChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Precio Venta</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="precio_venta"
+                      value={inventarioSeleccionado.precio_venta}
+                      onIonChange={handleModificarChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="stacked">Precio Compra</IonLabel>
+                    <IonInput
+                      type="number"
+                      name="precio_compra"
+                      value={inventarioSeleccionado.precio_compra}
+                      onIonChange={handleModificarChange}
+                    />
+                  </IonItem>
+                  <IonButton expand="full" onClick={guardarModificacion}>
+                    Guardar Cambios
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          )}
         </IonContent>
       </IonModal>
     </>
