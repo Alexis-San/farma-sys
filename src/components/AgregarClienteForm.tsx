@@ -1,3 +1,4 @@
+//ESTE ES NUEVOO JEJEJE
 import React, { useState } from "react";
 import { IonItem, IonLabel, IonInput, IonButton, IonContent } from "@ionic/react";
 import { ClientesType } from "../types/ClientesType";
