@@ -23,6 +23,7 @@ export interface InventarioType {
   descripcion: string;
   fecha_vencimiento: string; // ISO date string from API
   stock: number;
+  lote: string;
   estado: boolean;
   productoId: number;
   producto: ProductoType; // Include nested producto object
