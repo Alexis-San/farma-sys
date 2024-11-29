@@ -74,12 +74,12 @@ const Login: React.FC = () => {
 
           <IonRow>
             <IonCol sizeXs="12" sizeSm="6" offsetSm="3" sizeMd="4" offsetMd="4">
-              <IonButton onClick={() => doLogin()} expand='full' className='ion-button' >
+              <IonButton onClick={() => doLogin()} expand='full' className='ion-button' color="secondary" >
                 Ingresar
               </IonButton>
             </IonCol>
             <IonCol sizeXs="12" sizeSm="6" offsetSm="3" sizeMd="4" offsetMd="4">
-              <IonButton onClick={() => doRegistro()} expand='full' className='ion-button'>
+              <IonButton onClick={() => doRegistro()} expand='full' className='ion-button' color="secondary">
                 Registro
               </IonButton>
             </IonCol>

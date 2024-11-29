@@ -165,7 +165,7 @@ const CategoriasList: React.FC = () => {
           <IonCol size="1">ID</IonCol>
           <IonCol size="3">Nombre</IonCol>
           <IonCol size="4">Descripción</IonCol>
-          <IonCol size="2">Acciones</IonCol>
+          <IonCol size="4">Acciones</IonCol>
         </IonRow>
 
         {/* Mostrar mensaje de carga */}
@@ -192,7 +192,7 @@ const CategoriasList: React.FC = () => {
             <IonCol size="4">
               <IonText>{categoria.descripcion}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="4">
               {/* Botón Modificar */}
               <IonButton
                 color="primary"
