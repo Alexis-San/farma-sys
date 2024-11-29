@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { CarritoStore } from "../store";
 import styles from "../sccs/CarritoProducto.module.scss";
 import PDFGenerator from "../components/PDFGenerator";
+import AgregarClienteForm from "../components/AgregarClienteForm";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/";
 
@@ -35,6 +36,7 @@ const Carrito: React.FC = () => {
   const [amount, setAmount] = useState<string>("0.00");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [customerName, setCustomerName] = useState<string>("");
+  const [CI, setCI] = useState<string>("");
   const [clientesSugeridos, setClientesSugeridos] = useState<any[]>([]);
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
 
@@ -84,7 +86,7 @@ const Carrito: React.FC = () => {
       }
     });
   };
-  
+
   const decrementQuantity = (productId: number) => {
     CarritoStore.update((s) => {
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
@@ -93,7 +95,7 @@ const Carrito: React.FC = () => {
       }
     });
   };
-  
+
   const clearCart = () => {
     CarritoStore.update((s) => {
       s.cart = [];
@@ -172,6 +174,16 @@ const Carrito: React.FC = () => {
                     ></IonInput>
                   </IonItem>
 
+                  <IonItem>
+                    <IonLabel position="stacked">CI o RUC</IonLabel>
+                    <IonInput
+                      value={CI}
+                      placeholder="Ingresa el CI o RUC"
+                      clearInput
+                    // Aquí puedes agregar una lógica similar para manejar el CI o RUC
+                    ></IonInput>
+                  </IonItem>
+
                   {clientesSugeridos.length > 0 && (
                     <IonCard>
                       <IonCardContent>
@@ -189,21 +201,19 @@ const Carrito: React.FC = () => {
                     </IonCard>
                   )}
 
-                  {customerName.trim().length > 2 && clientesSugeridos.length === 0 && (
-                    <IonButton
-                      expand="block"
-                      color="primary"
-                      onClick={() => setMostrarModalAgregar(true)}
-                    >
+                  {/* Botón "Agregar Cliente" siempre visible */}
+                  <div style={{ position: "sticky", bottom: "10px", zIndex: 10 }}>
+                    {/* Botón y Modal para agregar cliente */}
+                    <IonButton expand="block" color="primary" onClick={() => setMostrarModalAgregar(true)}>
                       Agregar nuevo cliente
                     </IonButton>
-                  )}
+                  </div>
                 </IonCardContent>
               </IonCard>
 
               <IonCard>
                 <IonCardContent>
-                  <h2>Resumen del carrito</h2>
+                  <h1>Resumen del carrito</h1>
                   <h3>Total: ₡ {amount}</h3>
 
                   <IonButton
@@ -248,6 +258,25 @@ const Carrito: React.FC = () => {
           </IonHeader>
           <IonContent>
             {/* Aquí puedes insertar el formulario para agregar cliente */}
+            <IonModal isOpen={mostrarModalAgregar} onDidDismiss={() => setMostrarModalAgregar(false)}>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Agregar Cliente</IonTitle>
+                  <IonButton slot="end" onClick={() => setMostrarModalAgregar(false)}>
+                    Cerrar
+                  </IonButton>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent>
+                <AgregarClienteForm
+                  onGuardarCliente={(nuevoCliente) => {
+                    // Aquí puedes guardar el cliente en el estado del carrito
+                    console.log("Nuevo cliente agregado desde el carrito:", nuevoCliente);
+                    setMostrarModalAgregar(false);
+                  }}
+                />
+              </IonContent>
+            </IonModal>
           </IonContent>
         </IonModal>
 
