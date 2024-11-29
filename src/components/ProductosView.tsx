@@ -1,39 +1,61 @@
-import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ProdView from './ProdView';  // Asegúrate de que esta ruta sea correcta
+import React, { useEffect, useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSpinner } from '@ionic/react';
+import ProdView from './ProdView';
+import axios from 'axios'; // Asegúrate de tener Axios instalado
 
-const producto = [
-  {
-    nombre: 'La Roche Posay Effaclar Gel',
-    precio: 174000,
-    imagen: 'https://cdn.farmacenter.com.py/659286_1.jpg',  // Reemplaza con una URL válida
-    descuento: 20,
-    oferta: true
-  },
-  {
-    nombre: 'Eau Thermale Avène Cicalfate',
-    precio: 70950,
-    imagen: 'https://cdn.farmacenter.com.py/224/665020.jpg',  // Reemplaza con una URL válida
-    descuento: 35,
-    oferta: true
-  },
-  {
-    nombre: 'Gillette Prestobarba Ultragrip 2',
-    precio: 7400,
-    imagen: 'https://cdn.farmacenter.com.py/224/20590.jpg?v=1678452119',  // Reemplaza con una URL válida
-    descuento: 0,
-    oferta: false
-  },
-  {
-    nombre: 'Pampers Premium Care Pañales',
-    precio: 191850,
-    imagen: 'https://cdn.farmacenter.com.py/224/666480.jpg',  // Reemplaza con una URL válida
-    descuento: 20,
-    oferta: true
-  }
-];
+interface Producto {
+  id: number;
+  nombre: string;
+  precio: number;
+  imagen: string;
+  descuento?: number;
+  oferta?: boolean;
+  cantidad: number;
+}
 
 const ProductosView: React.FC = () => {
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/inventario/');
+        const productosAdaptados = response.data.map((item: any) => ({
+          id: item.id,
+          nombre: item.producto.nombre_comercial,
+          precio: item.precio_venta,
+          imagen: 'https://via.placeholder.com/150', // Reemplaza con imágenes reales si están disponibles
+          descuento: item.estado ? 10 : 0, // Ejemplo de descuento basado en el estado
+          oferta: item.estado,
+          cantidad: item.stock || 1,
+        }));
+        setProductos(productosAdaptados);
+      } catch (error) {
+        console.error('Error fetching productos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductos();
+  }, []);
+
+  if (loading) {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Cargando productos...</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <IonSpinner name="crescent" />
+        </IonContent>
+      </IonPage>
+    );
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -43,8 +65,8 @@ const ProductosView: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
-          {producto.map((producto, index) => (
-            <ProdView key={index} producto={producto} />  // Cambia a singular
+          {productos.map((producto) => (
+            <ProdView key={producto.id} producto={producto} />
           ))}
         </div>
       </IonContent>
