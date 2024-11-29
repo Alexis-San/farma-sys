@@ -19,6 +19,7 @@ import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
 import { ClientesType } from "../types/ClientesType";
 import axios from "axios";
 import "../theme/listas.css";
+import AgregarClienteForm from "./AgregarClienteForm";
 
 const URI = "http://localhost:8000/api/clientes/";
 
@@ -188,59 +189,18 @@ const ClientesList: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonItem>
-            <IonLabel position="stacked">Nombre</IonLabel>
-            <IonInput
-              name="nombre"
-              value={nuevoCliente.nombre}
-              onIonChange={(e) =>
-                setNuevoCliente({ ...nuevoCliente, nombre: e.detail.value! })
+          <AgregarClienteForm
+            onGuardarCliente={async (nuevoCliente) => {
+              try {
+                const response = await axios.post(URI, nuevoCliente);
+                setData([...data, response.data]);
+                setMostrarModalAgregar(false);
+                console.log("Cliente agregado exitosamente:", response.data);
+              } catch (error) {
+                console.error("Error al agregar el cliente:", error);
               }
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Apellido</IonLabel>
-            <IonInput
-              name="apellido"
-              value={nuevoCliente.apellido}
-              onIonChange={(e) =>
-                setNuevoCliente({ ...nuevoCliente, apellido: e.detail.value! })
-              }
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput
-              name="email"
-              value={nuevoCliente.email}
-              onIonChange={(e) =>
-                setNuevoCliente({ ...nuevoCliente, email: e.detail.value! })
-              }
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Teléfono</IonLabel>
-            <IonInput
-              name="telefono"
-              value={nuevoCliente.telefono}
-              onIonChange={(e) =>
-                setNuevoCliente({ ...nuevoCliente, telefono: e.detail.value! })
-              }
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Tipo</IonLabel>
-            <IonInput
-              name="tipo_cliente"
-              value={nuevoCliente.tipo_cliente}
-              onIonChange={(e) =>
-                setNuevoCliente({ ...nuevoCliente, tipo_cliente: e.detail.value! })
-              }
-            />
-          </IonItem>
-          <IonButton expand="full" onClick={guardarNuevoCliente}>
-            Guardar Cliente
-          </IonButton>
+            }}
+          />
         </IonContent>
       </IonModal>
 

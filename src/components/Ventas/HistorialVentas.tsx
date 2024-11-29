@@ -13,10 +13,10 @@ const HistorialVentas: React.FC = () => {
       <IonGrid>
         {/* Header de la tabla */}
         <IonRow className="header-row">
-          <IonCol size="2"><strong>ID</strong></IonCol>
-          <IonCol size="4"><strong>Cliente</strong></IonCol>
-          <IonCol size="3"><strong>Fecha</strong></IonCol>
-          <IonCol size="3"><strong>Total</strong></IonCol>
+          <IonCol size="2" className="header-text">ID</IonCol>
+          <IonCol size="4" className="header-text">Cliente</IonCol>
+          <IonCol size="3" className="header-text">Fecha</IonCol>
+          <IonCol size="3" className="header-text">Total</IonCol>
         </IonRow>
         {/* Contenido de la tabla */}
         {salesHistory.map((sale, index) => (

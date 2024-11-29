@@ -487,11 +487,11 @@ http://ionicframework.com/docs/theming/ */
 }
 
 :root {
-  --primary-text-color: #04256e;
+  --primary-text-color: #50cdfa;
   --ion-background-color: #ffffff;
   --ion-text-color: #04256e;
-  --ion-tab-bar-background: #04256e;
-  --ion-toolbar-background: #04256e;;
+  --ion-tab-bar-background: #50cdfa; /*colores del sistema*/
+  --ion-toolbar-background: #50cdfa;/*colores del sistema*/
   --ion-toolbar-color: #ffffff;
 }
 
