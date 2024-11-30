@@ -8,8 +8,6 @@ interface Producto {
   nombre: string;
   precio: number;
   imagen: string;
-  descuento?: number;
-  oferta?: boolean;
   cantidad: number;
 }
 
@@ -38,7 +36,6 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
       onMouseLeave={() => setHover(false)}
     >
       <IonCardHeader>
-        {producto.oferta && <div className={styles.oferta}>Oferta {producto.descuento}%</div>}
         <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
       </IonCardHeader>
       <IonCardContent className={styles.productoContent}>

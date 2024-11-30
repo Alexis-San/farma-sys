@@ -22,7 +22,6 @@ const Ventas: React.FC = () => {
         </>
       }
       searchbar
-      cartItemCount=""
     />
   );
 };

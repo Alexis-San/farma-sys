@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSpinner } from '@ionic/react';
 import ProdView from './ProdView';
 import axios from 'axios'; // Asegúrate de tener Axios instalado
+import "../theme/Producto.css"
+import "../../public/LOGO PARA APP.png"
 
 interface Producto {
   id: number;
@@ -13,6 +15,14 @@ interface Producto {
   cantidad: number;
 }
 
+// Función para formatear el nombre comercial y crear la URL de la imagen
+const formatImagenUrl = (nombreComercial: string) => {
+  return nombreComercial
+    .toUpperCase()
+    .replace(/ /g, '-')
+    .replace(/[^A-Z0-9\-\.]/g, ''); // Elimina caracteres no alfanuméricos ni guiones
+};
+
 const ProductosView: React.FC = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,15 +31,18 @@ const ProductosView: React.FC = () => {
     const fetchProductos = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/inventario/');
-        const productosAdaptados = response.data.map((item: any) => ({
-          id: item.id,
-          nombre: item.producto.nombre_comercial,
-          precio: item.precio_venta,
-          imagen: 'https://via.placeholder.com/150', // Reemplaza con imágenes reales si están disponibles
-          descuento: item.estado ? 10 : 0, // Ejemplo de descuento basado en el estado
-          oferta: item.estado,
-          cantidad: item.stock || 1,
-        }));
+        const productosAdaptados = response.data.map((item: any) => {
+          const imagenUrl = "LOGO PARA APP.png"; // Imagen generada dinámicamente
+
+          return {
+            id: item.id,
+            nombre: item.producto.nombre_comercial,
+            precio: item.precio_venta,
+            imagen: imagenUrl, // Usa la URL formateada
+            oferta: item.estado,
+            cantidad: item.stock || 1,
+          };
+        });
         setProductos(productosAdaptados);
       } catch (error) {
         console.error('Error fetching productos:', error);
@@ -58,11 +71,10 @@ const ProductosView: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Productos en Oferta</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <IonToolbar className='titulo'>
+        <IonTitle className='titulo'>Productos Más Destacados</IonTitle>
+      </IonToolbar>
+      
       <IonContent>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
           {productos.map((producto) => (
