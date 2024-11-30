@@ -30,11 +30,11 @@ import PDFGenerator from "../components/PDFGenerator";
 import AgregarClienteForm from "../components/AgregarClienteForm";
 import { ClientesType } from "../types/ClientesType";
 
-const API_CLIENTES = "http://localhost:8000/api/clientes/";
+const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
 
 const Carrito: React.FC = () => {
   const cart = useStoreState(CarritoStore, (s) => s.cart);
-  const [amount, setAmount] = useState<string>("0.00");
+  const [amount, setAmount] = useState<string>("0");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [customerName, setCustomerName] = useState<string>("");
   const [CI, setCI] = useState<string>("");
@@ -63,7 +63,7 @@ const Carrito: React.FC = () => {
       });
       setAmount(total.toFixed(2));
     } else {
-      setAmount("0.00");
+      setAmount("0");
     }
   }, [cart]);
 
@@ -127,8 +127,11 @@ const Carrito: React.FC = () => {
       return;
     }
     setIsConfirmed(true);
+    
 
     // Aquí puedes agregar lógica adicional, como enviar datos al backend.
+
+    
   };
 
   return (
@@ -148,7 +151,7 @@ const Carrito: React.FC = () => {
             <IonCol sizeMd="8" sizeSm="12">
               <IonCard>
                 <IonCardContent>
-                  <h2>Mi lista de productos</h2>
+                  <h1>Mi lista de productos</h1>
                   {cart.length > 0 ? (
                     cart.map((product) => (
                       <IonRow key={product.id} className={styles.productRow}>
@@ -214,7 +217,7 @@ const Carrito: React.FC = () => {
                             button
                             onClick={() => handleClienteSeleccionado(cliente)}
                           >
-                            {cliente.nombre} {cliente.apellido} - {cliente.email}
+                            {cliente.nombre} {cliente.apellido} - {cliente.ci}
                           </IonItem>
                         ))}
                       </IonCardContent>
@@ -234,7 +237,7 @@ const Carrito: React.FC = () => {
               <IonCard>
                 <IonCardContent>
                   <h1>Resumen del carrito</h1>
-                  <h3>Total: ₡ {amount}</h3>
+                  <h3>Total: {amount} Gs.</h3>
 
                   <IonButton
                     expand="block"

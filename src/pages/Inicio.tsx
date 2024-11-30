@@ -3,7 +3,10 @@ import ExploreContainer from '../components/ExploreContainer';
 import CustomPage from '../components/CustomPage';
 import ProductosView from '../components/ProductosView'; // Asegúrate de importar ProductosView
 
+
 const Inicio: React.FC = () => {
+  //const cartItemCount = useStoreState(selectCartItemCount);
+
   return (
     <CustomPage 
       titulo='Inicio' 
@@ -14,7 +17,6 @@ const Inicio: React.FC = () => {
         </>
       }
       searchbar 
-      cartItemCount="0"
     />
   );
 };

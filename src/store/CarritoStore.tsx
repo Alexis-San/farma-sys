@@ -1,37 +1,62 @@
 import { Store } from "pullstate";
 
-// Definimos el tipo de producto para el carrito (ajústalo según los atributos de tu producto)
-interface Product {
-    id: string;
-    title: string;
-    price: number;
-    image: string;
-    quantity: number;
+// Tipo del producto
+export interface Product {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+  quantity: number; // Cantidad en el carrito
+  stock: number; // Cantidad disponible en el inventario
 }
 
-// Definimos el tipo del estado del carrito
+// Estado inicial del carrito
 interface CarritoState {
-    cart: Product[];
+  cart: Product[];
 }
 
+// Creamos la tienda del carrito
 const CarritoStore = new Store<CarritoState>({
-    cart: []
+  cart: [],
 });
 
 export default CarritoStore;
 
-// Definimos el tipo de la función addToCart
+// Método para agregar al carrito
 export const addToCart = (passedProduct: Product): boolean => {
-    const currentCart = CarritoStore.getRawState().cart;
-    const added = !currentCart.includes(passedProduct);
+  // Primero verificamos si hay suficiente stock
+  if (passedProduct.stock <= 0) {
+    console.error(`No hay suficiente stock para ${passedProduct.title}`);
+    return false; // No se puede agregar si no hay stock
+  }
 
-    CarritoStore.update(s => {
-        if (currentCart.includes(passedProduct)) {
-            s.cart = currentCart.filter(product => product !== passedProduct);
-        } else {
-            s.cart = [...s.cart, passedProduct];
-        }
+  // Verificamos si el producto ya está en el carrito
+  const existingProduct = CarritoStore.getRawState().cart.find(
+    (product) => product.id === passedProduct.id
+  );
+
+  if (existingProduct) {
+    // Si el producto ya está en el carrito, comprobamos el stock
+    if (existingProduct.quantity < passedProduct.stock) {
+      // Si hay stock suficiente, aumentamos la cantidad
+      CarritoStore.update((s) => {
+        existingProduct.quantity += 1;
+      });
+      passedProduct.stock -= 1; // Reducir stock
+      return true; // Producto agregado correctamente
+    } else {
+      console.error(`No hay suficiente stock para agregar más de ${passedProduct.title}`);
+      return false; // No hay suficiente stock para añadir más
+    }
+  } else {
+    // Si el producto no está en el carrito, lo agregamos con cantidad 1
+    CarritoStore.update((s) => {
+      s.cart.push({ ...passedProduct, quantity: 1 });
     });
-
-    return added;
+    passedProduct.stock -= 1; // Reducir stock
+    return true; // Producto agregado correctamente
+  }
 };
+
+
+
