@@ -109,10 +109,13 @@ const Carrito: React.FC = () => {
     setClientesSugeridos([]);
   };
 
+
   const incrementQuantity = (productId: number) => {
     CarritoStore.update((s) => {
+
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
-      if (product) {
+      
+      if (product && product.stock >0) {
         product.stock -=1;
         product.quantity += 1;
         
@@ -173,7 +176,7 @@ const Carrito: React.FC = () => {
                       <IonRow key={product.id} className={styles.productRow}>
                         <IonCol>{product.title}</IonCol>
                         <IonCol>₡ {product.price}</IonCol>
-                        <IonCol>₡ {product.stock}</IonCol>
+
                         <IonCol>
                           <div className={styles.quantityControl}>
                             <IonButton onClick={() => decrementQuantity(product.id)}>-</IonButton>
@@ -181,6 +184,8 @@ const Carrito: React.FC = () => {
                             <IonButton onClick={() => incrementQuantity(product.id)}>+</IonButton>
                           </div>
                         </IonCol>
+
+                        <IonCol>₡ {product.stock}</IonCol>
                       </IonRow>
                     ))
                   ) : (
