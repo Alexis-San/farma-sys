@@ -1,13 +1,21 @@
 //ESTE ES NUEVOO JEJEJE
 import React, { useState } from "react";
-import { IonItem, IonLabel, IonInput, IonButton, IonContent } from "@ionic/react";
+import {
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonContent,
+} from "@ionic/react";
 import { ClientesType } from "../types/ClientesType";
 
 interface AgregarClienteFormProps {
   onGuardarCliente: (cliente: ClientesType) => void; // Función para manejar el guardado
 }
 
-const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({ onGuardarCliente }) => {
+const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
+  onGuardarCliente,
+}) => {
   const [nuevoCliente, setNuevoCliente] = useState<ClientesType>({
     id: 0,
     nombre: "",
@@ -15,6 +23,7 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({ onGuardarClient
     email: "",
     telefono: "",
     tipo_cliente: "",
+    ci: "", // Include 'ci' field
   });
 
   const manejarCambio = (e: CustomEvent) => {
@@ -34,11 +43,22 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({ onGuardarClient
       email: "",
       telefono: "",
       tipo_cliente: "",
+      ci: "", // Include 'ci' field
     }); // Limpia el formulario
   };
 
   return (
     <IonContent>
+      <IonItem>
+        <IonLabel position="stacked">CI</IonLabel>
+        <IonInput
+          name="ci"
+          value={nuevoCliente.ci}
+          onIonChange={(e) =>
+            setNuevoCliente({ ...nuevoCliente, ci: e.detail.value! })
+          }
+        />
+      </IonItem>
       <IonItem>
         <IonLabel position="stacked">Nombre</IonLabel>
         <IonInput

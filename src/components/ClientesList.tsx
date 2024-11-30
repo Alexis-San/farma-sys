@@ -28,7 +28,8 @@ const ClientesList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [mostrarModalModificar, setMostrarModalModificar] = useState(false);
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
-  const [clienteSeleccionado, setClienteSeleccionado] = useState<ClientesType | null>(null);
+  const [clienteSeleccionado, setClienteSeleccionado] =
+    useState<ClientesType | null>(null);
   const [nuevoCliente, setNuevoCliente] = useState<ClientesType>({
     id: 0,
     nombre: "",
@@ -36,6 +37,7 @@ const ClientesList: React.FC = () => {
     email: "",
     telefono: "",
     tipo_cliente: "",
+    ci: "", // Include 'ci' field
   });
 
   useEffect(() => {
@@ -90,7 +92,9 @@ const ClientesList: React.FC = () => {
         await axios.put(`${URI}${clienteSeleccionado.id}`, clienteSeleccionado);
         setData(
           data.map((cliente) =>
-            cliente.id === clienteSeleccionado.id ? clienteSeleccionado : cliente
+            cliente.id === clienteSeleccionado.id
+              ? clienteSeleccionado
+              : cliente
           )
         );
         console.log(`Cliente con ID: ${clienteSeleccionado.id} modificado`);
@@ -112,6 +116,7 @@ const ClientesList: React.FC = () => {
         email: "",
         telefono: "",
         tipo_cliente: "",
+        ci: "", // Add new field
       }); // Limpiar el formulario
       setMostrarModalAgregar(false); // Cerrar el modal
       console.log("Cliente agregado exitosamente:", response.data);
@@ -125,7 +130,10 @@ const ClientesList: React.FC = () => {
       <IonGrid className="tabla-personalizada">
         <IonHeader>
           <IonToolbar>
-            <IonButton color="success" onClick={() => setMostrarModalAgregar(true)}>
+            <IonButton
+              color="success"
+              onClick={() => setMostrarModalAgregar(true)}
+            >
               <IonIcon slot="start" icon={addCircleOutline} />
               Agregar Cliente
             </IonButton>
@@ -134,11 +142,12 @@ const ClientesList: React.FC = () => {
 
         <IonRow className="encabezado" style={{ background: "#f0f0f0" }}>
           <IonCol>ID</IonCol>
-          <IonCol>Tipo</IonCol>
+          <IonCol>CI</IonCol>
           <IonCol>Nombre</IonCol>
           <IonCol>Apellido</IonCol>
           <IonCol>Email</IonCol>
           <IonCol>Teléfono</IonCol>
+          <IonCol>Tipo</IonCol>
           <IonCol>Acciones</IonCol>
         </IonRow>
 
@@ -153,16 +162,20 @@ const ClientesList: React.FC = () => {
         {data.map((cliente) => (
           <IonRow key={cliente.id}>
             <IonCol>{cliente.id}</IonCol>
-            <IonCol>{cliente.tipo_cliente}</IonCol>
+            <IonCol>{cliente.ci}</IonCol> {/* Display 'ci' value */}
             <IonCol>{cliente.nombre}</IonCol>
             <IonCol>{cliente.apellido}</IonCol>
             <IonCol>{cliente.email}</IonCol>
             <IonCol>{cliente.telefono}</IonCol>
+            <IonCol>{cliente.tipo_cliente}</IonCol>
             <IonCol>
               <IonButton color="primary" onClick={() => modifyCliente(cliente)}>
                 <IonIcon slot="icon-only" icon={createOutline} />
               </IonButton>
-              <IonButton color="danger" onClick={() => deleteCliente(cliente.id)}>
+              <IonButton
+                color="danger"
+                onClick={() => deleteCliente(cliente.id)}
+              >
                 <IonIcon slot="icon-only" icon={trashOutline} />
               </IonButton>
             </IonCol>
@@ -179,7 +192,10 @@ const ClientesList: React.FC = () => {
       </IonGrid>
 
       {/* Modal de Agregar Cliente */}
-      <IonModal isOpen={mostrarModalAgregar} onDidDismiss={() => setMostrarModalAgregar(false)}>
+      <IonModal
+        isOpen={mostrarModalAgregar}
+        onDidDismiss={() => setMostrarModalAgregar(false)}
+      >
         <IonHeader>
           <IonToolbar>
             <IonTitle>Agregar Cliente</IonTitle>
@@ -205,7 +221,10 @@ const ClientesList: React.FC = () => {
       </IonModal>
 
       {/* Modal de Modificación */}
-      <IonModal isOpen={mostrarModalModificar} onDidDismiss={cerrarModalModificar}>
+      <IonModal
+        isOpen={mostrarModalModificar}
+        onDidDismiss={cerrarModalModificar}
+      >
         <IonHeader>
           <IonToolbar>
             <IonTitle>Modificar Cliente</IonTitle>
@@ -217,6 +236,14 @@ const ClientesList: React.FC = () => {
         <IonContent>
           {clienteSeleccionado && (
             <>
+              <IonItem>
+                <IonLabel position="stacked">CI</IonLabel>
+                <IonInput
+                  name="ci"
+                  value={clienteSeleccionado.ci}
+                  onIonChange={manejarCambioModificar}
+                />
+              </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Nombre</IonLabel>
                 <IonInput
