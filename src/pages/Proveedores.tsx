@@ -12,7 +12,6 @@ const Proveedores: React.FC = () => {
       titulo="Proveedores"
       contenido={<ProveedoresList />}
       searchbar
-      cartItemCount={""}
     />
   );
 };

@@ -2,7 +2,7 @@ import { Store } from "pullstate";
 
 // Tipo del producto
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   price: number;
   image: string;
@@ -51,7 +51,7 @@ export const addToCart = (passedProduct: Product): boolean => {
   } else {
     // Si el producto no está en el carrito, lo agregamos con cantidad 1
     CarritoStore.update((s) => {
-      s.cart.push({ ...passedProduct, quantity: 1 });
+      s.cart.push({ ...passedProduct, quantity: 0 });
     });
     passedProduct.stock -= 1; // Reducir stock
     return true; // Producto agregado correctamente
