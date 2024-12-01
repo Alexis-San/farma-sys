@@ -21,14 +21,16 @@ import {
   IonItem,
   IonLabel,
   IonModal,
+  IonIcon,
 } from "@ionic/react";
 import { useStoreState } from "pullstate";
 import { useEffect, useState } from "react";
-import { CarritoStore } from "../store";
+import CarritoStore, { removeFromCart } from "../store/CarritoStore";
 import styles from "../sccs/CarritoProducto.module.scss";
 import PDFGenerator from "../components/PDFGenerator";
 import AgregarClienteForm from "../components/AgregarClienteForm";
 import { ClientesType } from "../types/ClientesType";
+import { trashOutline } from "ionicons/icons";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
 
@@ -43,17 +45,16 @@ const Carrito: React.FC = () => {
   const [data, setData] = useState<ClientesType[]>([]);
   const [loading, setLoading] = useState(true);
 
-    // Buscar clientes con debounce
-    const buscarClientes = debounce(async (nombre: string) => {
-      try {
-        const response = await axios.get(`${API_CLIENTES}?nombre=${nombre}`);
-        setClientesSugeridos(response.data.clientes || []);
-      } catch (error) {
-        console.error("Error buscando clientes:", error);
-        setClientesSugeridos([]);
-      }
-    }, 300);
-  
+  // Buscar clientes con debounce
+  const buscarClientes = debounce(async (nombre: string) => {
+    try {
+      const response = await axios.get(`${API_CLIENTES}?nombre=${nombre}`);
+      setClientesSugeridos(response.data.clientes || []);
+    } catch (error) {
+      console.error("Error buscando clientes:", error);
+      setClientesSugeridos([]);
+    }
+  }, 300);
 
   const buscarClientesPorCI = debounce(async (ci: string) => {
     try {
@@ -63,7 +64,7 @@ const Carrito: React.FC = () => {
       console.error("Error buscando clientes:", error);
       setClientesSugeridos([]);
     }
-  }, 300);   
+  }, 300);
 
   // Calcular el total del carrito
   useEffect(() => {
@@ -109,16 +110,13 @@ const Carrito: React.FC = () => {
     setClientesSugeridos([]);
   };
 
-
   const incrementQuantity = (productId: number) => {
     CarritoStore.update((s) => {
-
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
-      
-      if (product && product.stock >0) {
-        product.stock -=1;
+
+      if (product && product.stock > 0) {
+        product.stock -= 1;
         product.quantity += 1;
-        
       }
     });
   };
@@ -127,9 +125,8 @@ const Carrito: React.FC = () => {
     CarritoStore.update((s) => {
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
       if (product && product.quantity > 1) {
-        product.stock +=1;
+        product.stock += 1;
         product.quantity -= 1;
-        
       }
     });
   };
@@ -146,13 +143,11 @@ const Carrito: React.FC = () => {
       return;
     }
     setIsConfirmed(true);
-    
-
     // Aquí puedes agregar lógica adicional, como enviar datos al backend.
-
-    
   };
-
+  const handleDelete = (productId: number) => {
+    removeFromCart(productId);
+  };
   return (
     <IonPage>
       <IonHeader>
@@ -179,13 +174,31 @@ const Carrito: React.FC = () => {
 
                         <IonCol>
                           <div className={styles.quantityControl}>
-                            <IonButton onClick={() => decrementQuantity(product.id)}>-</IonButton>
+                            <IonButton
+                              onClick={() => decrementQuantity(product.id)}
+                            >
+                              -
+                            </IonButton>
                             <span>{product.quantity}</span>
-                            <IonButton onClick={() => incrementQuantity(product.id)}>+</IonButton>
+                            <IonButton
+                              onClick={() => incrementQuantity(product.id)}
+                            >
+                              +
+                            </IonButton>
                           </div>
                         </IonCol>
 
                         <IonCol>₡ {product.stock}</IonCol>
+
+                        <IonCol>
+                          <IonButton
+                            onClick={() => handleDelete(product.id)}
+                            fill="clear"
+                            color="danger"
+                          >
+                            <IonIcon icon={trashOutline} />
+                          </IonButton>
+                        </IonCol>
                       </IonRow>
                     ))
                   ) : (
@@ -196,7 +209,11 @@ const Carrito: React.FC = () => {
                         className={styles.cartImage}
                       />
                       <p>Tu carrito está vacío</p>
-                      <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
+                      <IonButton
+                        expand="block"
+                        fill="outline"
+                        routerLink="/menu/Inicio"
+                      >
                         Ver Productos
                       </IonButton>
                     </div>
@@ -232,7 +249,6 @@ const Carrito: React.FC = () => {
                     ></IonInput>
                   </IonItem>
 
-
                   {clientesSugeridos.length > 0 && (
                     <IonCard>
                       <IonCardContent>
@@ -251,9 +267,15 @@ const Carrito: React.FC = () => {
                   )}
 
                   {/* Botón "Agregar Cliente" siempre visible */}
-                  <div style={{ position: "sticky", bottom: "10px", zIndex: 10 }}>
+                  <div
+                    style={{ position: "sticky", bottom: "10px", zIndex: 10 }}
+                  >
                     {/* Botón y Modal para agregar cliente */}
-                    <IonButton expand="block" color="primary" onClick={() => setMostrarModalAgregar(true)}>
+                    <IonButton
+                      expand="block"
+                      color="primary"
+                      onClick={() => setMostrarModalAgregar(true)}
+                    >
                       Agregar nuevo cliente
                     </IonButton>
                   </div>
@@ -274,9 +296,17 @@ const Carrito: React.FC = () => {
                     Comprar Ya
                   </IonButton>
 
-                  <PDFGenerator cart={cart} customerName={customerName} CI={CI} />
+                  <PDFGenerator
+                    cart={cart}
+                    customerName={customerName}
+                    CI={CI}
+                  />
 
-                  <IonButton expand="block" fill="outline" routerLink="/menu/Inicio">
+                  <IonButton
+                    expand="block"
+                    fill="outline"
+                    routerLink="/menu/Inicio"
+                  >
                     Agregar más productos
                   </IonButton>
                   <IonButton
@@ -300,34 +330,49 @@ const Carrito: React.FC = () => {
           <IonHeader>
             <IonToolbar>
               <IonTitle>Agregar Cliente</IonTitle>
-              <IonButton slot="end" onClick={() => setMostrarModalAgregar(false)}>
+              <IonButton
+                slot="end"
+                onClick={() => setMostrarModalAgregar(false)}
+              >
                 Cerrar
               </IonButton>
             </IonToolbar>
           </IonHeader>
           <IonContent>
             {/* Aquí puedes insertar el formulario para agregar cliente */}
-            <IonModal isOpen={mostrarModalAgregar} onDidDismiss={() => setMostrarModalAgregar(false)}>
+            <IonModal
+              isOpen={mostrarModalAgregar}
+              onDidDismiss={() => setMostrarModalAgregar(false)}
+            >
               <IonHeader>
                 <IonToolbar>
                   <IonTitle>Agregar Cliente</IonTitle>
-                  <IonButton slot="end" onClick={() => setMostrarModalAgregar(false)}>
+                  <IonButton
+                    slot="end"
+                    onClick={() => setMostrarModalAgregar(false)}
+                  >
                     Cerrar
                   </IonButton>
                 </IonToolbar>
               </IonHeader>
               <IonContent>
                 <AgregarClienteForm
-            onGuardarCliente={async (nuevoCliente) => {
-              try {
-                const response = await axios.post(API_CLIENTES, nuevoCliente);
-                setData([...data, response.data]);
-                setMostrarModalAgregar(false);
-                console.log("Cliente agregado exitosamente:", response.data);
-              } catch (error) {
-                console.error("Error al agregar el cliente:", error);
-              }
-            }}
+                  onGuardarCliente={async (nuevoCliente) => {
+                    try {
+                      const response = await axios.post(
+                        API_CLIENTES,
+                        nuevoCliente
+                      );
+                      setData([...data, response.data]);
+                      setMostrarModalAgregar(false);
+                      console.log(
+                        "Cliente agregado exitosamente:",
+                        response.data
+                      );
+                    } catch (error) {
+                      console.error("Error al agregar el cliente:", error);
+                    }
+                  }}
                 />
               </IonContent>
             </IonModal>
@@ -347,4 +392,3 @@ const Carrito: React.FC = () => {
 };
 
 export default Carrito;
-
