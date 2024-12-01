@@ -118,7 +118,6 @@ const RegistroView: React.FC<RegistroProps> = (props) => {
             <h1 className="titulo">Registro de Usuario</h1>
           </IonCol>
         </IonRow>
-        
         <IonRow>
           <IonCol size="4" offset="4">
             <IonInput
