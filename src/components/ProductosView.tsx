@@ -12,7 +12,8 @@ interface Producto {
   imagen: string;
   descuento?: number;
   oferta?: boolean;
-  cantidad: number;
+  stock: number;
+  quantity: number;
 }
 
 // Función para formatear el nombre comercial y crear la URL de la imagen
@@ -40,7 +41,7 @@ const ProductosView: React.FC = () => {
             precio: item.precio_venta,
             imagen: imagenUrl, // Usa la URL formateada
             oferta: item.estado,
-            cantidad: item.stock || 1,
+            stock: item.stock
           };
         });
         setProductos(productosAdaptados);

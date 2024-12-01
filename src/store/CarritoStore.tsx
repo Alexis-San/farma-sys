@@ -2,7 +2,7 @@ import { Store } from "pullstate";
 
 // Tipo del producto
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   price: number;
   image: string;
@@ -40,9 +40,9 @@ export const addToCart = (passedProduct: Product): boolean => {
     if (existingProduct.quantity < passedProduct.stock) {
       // Si hay stock suficiente, aumentamos la cantidad
       CarritoStore.update((s) => {
-        existingProduct.quantity += 1;
+       // existingProduct.quantity += 1;
       });
-      passedProduct.stock -= 1; // Reducir stock
+      //passedProduct.stock -= 1; // Reducir stock
       return true; // Producto agregado correctamente
     } else {
       console.error(`No hay suficiente stock para agregar más de ${passedProduct.title}`);
@@ -51,9 +51,9 @@ export const addToCart = (passedProduct: Product): boolean => {
   } else {
     // Si el producto no está en el carrito, lo agregamos con cantidad 1
     CarritoStore.update((s) => {
-      s.cart.push({ ...passedProduct, quantity: 1 });
+        s.cart.push({ ...passedProduct, quantity: 1, stock: passedProduct.stock - 1 });
+
     });
-    passedProduct.stock -= 1; // Reducir stock
     return true; // Producto agregado correctamente
   }
 };

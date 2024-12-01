@@ -9,7 +9,6 @@ const Productos: React.FC = () => {
       titulo="Productos"
       contenido={<ProductosList />}
       searchbar
-      cartItemCount={""}
     />
   );
 };

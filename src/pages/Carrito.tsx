@@ -43,16 +43,27 @@ const Carrito: React.FC = () => {
   const [data, setData] = useState<ClientesType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Buscar clientes con debounce
-  const buscarClientes = debounce(async (nombre: string) => {
+    // Buscar clientes con debounce
+    const buscarClientes = debounce(async (nombre: string) => {
+      try {
+        const response = await axios.get(`${API_CLIENTES}?nombre=${nombre}`);
+        setClientesSugeridos(response.data.clientes || []);
+      } catch (error) {
+        console.error("Error buscando clientes:", error);
+        setClientesSugeridos([]);
+      }
+    }, 300);
+  
+
+  const buscarClientesPorCI = debounce(async (ci: string) => {
     try {
-      const response = await axios.get(`${API_CLIENTES}?nombre=${nombre}`);
+      const response = await axios.get(`${API_CLIENTES}?ci=${ci}`);
       setClientesSugeridos(response.data.clientes || []);
     } catch (error) {
       console.error("Error buscando clientes:", error);
       setClientesSugeridos([]);
     }
-  }, 300);
+  }, 300);   
 
   // Calcular el total del carrito
   useEffect(() => {
@@ -94,14 +105,20 @@ const Carrito: React.FC = () => {
 
   const handleClienteSeleccionado = (cliente: any) => {
     setCustomerName(`${cliente.nombre} ${cliente.apellido}`);
+    setCI(cliente.ci);
     setClientesSugeridos([]);
   };
 
+
   const incrementQuantity = (productId: number) => {
     CarritoStore.update((s) => {
+
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
-      if (product) {
+      
+      if (product && product.stock >0) {
+        product.stock -=1;
         product.quantity += 1;
+        
       }
     });
   };
@@ -110,7 +127,9 @@ const Carrito: React.FC = () => {
     CarritoStore.update((s) => {
       const product = s.cart.find((p) => Number(p.id) === productId); // Convert 'p.id' to a number
       if (product && product.quantity > 1) {
+        product.stock +=1;
         product.quantity -= 1;
+        
       }
     });
   };
@@ -157,6 +176,7 @@ const Carrito: React.FC = () => {
                       <IonRow key={product.id} className={styles.productRow}>
                         <IonCol>{product.title}</IonCol>
                         <IonCol>₡ {product.price}</IonCol>
+
                         <IonCol>
                           <div className={styles.quantityControl}>
                             <IonButton onClick={() => decrementQuantity(product.id)}>-</IonButton>
@@ -164,6 +184,8 @@ const Carrito: React.FC = () => {
                             <IonButton onClick={() => incrementQuantity(product.id)}>+</IonButton>
                           </div>
                         </IonCol>
+
+                        <IonCol>₡ {product.stock}</IonCol>
                       </IonRow>
                     ))
                   ) : (
@@ -200,12 +222,16 @@ const Carrito: React.FC = () => {
                     <IonLabel position="stacked">CI o RUC</IonLabel>
                     <IonInput
                       value={CI}
-                      onIonChange={(e) => setCI(e.detail.value!)}
+                      onIonChange={(e) => {
+                        const ci = e.detail.value!;
+                        setCI(ci); // Actualiza el estado de CI
+                        buscarClientesPorCI(ci); // Llama a la función de búsqueda por CI
+                      }}
                       placeholder="Ingresa el CI o RUC"
                       clearInput
-                    // Aquí puedes agregar una lógica similar para manejar el CI o RUC
                     ></IonInput>
                   </IonItem>
+
 
                   {clientesSugeridos.length > 0 && (
                     <IonCard>

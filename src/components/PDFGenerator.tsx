@@ -4,7 +4,7 @@ import { IonButton } from "@ionic/react";
 
 interface PDFGeneratorProps {
   cart: Array<{
-    id: string;
+    id: number;
     title: string;
     price: number;
     quantity: number;
