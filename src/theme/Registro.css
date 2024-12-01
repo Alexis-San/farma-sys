@@ -1,0 +1,26 @@
+.letras {
+    font-size: 1.1em;
+    color: white;
+  }
+  
+  /* Aplica el margen superior a IonCol o IonRow */
+  .usuario-input{
+    margin-top: 30px !important;
+  }
+  
+  .modificar-button {
+    --background: #0e9aeb;
+    --color: white;
+    border-radius: 20px;
+    font-weight: bold;
+  }
+  
+  .modificar-button:hover {
+    --background: #0e9aeb;
+  }
+  
+  #RegistroButton {
+    font-weight: bold;
+    color: white; /* Texto en blanco */
+  }
+  

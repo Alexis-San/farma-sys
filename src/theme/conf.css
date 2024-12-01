@@ -31,8 +31,8 @@ ion-avatar {
 .modificar-button {
     margin-top: 20px; /* Espacio adicional antes del botón */
     margin: left 0;
-    color: aqua;
-    --ion-color-primary: #04256e;
+    color: white;
+    --ion-color-primary: #0e9aeb;
 }
 
 
@@ -76,4 +76,11 @@ ion-input {
   
 .letras{
     color: rgb(0, 0, 0);
+}
+
+.ionr-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 }
