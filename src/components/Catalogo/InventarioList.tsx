@@ -1,23 +1,15 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonText,
-  IonContent,
-  IonHeader,
-  IonToolbar,
-  IonButton,
-  IonIcon,
-  IonModal, IonSearchbar,
-  IonTitle,
+  IonGrid,IonRow,IonCol,IonText,IonContent,IonHeader,IonToolbar,IonButton,IonIcon,IonBadge,IonModal,IonSearchbar,IonTitle,IonItem,IonList,IonLabel,
 } from "@ionic/react";
 import { InventarioType, ProductoType } from "../../types/InventarioType";
 import axios from "axios";
-import { createOutline, addCircleOutline, add } from "ionicons/icons";
+import { createOutline, addCircleOutline, add, warningOutline, downloadOutline } from "ionicons/icons";
 import ModificarInventarioModal from "./ModificarInventarioModal";
 import AgregarInventarioModal from "./AgregarInventarioModal";
+import "../InventarioList.css";
+import ExportarStockBajo from '../ExcelGenerator';
 
 const URI = "http://localhost:8000/api/inventario/";
 const PRODUCTOS_URI = "http://localhost:8000/api/productos/";
@@ -26,11 +18,14 @@ const InventarioList: React.FC = () => {
   const [data, setData] = useState<InventarioType[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [stockBajo, setStockBajo] = useState<InventarioType[]>([]); // Estado para productos con stock bajo
+  const [showStockBajoModal, setShowStockBajoModal] = useState(false); // Control del modal
+
   // Estados para agregar productos
   const [showProductModal, setShowProductModal] = useState(false);
   const [productos, setProductos] = useState<ProductoType[]>([]);
   const [loadingProductos, setLoadingProductos] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<ProductoType | null>(
     null
   );
@@ -43,8 +38,6 @@ const InventarioList: React.FC = () => {
     fecha_vencimiento: new Date().toISOString(),
     productoId: 0,
   });
-
-  
 
   // Estados para modificar inventario
   const [showModificarModal, setShowModificarModal] = useState(false);
@@ -127,9 +120,12 @@ const InventarioList: React.FC = () => {
           precio_compra: nuevoInventario.precio_compra,
           fecha_vencimiento: nuevoInventario.fecha_vencimiento,
         };
-  
-        const response = await axios.put(`${URI}${inventarioSeleccionado.id}`, updatedInventario);
-        
+
+        const response = await axios.put(
+          `${URI}${inventarioSeleccionado.id}`,
+          updatedInventario
+        );
+
         // Actualizar el inventario local con los datos modificados
         setData((prevData) =>
           prevData.map((item) =>
@@ -142,29 +138,63 @@ const InventarioList: React.FC = () => {
       }
     }
   };
-  
 
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<InventarioType[]>(URI);
+        setData(response.data);
+        filtrarStockBajo(response.data); // Filtrar stock bajo al cargar los datos
+      } catch (error) {
+        console.error("Error al cargar los datos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  // Filtrar productos con stock bajo
+  const filtrarStockBajo = (productos: InventarioType[]) => {
+    const bajoStock = productos.filter((item) => item.stock && item.stock < 5);
+    setStockBajo(bajoStock);
+  };
 
   return (
     <>
       <IonGrid>
         <IonHeader>
           <IonToolbar>
+            {/* Botón para agregar inventario */}
             <IonButton color="success" size="default" onClick={handleAddClick}>
               <IonIcon slot="start" icon={addCircleOutline} />
               Agregar Inventario
+            </IonButton>
+
+            {/* Botón para el informe de stock bajo */}
+            <IonButton
+              color="warning"
+              size="default"
+              onClick={() => setShowStockBajoModal(true)}
+            >
+              <IonIcon slot="start" icon={warningOutline} />
+              Informe Stock Bajo
             </IonButton>
           </IonToolbar>
         </IonHeader>
 
         {/* Tabla de inventario */}
-        <IonRow className="encabezado"
+        <IonRow
+          className="encabezado"
           style={{
             background: "#f0f0f0",
             fontWeight: "bold",
             textAlign: "center",
-          }}>
-         <IonCol size="0.5">ID</IonCol>
+          }}
+        >
+          <IonCol size="0.5">ID</IonCol>
           <IonCol size="3">Nombre</IonCol>
           <IonCol size="1">Stock</IonCol>
           <IonCol size="1">Lote</IonCol>
@@ -177,36 +207,42 @@ const InventarioList: React.FC = () => {
 
         {data.map((item) => (
           <IonRow
-          key={item.id}
-          style={{ textAlign: "center", verticalAlign: "middle" }}
-        >
-          <IonCol size="0.5">
-            <IonText>{item.id}</IonText>
-          </IonCol>
-          <IonCol size="3">
-            <IonText>{item.producto?.nombre_comercial}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.stock}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.lote}</IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>{item.precio_venta}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.precio_compra}</IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>
-              {new Date(item.fecha_vencimiento).toLocaleDateString()}
-            </IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>{item.producto?.condicion_venta}</IonText>
-          </IonCol>
-          <IonCol size="1">
+            key={item.id}
+            style={{ textAlign: "center", verticalAlign: "middle" }}
+          >
+            <IonCol size="0.5">
+              <IonText>{item.id}</IonText>
+            </IonCol>
+            <IonCol size="3">
+              <IonText>{item.producto?.nombre_comercial}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.stock}</IonText>
+              {/* Badge para indicar stock bajo */}
+              {item.stock && item.stock < 5 && (
+                <IonBadge color="warning" className="lowStockBadge">
+                  Bajo
+                </IonBadge>
+              )}
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.lote}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.precio_venta}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.precio_compra}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {new Date(item.fecha_vencimiento).toLocaleDateString()}
+              </IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.producto?.condicion_venta}</IonText>
+            </IonCol>
+            <IonCol size="1">
               <IonButton
                 color="primary"
                 size="small"
@@ -220,8 +256,9 @@ const InventarioList: React.FC = () => {
             </IonCol>
           </IonRow>
         ))}
-                {/* Mostrar mensaje si no hay datos */}
-                {!loading && data.length === 0 && (
+
+        {/* Mostrar mensaje si no hay datos */}
+        {!loading && data.length === 0 && (
           <IonRow>
             <IonCol>
               <IonText>No hay datos disponibles</IonText>
@@ -230,52 +267,84 @@ const InventarioList: React.FC = () => {
         )}
       </IonGrid>
 
+      {/* Modal para informe de stock bajo */}
+      <IonModal
+        isOpen={showStockBajoModal}
+        onDidDismiss={() => setShowStockBajoModal(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Informe: Productos con Stock Bajo</IonTitle>
+
+            {/* Aquí colocamos el botón para exportar el Excel */}
+            <ExportarStockBajo stockBajo={stockBajo} />
+
+
+            <IonButton slot="end" onClick={() => setShowStockBajoModal(false)}>
+              Cerrar
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonList>
+            {stockBajo.map((item) => (
+              <IonItem key={item.id}>
+                <IonLabel>
+                  <h2>{item.producto?.nombre_comercial}</h2>
+                  <p>Stock: {item.stock}</p>
+                  <p>Lote: {item.lote}</p>
+                </IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+        </IonContent>
+      </IonModal>
+
       {/* Modal de selección de producto */}
       <IonModal
-  isOpen={showProductModal}
-  onDidDismiss={() => setShowProductModal(false)}
->
-  <IonHeader>
-    <IonToolbar>
-      <IonTitle>Seleccionar Producto</IonTitle>
-      <IonButton slot="end" onClick={() => setShowProductModal(false)}>
-        Cerrar
-      </IonButton>
-    </IonToolbar>
-  </IonHeader>
-  <IonContent>
-    <IonSearchbar
-      value={searchText}
-      onIonInput={(e: any) => setSearchText(e.target.value)}
-      debounce={0}
-      showClearButton="focus"
-      placeholder="Buscar por nombre comercial"
-    />
-    <IonGrid>
-      {productos
-        .filter((producto) =>
-          producto.nombre_comercial
-            .toLowerCase()
-            .includes(searchText.toLowerCase())
-        )
-        .map((producto) => (
-          <IonRow key={producto.id}>
-            <IonCol size="9.5">{producto.nombre_comercial}</IonCol>
-            <IonCol size="2.5">
-              <IonButton
-                size="small"
-                color="success"
-                onClick={() => handleProductSelect(producto)}
-              >
-                Agregar <IonIcon slot="end" icon={add} />
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        ))}
-    </IonGrid>
-  </IonContent>
-</IonModal>
-
+        isOpen={showProductModal}
+        onDidDismiss={() => setShowProductModal(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Seleccionar Producto</IonTitle>
+            <IonButton slot="end" onClick={() => setShowProductModal(false)}>
+              Cerrar
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonSearchbar
+            value={searchText}
+            onIonInput={(e: any) => setSearchText(e.target.value)}
+            debounce={0}
+            showClearButton="focus"
+            placeholder="Buscar por nombre comercial"
+          />
+          <IonGrid>
+            {productos
+              .filter((producto) =>
+                producto.nombre_comercial
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase())
+              )
+              .map((producto) => (
+                <IonRow key={producto.id}>
+                  <IonCol size="9.5">{producto.nombre_comercial}</IonCol>
+                  <IonCol size="2.5">
+                    <IonButton
+                      size="small"
+                      color="success"
+                      onClick={() => handleProductSelect(producto)}
+                    >
+                      Agregar <IonIcon slot="end" icon={add} />
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              ))}
+          </IonGrid>
+        </IonContent>
+      </IonModal>
 
       {/* Modal de agregar inventario */}
       <AgregarInventarioModal
@@ -294,8 +363,9 @@ const InventarioList: React.FC = () => {
         onClose={() => setShowModificarModal(false)}
         onGuardarM={modificarInventario}
         onChange={handleInventarioChange}
-        />
+      />
     </>
+
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText, IonBadge} from '@ionic/react';
 import styles from '../sccs/ProductoView.module.scss';
 import { addToCart } from '../store/CarritoStore'; // Importa la función para agregar al carrito
 
@@ -34,23 +34,30 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
   };
 
   return (
-    <IonCard className={styles.productoCard} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <IonCardHeader>
-        <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
-      </IonCardHeader>
-      <IonCardContent className={styles.productoContent}>
-        <IonText>
-          <h2>{producto.nombre}</h2>
-          <p>₲ {producto.precio}</p>
-          <p>Stock: {producto.stock || 'No disponible'}</p> {/* Aquí muestra un valor por defecto si stock está vacío */}
-        </IonText>
-        {hover && (
-          <IonButton expand="block" color="success" onClick={handleAddToCart}>
-            Agregar al carrito
-          </IonButton>
-        )}
-      </IonCardContent>
-    </IonCard>
+<IonCard className={styles.productoCard} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+  <IonCardHeader>
+    <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
+  </IonCardHeader>
+  <IonCardContent className={styles.productoContent}>
+    <IonText>
+      <h2>{producto.nombre}</h2>
+      <p>₲ {producto.precio}</p>
+      <p>Stock: {producto.stock || 'No disponible'}</p>
+    </IonText>
+    {/* Badge para indicar stock bajo */}
+    {producto.stock && producto.stock < 5 && (
+      <IonBadge color="warning" className={styles.lowStockBadge}>
+        Stock bajo
+      </IonBadge>
+    )}
+    {hover && (
+      <IonButton expand="block" color="success" onClick={handleAddToCart}>
+        Agregar al carrito
+      </IonButton>
+    )}
+  </IonCardContent>
+</IonCard>
+
   );
 };
 

@@ -29,6 +29,11 @@
  
  }
  
- 
- 
+ .lowStockBadge {
+  margin-top: px;
+  display: ruby; /* Para que se alinee dentro del flujo */
+}
+
+
+
  
