@@ -109,7 +109,7 @@ const Funcionarios: React.FC = () => {
     </IonContent>
   );
 
-  return <CustomPage titulo="Funcionarios" contenido={contenido} searchbar cartItemCount="2" />;
+  return <CustomPage titulo="Funcionarios" contenido={contenido} searchbar  />;
 };
 
 export default Funcionarios;
