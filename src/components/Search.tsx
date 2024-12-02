@@ -7,6 +7,7 @@ import {
   IonModal,
   IonButton,
   IonSpinner,
+  IonBadge,
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -133,16 +134,22 @@ export const SearchBar: React.FC = () => {
           <IonList>
             {filteredResults.length > 0 ? (
               filteredResults.map((item) => (
-                <IonItem key={item.id}>
-                  <IonLabel>
-                    <h2>{item.producto.nombre_comercial}</h2>
-                    <p>Presentación: {item.producto.presentacion}</p>
-                    <p>Precio: {item.precio_venta} Gs</p>
-                    <p>Stock: {item.stock}</p>
-                  </IonLabel>
-                  {/* Botón para agregar al carrito */}
-                  <IonButton onClick={() => handleAddToCart(item)}>Agregar</IonButton>
-                </IonItem>
+              <IonItem key={item.id}>
+                <IonLabel>
+                  <h2>{item.producto.nombre_comercial}</h2>
+                  <p>Presentación: {item.producto.presentacion}</p>
+                  <p>Precio: {item.precio_venta} Gs</p>
+                  <p>Stock: {item.stock}</p>
+                  {/* Badge para indicar stock bajo */}
+                  {item.stock && item.stock < 5 && (
+                    <IonBadge color="warning" >
+                      Stock bajo
+                    </IonBadge>
+                  )}
+                </IonLabel>
+                {/* Botón para agregar al carrito */}
+                <IonButton onClick={() => handleAddToCart(item)}>Agregar</IonButton>
+              </IonItem>
               ))
             ) : (
               <IonItem>

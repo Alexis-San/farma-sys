@@ -9,7 +9,7 @@ import {
   IonHeader,
   IonToolbar,
   IonButton,
-  IonIcon,
+  IonIcon, IonBadge,
   IonModal, IonSearchbar,
   IonTitle,
 } from "@ionic/react";
@@ -18,6 +18,7 @@ import axios from "axios";
 import { createOutline, addCircleOutline, add } from "ionicons/icons";
 import ModificarInventarioModal from "./ModificarInventarioModal";
 import AgregarInventarioModal from "./AgregarInventarioModal";
+import "../InventarioList.css"
 
 const URI = "http://localhost:8000/api/inventario/";
 const PRODUCTOS_URI = "http://localhost:8000/api/productos/";
@@ -44,7 +45,7 @@ const InventarioList: React.FC = () => {
     productoId: 0,
   });
 
-  
+
 
   // Estados para modificar inventario
   const [showModificarModal, setShowModificarModal] = useState(false);
@@ -127,9 +128,9 @@ const InventarioList: React.FC = () => {
           precio_compra: nuevoInventario.precio_compra,
           fecha_vencimiento: nuevoInventario.fecha_vencimiento,
         };
-  
+
         const response = await axios.put(`${URI}${inventarioSeleccionado.id}`, updatedInventario);
-        
+
         // Actualizar el inventario local con los datos modificados
         setData((prevData) =>
           prevData.map((item) =>
@@ -142,7 +143,7 @@ const InventarioList: React.FC = () => {
       }
     }
   };
-  
+
 
 
   return (
@@ -164,7 +165,7 @@ const InventarioList: React.FC = () => {
             fontWeight: "bold",
             textAlign: "center",
           }}>
-         <IonCol size="0.5">ID</IonCol>
+          <IonCol size="0.5">ID</IonCol>
           <IonCol size="3">Nombre</IonCol>
           <IonCol size="1">Stock</IonCol>
           <IonCol size="1">Lote</IonCol>
@@ -177,36 +178,42 @@ const InventarioList: React.FC = () => {
 
         {data.map((item) => (
           <IonRow
-          key={item.id}
-          style={{ textAlign: "center", verticalAlign: "middle" }}
-        >
-          <IonCol size="0.5">
-            <IonText>{item.id}</IonText>
-          </IonCol>
-          <IonCol size="3">
-            <IonText>{item.producto?.nombre_comercial}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.stock}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.lote}</IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>{item.precio_venta}</IonText>
-          </IonCol>
-          <IonCol size="1">
-            <IonText>{item.precio_compra}</IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>
-              {new Date(item.fecha_vencimiento).toLocaleDateString()}
-            </IonText>
-          </IonCol>
-          <IonCol size="1.5">
-            <IonText>{item.producto?.condicion_venta}</IonText>
-          </IonCol>
-          <IonCol size="1">
+            key={item.id}
+            style={{ textAlign: "center", verticalAlign: "middle" }}
+          >
+            <IonCol size="0.5">
+              <IonText>{item.id}</IonText>
+            </IonCol>
+            <IonCol size="3">
+              <IonText>{item.producto?.nombre_comercial}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.stock}  </IonText>
+              {/* Badge para indicar stock bajo */}
+              {item.stock && item.stock < 5 && (
+                <IonBadge color="warning" className="lowStockBadge">
+                  Bajo
+                </IonBadge>
+              )}
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.lote}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.precio_venta}</IonText>
+            </IonCol>
+            <IonCol size="1">
+              <IonText>{item.precio_compra}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {new Date(item.fecha_vencimiento).toLocaleDateString()}
+              </IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>{item.producto?.condicion_venta}</IonText>
+            </IonCol>
+            <IonCol size="1">
               <IonButton
                 color="primary"
                 size="small"
@@ -220,8 +227,8 @@ const InventarioList: React.FC = () => {
             </IonCol>
           </IonRow>
         ))}
-                {/* Mostrar mensaje si no hay datos */}
-                {!loading && data.length === 0 && (
+        {/* Mostrar mensaje si no hay datos */}
+        {!loading && data.length === 0 && (
           <IonRow>
             <IonCol>
               <IonText>No hay datos disponibles</IonText>
@@ -232,49 +239,49 @@ const InventarioList: React.FC = () => {
 
       {/* Modal de selección de producto */}
       <IonModal
-  isOpen={showProductModal}
-  onDidDismiss={() => setShowProductModal(false)}
->
-  <IonHeader>
-    <IonToolbar>
-      <IonTitle>Seleccionar Producto</IonTitle>
-      <IonButton slot="end" onClick={() => setShowProductModal(false)}>
-        Cerrar
-      </IonButton>
-    </IonToolbar>
-  </IonHeader>
-  <IonContent>
-    <IonSearchbar
-      value={searchText}
-      onIonInput={(e: any) => setSearchText(e.target.value)}
-      debounce={0}
-      showClearButton="focus"
-      placeholder="Buscar por nombre comercial"
-    />
-    <IonGrid>
-      {productos
-        .filter((producto) =>
-          producto.nombre_comercial
-            .toLowerCase()
-            .includes(searchText.toLowerCase())
-        )
-        .map((producto) => (
-          <IonRow key={producto.id}>
-            <IonCol size="9.5">{producto.nombre_comercial}</IonCol>
-            <IonCol size="2.5">
-              <IonButton
-                size="small"
-                color="success"
-                onClick={() => handleProductSelect(producto)}
-              >
-                Agregar <IonIcon slot="end" icon={add} />
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        ))}
-    </IonGrid>
-  </IonContent>
-</IonModal>
+        isOpen={showProductModal}
+        onDidDismiss={() => setShowProductModal(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Seleccionar Producto</IonTitle>
+            <IonButton slot="end" onClick={() => setShowProductModal(false)}>
+              Cerrar
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonSearchbar
+            value={searchText}
+            onIonInput={(e: any) => setSearchText(e.target.value)}
+            debounce={0}
+            showClearButton="focus"
+            placeholder="Buscar por nombre comercial"
+          />
+          <IonGrid>
+            {productos
+              .filter((producto) =>
+                producto.nombre_comercial
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase())
+              )
+              .map((producto) => (
+                <IonRow key={producto.id}>
+                  <IonCol size="9.5">{producto.nombre_comercial}</IonCol>
+                  <IonCol size="2.5">
+                    <IonButton
+                      size="small"
+                      color="success"
+                      onClick={() => handleProductSelect(producto)}
+                    >
+                      Agregar <IonIcon slot="end" icon={add} />
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              ))}
+          </IonGrid>
+        </IonContent>
+      </IonModal>
 
 
       {/* Modal de agregar inventario */}
@@ -294,7 +301,7 @@ const InventarioList: React.FC = () => {
         onClose={() => setShowModificarModal(false)}
         onGuardarM={modificarInventario}
         onChange={handleInventarioChange}
-        />
+      />
     </>
   );
 };
