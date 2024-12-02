@@ -166,29 +166,13 @@ const Carrito: React.FC = () => {
               <IonCard>
                 <IonCardContent>
                   <h1>Mi lista de productos</h1>
-                    <IonRow
-                     className="encabezado"
-                      style={{
-                      background: "#f0f0f0",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                             }}
-                     >
-                    <IonCol size="4">Nombre</IonCol>
-                    <IonCol size="2">Precio</IonCol>
-                    <IonCol size="2">Stock</IonCol>
-                    <IonCol size="2">Cantidad</IonCol>
-                    <IonCol size="2">Accion</IonCol>
-                     </IonRow>
                   {cart.length > 0 ? (
                     cart.map((product) => (
-
-
                       <IonRow key={product.id} className={styles.productRow}>
-                        <IonCol size="4">{product.title}</IonCol>
-                        <IonCol size="2">{product.price} Gs</IonCol>
-                        <IonCol size="2">{product.stock}</IonCol>
-                        <IonCol size="2">
+                        <IonCol>{product.title}</IonCol>
+                        <IonCol>₡ {product.price}</IonCol>
+
+                        <IonCol>
                           <div className={styles.quantityControl}>
                             <IonButton
                               onClick={() => decrementQuantity(product.id)}
@@ -204,9 +188,9 @@ const Carrito: React.FC = () => {
                           </div>
                         </IonCol>
 
-                        
+                        <IonCol>₡ {product.stock}</IonCol>
 
-                        <IonCol size="2">
+                        <IonCol>
                           <IonButton
                             onClick={() => handleDelete(product.id)}
                             fill="clear"
