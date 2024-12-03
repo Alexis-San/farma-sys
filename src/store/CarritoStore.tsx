@@ -5,7 +5,6 @@ export interface Product {
   id: number;
   title: string;
   price: number;
-  image: string;
   quantity: number; // Cantidad en el carrito
   stock: number; // Cantidad disponible en el inventario
 }

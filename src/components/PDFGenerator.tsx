@@ -42,26 +42,32 @@ const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName, CI }) =
       doc.setFontSize(10);
       doc.text("Tel.: +595 982 126400", 5, 35);
       doc.text(`Cliente: ${customerName}`, 5, 40);
-      doc.text(`CI/RUC: ${CI}`, 5, 44);
+      doc.text(`CI/RUC: ${CI}`, 5, 45);
+
+      // Fecha y hora de emisión
+      const date = new Date();
+      const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getFullYear()}`;
+      const formattedTime = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+      doc.text(`Fecha: ${formattedDate} ${formattedTime}`, 5, 50);
 
       // Línea divisoria
-      doc.line(5, 46, 75, 46);
+      doc.line(5, 53, 75, 53);
 
       // Tabla encabezado
       doc.setFontSize(10);
-      doc.text("Cant", 5, 50);
-      doc.text("Artículo", 15, 50);
-      doc.text("Subtotal", 50, 50);
-      doc.line(5, 52, 75, 52); // Línea bajo el encabezado
+      doc.text("Cant", 5, 56);
+      doc.text("Artículo", 15, 56);
+      doc.text("Subtotal", 60, 56);
+      doc.line(5, 57, 75, 57); // Línea bajo el encabezado
 
       // Productos
-      let y = 57; // Posición inicial para productos
+      let y = 63; // Posición inicial para productos
       cart.forEach((product) => {
         const subtotal = product.price * product.quantity;
         doc.setFontSize(8);
-        doc.text(`${product.quantity}`, 5, y);
-        doc.text(doc.splitTextToSize(product.title, 30), 15, y);
-        doc.text(`${subtotal.toFixed(2)}`, 65, y, { align: "right" });
+        doc.text(`${product.quantity}`, 7, y);
+        doc.text(doc.splitTextToSize(product.title, 50), 15, y);
+        doc.text(`${subtotal.toFixed(0)}`, 62, y, { align: "left" });
         y += 9;
       });
 
@@ -72,7 +78,7 @@ const PDFGenerator: React.FC<PDFGeneratorProps> = ({ cart, customerName, CI }) =
       const total = cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
       y += 8;
       doc.setFontSize(12);
-      doc.text(`Total: $${total.toFixed(2)}`, 5, y);
+      doc.text(`Total: $${total.toFixed(0)}`, 5, y);
 
       // Guardar PDF
       doc.save("Recibo.pdf");

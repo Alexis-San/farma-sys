@@ -18,6 +18,8 @@ import {
 import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
 import axios from "axios";
 import { LaboratoriosType } from "../../types/LaboratoriosType";
+import "../../theme/listas.css";
+
 const URI = "http://localhost:8000/api/laboratorios/";
 
 /**
@@ -135,7 +137,7 @@ const LaboratoriosList: React.FC = () => {
 
   return (
     <>
-      <IonGrid className="tabla">
+      <IonGrid className="tabla-persoanalizada">
         <IonHeader>
           <IonToolbar>
             <IonButton

@@ -20,6 +20,7 @@ import {
 import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
 import { ProductosType } from "../../types/ProductosType";
 import axios from "axios";
+import "../../theme/listas.css";
 
 const URI = "http://localhost:8000/api/productos/";
 
@@ -163,7 +164,7 @@ const ProductosList: React.FC = () => {
 
   return (
     <>
-      <IonGrid className="tabla">
+      <IonGrid className="tabla-personalizada">
         {/* Botón Agregar */}
         <IonHeader>
           <IonToolbar>

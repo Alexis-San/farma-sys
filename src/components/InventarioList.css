@@ -33,7 +33,9 @@
   margin-top: px;
   display: ruby; /* Para que se alinee dentro del flujo */
 }
-
+ .Texto{
+  margin-top: 8px;
+ }
 
 
  

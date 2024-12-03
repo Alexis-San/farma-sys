@@ -18,6 +18,7 @@ import {
 import { createOutline, trashOutline, addCircleOutline } from "ionicons/icons";
 import axios from "axios";
 import { ProveedoresType } from "../types/ProveedoresType";
+import "../theme/listas.css";
 
 const URI = "http://localhost:8000/api/proveedores/";
 
@@ -131,7 +132,7 @@ const ProveedoresList: React.FC = () => {
 
   return (
     <>
-      <IonGrid className="tabla">
+      <IonGrid className="tabla-personalizada">
         <IonHeader>
           <IonToolbar>
             <IonButton
