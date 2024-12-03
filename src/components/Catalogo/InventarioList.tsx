@@ -1,15 +1,35 @@
-
 import React, { useState, useEffect } from "react";
 import {
-  IonGrid,IonRow,IonCol,IonText,IonContent,IonHeader,IonToolbar,IonButton,IonIcon,IonBadge,IonModal,IonSearchbar,IonTitle,IonItem,IonList,IonLabel,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonText,
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonButton,
+  IonIcon,
+  IonBadge,
+  IonModal,
+  IonSearchbar,
+  IonTitle,
+  IonItem,
+  IonList,
+  IonLabel,
 } from "@ionic/react";
 import { InventarioType, ProductoType } from "../../types/InventarioType";
 import axios from "axios";
-import { createOutline, addCircleOutline, add, warningOutline, downloadOutline } from "ionicons/icons";
+import {
+  createOutline,
+  addCircleOutline,
+  add,
+  warningOutline,
+  downloadOutline,
+} from "ionicons/icons";
 import ModificarInventarioModal from "./ModificarInventarioModal";
 import AgregarInventarioModal from "./AgregarInventarioModal";
 import "../InventarioList.css";
-import ExportarStockBajo from '../ExcelGenerator';
+import ExportarStockBajo from "../ExcelGenerator";
 
 const URI = "http://localhost:8000/api/inventario/";
 const PRODUCTOS_URI = "http://localhost:8000/api/productos/";
@@ -89,10 +109,12 @@ const InventarioList: React.FC = () => {
 
   const handleInventarioChange = (e: CustomEvent) => {
     const { name, value } = e.target as HTMLInputElement;
-    setNuevoInventario({
-      ...nuevoInventario,
-      [name]: value,
-    });
+    if (inventarioSeleccionado) {
+      setInventarioSeleccionado({
+        ...inventarioSeleccionado,
+        [name]: value,
+      });
+    }
   };
 
   const guardarInventario = async () => {
@@ -114,11 +136,11 @@ const InventarioList: React.FC = () => {
       try {
         const updatedInventario = {
           ...inventarioSeleccionado,
-          stock: nuevoInventario.stock,
-          lote: nuevoInventario.lote,
-          precio_venta: nuevoInventario.precio_venta,
-          precio_compra: nuevoInventario.precio_compra,
-          fecha_vencimiento: nuevoInventario.fecha_vencimiento,
+          stock: inventarioSeleccionado.stock,
+          lote: inventarioSeleccionado.lote,
+          precio_venta: inventarioSeleccionado.precio_venta,
+          precio_compra: inventarioSeleccionado.precio_compra,
+          fecha_vencimiento: inventarioSeleccionado.fecha_vencimiento,
         };
 
         const response = await axios.put(
@@ -138,8 +160,6 @@ const InventarioList: React.FC = () => {
       }
     }
   };
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,13 +187,13 @@ const InventarioList: React.FC = () => {
       <IonGrid>
         <IonHeader>
           <IonToolbar>
-            {/* Botón para agregar inventario */}
+            {/* Bot贸n para agregar inventario */}
             <IonButton color="success" size="default" onClick={handleAddClick}>
               <IonIcon slot="start" icon={addCircleOutline} />
               Agregar Inventario
             </IonButton>
 
-            {/* Botón para el informe de stock bajo */}
+            {/* Bot贸n para el informe de stock bajo */}
             <IonButton
               color="warning"
               size="default"
@@ -201,7 +221,7 @@ const InventarioList: React.FC = () => {
           <IonCol size="1.5">Precio Venta</IonCol>
           <IonCol size="1">Precio Compra</IonCol>
           <IonCol size="1.5">Vencimiento</IonCol>
-          <IonCol size="1.5">Condición Venta</IonCol>
+          <IonCol size="1.5">Condicion Venta</IonCol>
           <IonCol size="1">Acciones</IonCol>
         </IonRow>
 
@@ -219,11 +239,12 @@ const InventarioList: React.FC = () => {
             <IonCol size="1">
               <IonText>{item.stock}</IonText>
               {/* Badge para indicar stock bajo */}
-              {item.stock && item.stock < 10 && (       /// STOCK BAJO INDICADOR///////
-                <IonBadge color="warning" className="lowStockBadge">
-                  Bajo
-                </IonBadge>
-              )}
+              {item.stock &&
+                item.stock < 10 && ( /// STOCK BAJO INDICADOR///////
+                  <IonBadge color="warning" className="lowStockBadge">
+                    Bajo
+                  </IonBadge>
+                )}
             </IonCol>
             <IonCol size="1">
               <IonText>{item.lote}</IonText>
@@ -273,24 +294,22 @@ const InventarioList: React.FC = () => {
         onDidDismiss={() => setShowStockBajoModal(false)}
       >
         <IonHeader>
-      <IonToolbar>
-        <IonRow>
-          <IonCol size="3.7">
-          <ExportarStockBajo  />
-          </IonCol>
-          <IonCol size="6.3" >
-          <IonTitle className="Texto">
-            Productos con Stock Bajo
-          </IonTitle>
-          </IonCol>
-          <IonCol size="2">
-          <IonButton onClick={() => setShowStockBajoModal(false)}>
-            Cerrar
-          </IonButton>
-          </IonCol>
-        </IonRow>
-      </IonToolbar>
-</IonHeader>
+          <IonToolbar>
+            <IonRow>
+              <IonCol size="3.7">
+                <ExportarStockBajo />
+              </IonCol>
+              <IonCol size="6.3">
+                <IonTitle className="Texto">Productos con Stock Bajo</IonTitle>
+              </IonCol>
+              <IonCol size="2">
+                <IonButton onClick={() => setShowStockBajoModal(false)}>
+                  Cerrar
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonToolbar>
+        </IonHeader>
 
         <IonContent>
           <IonList>
@@ -307,7 +326,7 @@ const InventarioList: React.FC = () => {
         </IonContent>
       </IonModal>
 
-      {/* Modal de selección de producto */}
+      {/* Modal de selecci贸n de producto */}
       <IonModal
         isOpen={showProductModal}
         onDidDismiss={() => setShowProductModal(false)}
@@ -330,10 +349,12 @@ const InventarioList: React.FC = () => {
           />
           <IonGrid>
             {productos
-              .filter((producto) =>
-                producto.nombre_comercial
-                  .toLowerCase()
-                  .includes(searchText.toLowerCase())
+              .filter(
+                (producto) =>
+                  producto.nombre_comercial &&
+                  producto.nombre_comercial
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase())
               )
               .map((producto) => (
                 <IonRow key={producto.id}>
@@ -372,7 +393,6 @@ const InventarioList: React.FC = () => {
         onChange={handleInventarioChange}
       />
     </>
-
   );
 };
 

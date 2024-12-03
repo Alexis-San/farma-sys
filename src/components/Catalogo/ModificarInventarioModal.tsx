@@ -28,7 +28,7 @@ const ModificarInventarioModal: React.FC<ModificarInventarioModalProps> = ({
   inventarioSeleccionado,
   onClose,
   onChange,
-  onGuardarM
+  onGuardarM,
 }) => {
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose}>
@@ -87,7 +87,13 @@ const ModificarInventarioModal: React.FC<ModificarInventarioModalProps> = ({
                     onIonChange={onChange}
                   />
                 </IonItem>
-                <IonButton expand="full" onClick={onGuardarM}>
+                <IonButton
+                  expand="full"
+                  onClick={() => {
+                    onGuardarM(); // Llama a la función de guardar
+                    window.location.reload(); // Recarga la página
+                  }}
+                >
                   Guardar Cambios
                 </IonButton>
               </IonCol>

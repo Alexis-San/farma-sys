@@ -172,7 +172,6 @@ const Carrito: React.FC = () => {
       };
 
       // Realizar la petición POST con el objeto construido
-      console.log("Detalles de la venta:", ventaDetalle);
       await axios.post(API_VENTASDETALLES, ventaDetalle);
 
       setIsConfirmed(true);
