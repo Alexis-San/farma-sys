@@ -33,6 +33,9 @@ import { ClientesType } from "../types/ClientesType";
 import { trashOutline } from "ionicons/icons";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
+const API_lOGIN = "http://localhost:8000/api/login/usuario";
+const API_VENTAS = "http://localhost:8000/api/ventas";
+const API_VENTASDETALLES = "http://localhost:8000/api/ventas/detalles";
 
 const Carrito: React.FC = () => {
   const cart = useStoreState(CarritoStore, (s) => s.cart);
@@ -137,13 +140,47 @@ const Carrito: React.FC = () => {
     });
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (cart.length === 0) {
       alert("El carrito está vacío, agrega productos antes de comprar.");
       return;
     }
-    setIsConfirmed(true);
-    // Aquí puedes agregar lógica adicional, como enviar datos al backend.
+
+    try {
+      const Cliente = await axios.get(API_CLIENTES);
+      const usuario = await axios.get(API_lOGIN);
+      console.log("Datos obtenidos:", Cliente.data);
+      // Step 1: Create main sale
+      const ventaResponse = await axios.post(API_VENTAS, {
+        id_cliente: Cliente.data.id, // cliente obtenido de API_CLIENTES
+        id_usuario: usuario.data.id, // Replace with actual user ID
+      });
+      console.log("Respuesta de la venta:", ventaResponse.data);
+      const idVenta = ventaResponse.data.venta.id_venta; // ID de la venta creada
+      console.log("ID de la venta:", idVenta);
+
+      // Step 2: Create sale details
+      const detalles = cart.map((item) => ({
+        id_producto_inventario: item.id,
+        precio: item.price,
+        cantidad: item.quantity,
+      }));
+
+      const ventaDetalle = {
+        id_venta: idVenta,
+        detalles: detalles,
+      };
+
+      // Realizar la petición POST con el objeto construido
+      console.log("Detalles de la venta:", ventaDetalle);
+      await axios.post(API_VENTASDETALLES, ventaDetalle);
+
+      setIsConfirmed(true);
+      // Clear cart and show success message
+    } catch (error) {
+      console.error("Error al procesar la venta:", error);
+      alert("Error al procesar la venta");
+    }
   };
   const handleDelete = (productId: number) => {
     removeFromCart(productId);
@@ -167,19 +204,19 @@ const Carrito: React.FC = () => {
                 <IonCardContent>
                   <h1>Mi lista de productos</h1>
                   <IonRow
-                     className="encabezado"
-                      style={{
+                    className="encabezado"
+                    style={{
                       background: "#f0f0f0",
                       fontWeight: "bold",
                       textAlign: "center",
-                             }}
-                     >
+                    }}
+                  >
                     <IonCol size="4">Nombre</IonCol>
                     <IonCol size="2">Precio</IonCol>
                     <IonCol size="2">Stock</IonCol>
                     <IonCol size="3">Cantidad</IonCol>
                     <IonCol size="1">Accion</IonCol>
-                     </IonRow>
+                  </IonRow>
 
                   {cart.length > 0 ? (
                     cart.map((product) => (
@@ -202,8 +239,6 @@ const Carrito: React.FC = () => {
                             </IonButton>
                           </div>
                         </IonCol>
-
-                        
 
                         <IonCol size="1">
                           <IonButton
