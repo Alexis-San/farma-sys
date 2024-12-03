@@ -4,12 +4,12 @@ import { ClientesType } from "../types/ClientesType";
 import ClientesList from "../components/ClientesList";
 
 const Clientes: React.FC = () => {
+  const data: ClientesType[] = [];
   return (
     <CustomPage
       titulo="Clientes"
       contenido={<ClientesList />}
       searchbar
-      cartItemCount={""}
     />
   );
 };

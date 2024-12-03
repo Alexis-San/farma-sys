@@ -45,7 +45,7 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
       <p>Stock: {producto.stock || 'No disponible'}</p>
     </IonText>
     {/* Badge para indicar stock bajo */}
-    {producto.stock && producto.stock < 5 && (
+    {producto.stock && producto.stock < 10 && (  /// STOCK BAJO INDICADOR///////
       <IonBadge color="warning" className={styles.lowStockBadge}>
         Stock bajo
       </IonBadge>

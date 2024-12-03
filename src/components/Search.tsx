@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { addToCart } from '../store/CarritoStore'; // Importa la función para agregar al carrito
+import { image } from 'ionicons/icons';
+import { any } from 'cypress/types/bluebird';
 
 interface Producto {
   id: number;
@@ -108,6 +110,7 @@ export const SearchBar: React.FC = () => {
       price: item.precio_venta, // 'precio_venta' está directamente en 'item'
       stock: item.stock, // 'stock' está en 'item'
       quantity: item.quantity
+      
     };
     addToCart(productToAdd); // Agrega el producto al carrito
   };
@@ -141,7 +144,7 @@ export const SearchBar: React.FC = () => {
                   <p>Precio: {item.precio_venta} Gs</p>
                   <p>Stock: {item.stock}</p>
                   {/* Badge para indicar stock bajo */}
-                  {item.stock && item.stock < 5 && (
+                  {item.stock && item.stock < 10 && ( /// STOCK BAJO INDICADOR///////
                     <IonBadge color="warning" >
                       Stock bajo
                     </IonBadge>
