@@ -158,7 +158,7 @@ const InventarioList: React.FC = () => {
   }, []);
   // Filtrar productos con stock bajo
   const filtrarStockBajo = (productos: InventarioType[]) => {
-    const bajoStock = productos.filter((item) => item.stock && item.stock < 5);
+    const bajoStock = productos.filter((item) => item.stock && item.stock < 10); /// STOCK BAJO LISTA///////
     setStockBajo(bajoStock);
   };
 
@@ -219,7 +219,7 @@ const InventarioList: React.FC = () => {
             <IonCol size="1">
               <IonText>{item.stock}</IonText>
               {/* Badge para indicar stock bajo */}
-              {item.stock && item.stock < 5 && (
+              {item.stock && item.stock < 10 && (       /// STOCK BAJO INDICADOR///////
                 <IonBadge color="warning" className="lowStockBadge">
                   Bajo
                 </IonBadge>
@@ -273,18 +273,25 @@ const InventarioList: React.FC = () => {
         onDidDismiss={() => setShowStockBajoModal(false)}
       >
         <IonHeader>
-          <IonToolbar>
-            <IonTitle>Informe: Productos con Stock Bajo</IonTitle>
+      <IonToolbar>
+        <IonRow>
+          <IonCol size="3.7">
+          <ExportarStockBajo  />
+          </IonCol>
+          <IonCol size="6.3" >
+          <IonTitle className="Texto">
+            Productos con Stock Bajo
+          </IonTitle>
+          </IonCol>
+          <IonCol size="2">
+          <IonButton onClick={() => setShowStockBajoModal(false)}>
+            Cerrar
+          </IonButton>
+          </IonCol>
+        </IonRow>
+      </IonToolbar>
+</IonHeader>
 
-            {/* Aquí colocamos el botón para exportar el Excel */}
-            <ExportarStockBajo stockBajo={stockBajo} />
-
-
-            <IonButton slot="end" onClick={() => setShowStockBajoModal(false)}>
-              Cerrar
-            </IonButton>
-          </IonToolbar>
-        </IonHeader>
         <IonContent>
           <IonList>
             {stockBajo.map((item) => (

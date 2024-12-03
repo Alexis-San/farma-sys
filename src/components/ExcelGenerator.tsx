@@ -1,4 +1,4 @@
-import { IonButton, IonIcon } from "@ionic/react";
+import { IonButton, IonIcon, IonAlert, useIonAlert } from "@ionic/react";
 import { downloadOutline } from "ionicons/icons";
 import * as XLSX from "xlsx";
 import axios from "axios";
@@ -21,6 +21,8 @@ interface InventarioItem {
 }
 
 const ExportarStockBajo = () => {
+  const [presentAlert] = useIonAlert(); // Hook para mostrar alertas
+
   // Función para generar el archivo Excel con productos de stock bajo
   const generarExcelStockBajo = async () => {
     try {
@@ -30,6 +32,9 @@ const ExportarStockBajo = () => {
 
       // Filtrar productos con stock bajo
       const stockBajo = inventario.filter((item) => item.stock < 5);
+
+      // Obtener la fecha actual de exportación
+      const fechaExportacion = new Date().toLocaleDateString();
 
       // Formatear los datos para el archivo Excel
       const datosExcel = stockBajo.map((item) => ({
@@ -49,22 +54,36 @@ const ExportarStockBajo = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Stock Bajo");
 
       // Exportar el archivo Excel
-      XLSX.writeFile(workbook, "Productos_Stock_Bajo.xlsx");
-      alert("Archivo generado exitosamente.");
+      XLSX.writeFile(workbook, `Productos_Stock_Bajo_${fechaExportacion.replace(/\//g, "-")}.xlsx`);
+
+      // Mostrar el IonAlert de éxito
+      presentAlert({
+        header: "¡Éxito!",
+        message: `El archivo "Productos_Stock_Bajo_${fechaExportacion.replace(/\//g, "-")}.xlsx" ha sido generado exitosamente.`,
+        buttons: ["OK"],
+      });
     } catch (error) {
       console.error("Error al generar el Excel:", error);
-      alert("Hubo un error al generar el archivo.");
+
+      // Mostrar IonAlert de error
+      presentAlert({
+        header: "Error",
+        message: "Hubo un error al generar el archivo. Por favor, inténtalo de nuevo.",
+        buttons: ["Cerrar"],
+      });
     }
   };
 
   return (
-    <IonButton color="secondary" onClick={generarExcelStockBajo}>
+    
+    <IonButton color="secondary" onClick={generarExcelStockBajo} >
       <IonIcon slot="start" icon={downloadOutline} />
-      Exportar Stock Bajo
+      Exportar Lista
     </IonButton>
   );
 };
 
 export default ExportarStockBajo;
+
 
 
