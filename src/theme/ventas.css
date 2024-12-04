@@ -1,10 +1,13 @@
 /* Header de la tabla */
 .header-row {
-  background-color: #50cdfa;
+  background-color: #2389f6;
   text-align: center;
   font-weight: bold;
   padding: 10px 0;
   border-radius: 8px;
+  position: sticky;
+  z-index: 1;
+  top: 0;
 }
 
 .header-text {
@@ -44,3 +47,79 @@ ion-col {
   color: black !important; /* Prioridad máxima */
   font-size: 1em;
 }
+
+/* Estilos para la tabla */
+.table-container {
+  margin: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título de la tabla */
+.table-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+/* Fila de encabezado */
+.header-row {
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+}
+
+/* Estilos para las celdas del encabezado */
+.header-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* Cambia el color de fondo */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Estilo para las filas de datos */
+.data-row {
+  background-color: #f9f9f9;
+  /*border-bottom: 1px solid #ddd;*/
+ /* padding: 15px 10px;*/
+  display: flex;
+  flex-direction: row;
+}
+
+.data-row.odd {
+  background-color: #f2f2f2; /* Filas alternas */
+}
+
+/* Estilo de las celdas de datos */
+.letrita {
+  font-size: 1rem;
+  color: #333;
+  padding: 5px 0;
+}
+
+/* Contenedor de la tabla con scroll */
+.table-scroll-container {
+ max-height: 300px; /* Ajusta la altura máxima de la tabla */
+  overflow-y: auto;  /* Activa el scroll vertical */
+   margin-top: 10px;
+}
+
+.clientes-scroll {
+  max-height: 200px; /* Ajusta la altura máxima según sea necesario */
+  overflow-y: auto;  /* Activa el scroll vertical */
+}
+
+.ventas-scroll {
+  max-height: 300px; /* Ajusta la altura máxima según sea necesario */
+  overflow-y: auto;  /* Activa el scroll vertical */
+}
+

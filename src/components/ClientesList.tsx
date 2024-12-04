@@ -141,14 +141,14 @@ const ClientesList: React.FC = () => {
         </IonHeader>
 
         <IonRow className="encabezado" style={{ background: "#f0f0f0" }}>
-          <IonCol>ID</IonCol>
-          <IonCol>CI</IonCol>
-          <IonCol>Nombre</IonCol>
-          <IonCol>Apellido</IonCol>
-          <IonCol>Email</IonCol>
-          <IonCol>Teléfono</IonCol>
-          <IonCol>Tipo</IonCol>
-          <IonCol>Acciones</IonCol>
+          <IonCol size="0.5">ID</IonCol>
+          <IonCol size="1">CI</IonCol>
+          <IonCol size="1.5">Nombre</IonCol>
+          <IonCol size="1.8">Apellido</IonCol>
+          <IonCol size="3.2">Email</IonCol>
+          <IonCol size="1">Teléfono</IonCol>
+          <IonCol size="1">Tipo</IonCol>
+          <IonCol size="2">Acciones</IonCol>
         </IonRow>
 
         {loading && (
@@ -161,14 +161,14 @@ const ClientesList: React.FC = () => {
 
         {data.map((cliente) => (
           <IonRow key={cliente.id}>
-            <IonCol>{cliente.id}</IonCol>
-            <IonCol>{cliente.ci}</IonCol> {/* Display 'ci' value */}
-            <IonCol>{cliente.nombre}</IonCol>
-            <IonCol>{cliente.apellido}</IonCol>
-            <IonCol>{cliente.email}</IonCol>
-            <IonCol>{cliente.telefono}</IonCol>
-            <IonCol>{cliente.tipo_cliente}</IonCol>
-            <IonCol>
+            <IonCol size="0.5">{cliente.id}</IonCol>
+            <IonCol size="1">{cliente.ci}</IonCol> {/* Display 'ci' value */}
+            <IonCol size="1.5">{cliente.nombre}</IonCol>
+            <IonCol size="1.8">{cliente.apellido}</IonCol>
+            <IonCol size="3.2">{cliente.email}</IonCol>
+            <IonCol size="1">{cliente.telefono}</IonCol>
+            <IonCol size="1">{cliente.tipo_cliente}</IonCol>
+            <IonCol size="2">
               <IonButton color="primary" onClick={() => modifyCliente(cliente)}>
                 <IonIcon slot="icon-only" icon={createOutline} />
               </IonButton>

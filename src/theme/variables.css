@@ -490,8 +490,8 @@ http://ionicframework.com/docs/theming/ */
   --primary-text-color: #50cdfa;
   --ion-background-color: #ffffff;
   --ion-text-color: #04256e;
-  --ion-tab-bar-background: #50cdfa; /*colores del sistema*/
-  --ion-toolbar-background: #50cdfa;/*colores del sistema*/
+  --ion-tab-bar-background: #0e9aeb; /*colores del sistema*/
+  --ion-toolbar-background: #0e9aeb;/*colores del sistema*/
   --ion-toolbar-color: #ffffff;
 }
 
