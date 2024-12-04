@@ -15,6 +15,7 @@ import {
   IonAccordion,
   IonAccordionGroup,
   IonLabel,
+  useIonRouter,
 } from "@ionic/react";
 import {
   appsOutline,
@@ -40,10 +41,31 @@ import menu from "./Menu.css";
 import Drogas from "./Drogas";
 import Categorias from "./Categorias";
 import Laboratorios from "./Laboratorios";
-import Proveedores from "./Proveedores"; 
+import Proveedores from "./Proveedores";
 import Carrito from "./Carrito";
 import Clientes from "./Clientes";
 const Menu: React.FC = () => {
+  const navigation = useIonRouter();
+
+  const doLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/login/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al desloguear.");
+      }
+
+      navigation.push("/", "forward", "replace");
+    } catch (error) {
+      console.error("Error en el logout:", error);
+    }
+  };
+
   const catalogo = [
     { name: "Drogas", URL: "/menu/Drogas", icon: fileTrayFullOutline },
     { name: "Categorías", URL: "/menu/Categorias", icon: fileTrayFullOutline },
@@ -158,12 +180,7 @@ const Menu: React.FC = () => {
             </IonMenuToggle>
 
             {/* Logout */}
-            <IonButton
-              routerLink="/"
-              routerDirection="back"
-              expand="full"
-              className="ion-button"
-            >
+            <IonButton onClick={doLogout} expand="full" className="ion-button">
               <IonIcon icon={logOutOutline} slot="start" />
               Logout
             </IonButton>
