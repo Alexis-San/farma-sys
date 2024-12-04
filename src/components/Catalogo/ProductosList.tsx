@@ -188,7 +188,7 @@ const ProductosList: React.FC = () => {
             textAlign: "center",
           }}
         >
-          <IonCol size="1">ID</IonCol>
+          <IonCol size="0.5">ID</IonCol>
           <IonCol size="2">Nombre Comercial</IonCol>
           <IonCol size="2">Presentación</IonCol>
           <IonCol size="1">Precio</IonCol>
@@ -212,7 +212,7 @@ const ProductosList: React.FC = () => {
             key={producto.id}
             style={{ textAlign: "center", verticalAlign: "middle" }}
           >
-            <IonCol size="1">
+            <IonCol size="0.5">
               <IonText>{producto.id}</IonText>
             </IonCol>
             <IonCol size="2">
