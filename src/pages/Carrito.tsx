@@ -43,6 +43,7 @@ const Carrito: React.FC = () => {
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [customerName, setCustomerName] = useState<string>("");
   const [CI, setCI] = useState<string>("");
+  const [idCliente, setIdCliente] = useState("");
   const [clientesSugeridos, setClientesSugeridos] = useState<any[]>([]);
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
   const [data, setData] = useState<ClientesType[]>([]);
@@ -111,6 +112,7 @@ const Carrito: React.FC = () => {
     setCustomerName(`${cliente.nombre} ${cliente.apellido}`);
     setCI(cliente.ci);
     setClientesSugeridos([]);
+    setIdCliente(cliente.id);
   };
 
   const incrementQuantity = (productId: number) => {
@@ -147,12 +149,10 @@ const Carrito: React.FC = () => {
     }
 
     try {
-      const Cliente = await axios.get(API_CLIENTES);
-      let idCliente = Cliente.data.clientes[0].id;
-      console.log("ID del cliente:", idCliente);
       const usuario = await axios.get(API_lOGIN);
       let idUsuario = usuario.data.usuario.id;
       console.log("ID del usuario:", idUsuario);
+      console.log("ID del cliente:", idCliente);
       // Step 1: Create main sale
       const ventaResponse = await axios.post(API_VENTAS, {
         id_cliente: idCliente,
