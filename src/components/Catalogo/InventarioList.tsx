@@ -107,6 +107,17 @@ const InventarioList: React.FC = () => {
     setShowInventarioModal(true);
   };
 
+  const handleInventarioChange1 = (e: CustomEvent) => {
+    const { name, value } = e.target as HTMLInputElement;
+    
+      setNuevoInventario({
+        ...nuevoInventario,
+        [name]: value,
+      });
+    
+  };
+
+
   const handleInventarioChange = (e: CustomEvent) => {
     const { name, value } = e.target as HTMLInputElement;
     if (inventarioSeleccionado) {
@@ -380,7 +391,7 @@ const InventarioList: React.FC = () => {
         productoSeleccionado={selectedProduct}
         inventario={nuevoInventario}
         onClose={() => setShowInventarioModal(false)}
-        onChange={handleInventarioChange}
+        onChange={handleInventarioChange1}
         onGuardar={guardarInventario}
       />
 

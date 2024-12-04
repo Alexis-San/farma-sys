@@ -31,6 +31,7 @@ import PDFGenerator from "../components/PDFGenerator";
 import AgregarClienteForm from "../components/AgregarClienteForm";
 import { ClientesType } from "../types/ClientesType";
 import { trashOutline } from "ionicons/icons";
+import { useHistory } from 'react-router';
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
 const API_lOGIN = "http://localhost:8000/api/login/usuario";
@@ -47,6 +48,7 @@ const Carrito: React.FC = () => {
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
   const [data, setData] = useState<ClientesType[]>([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory(); // Obtén el objeto history
 
   // Buscar clientes con debounce
   const buscarClientes = debounce(async (nombre: string) => {
@@ -140,6 +142,8 @@ const Carrito: React.FC = () => {
     });
   };
 
+
+  
   const handleBuyNow = async () => {
     if (cart.length === 0) {
       alert("El carrito está vacío, agrega productos antes de comprar.");
@@ -187,11 +191,28 @@ const Carrito: React.FC = () => {
   const handleDelete = (productId: number) => {
     removeFromCart(productId);
   };
+
+
+  const limpiarInputs = () => {
+    // Limpia los valores de los estados
+    setCustomerName('');
+    setCI('');
+  
+    // Limpia los valores directamente en los inputs con `clearInput`
+    document.querySelectorAll('ion-input').forEach((input: any) => input.value = '');
+  };
+
+  const handleAlertDismiss = async () => {
+    // Redirige a las páginas deseadas y recarga si es necesario
+    history.push('/menu/inicio');
+    window.location.reload(); // Recarga la página si lo necesitas
+  };
+  
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
+          <IonButtons slot="start" onClick={async () => {handleAlertDismiss(); }} >
             <IonBackButton defaultHref="/" />
           </IonButtons>
           <IonTitle>Mi Carrito</IonTitle>
@@ -264,7 +285,7 @@ const Carrito: React.FC = () => {
                       <IonButton
                         expand="block"
                         fill="outline"
-                        routerLink="/menu/Inicio"
+                        onClick={async () => {handleAlertDismiss(); }}
                       >
                         Ver Productos
                       </IonButton>
@@ -343,9 +364,10 @@ const Carrito: React.FC = () => {
                     expand="block"
                     color="tertiary"
                     className={styles.buyNow}
-                    onClick={async () => {
+                    onClick={async () => { 
                       await handleBuyNow();
                       clearCart();
+                      limpiarInputs(); // Llama a la función para limpiar los inputs
                     }}
                   >
                     Comprar Ya
@@ -437,8 +459,7 @@ const Carrito: React.FC = () => {
         <IonAlert
           isOpen={isConfirmed}
           onDidDismiss={() => setIsConfirmed(false)}
-          header="Compra realizada"
-          message={`¡Gracias por tu compra, ${customerName}! Un PDF con los detalles de tu compra ha sido generado.`}
+          header="Venta realizada"
           buttons={["OK"]}
         />
       </IonContent>
