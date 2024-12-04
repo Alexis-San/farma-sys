@@ -31,7 +31,7 @@ const ExportarStockBajo = () => {
       const inventario: InventarioItem[] = response.data; // Tipar la respuesta
 
       // Filtrar productos con stock bajo
-      const stockBajo = inventario.filter((item) => item.stock < 5);
+      const stockBajo = inventario.filter((item) => item.stock < 5); //// AJUSTAR PARA LOS STOCKS BAJOS
 
       // Obtener la fecha actual de exportación
       const fechaExportacion = new Date().toLocaleDateString();
