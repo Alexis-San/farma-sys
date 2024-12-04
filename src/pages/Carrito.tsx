@@ -148,12 +148,15 @@ const Carrito: React.FC = () => {
 
     try {
       const Cliente = await axios.get(API_CLIENTES);
+      let idCliente = Cliente.data.clientes[0].id;
+      console.log("ID del cliente:", idCliente);
       const usuario = await axios.get(API_lOGIN);
-      console.log("Datos obtenidos:", Cliente.data);
+      let idUsuario = usuario.data.usuario.id;
+      console.log("ID del usuario:", idUsuario);
       // Step 1: Create main sale
       const ventaResponse = await axios.post(API_VENTAS, {
-        id_cliente: Cliente.data.id, // cliente obtenido de API_CLIENTES
-        id_usuario: usuario.data.id, // Replace with actual user ID
+        id_cliente: idCliente,
+        id_usuario: idUsuario,
       });
       console.log("Respuesta de la venta:", ventaResponse.data);
       const idVenta = ventaResponse.data.venta.id_venta; // ID de la venta creada
@@ -340,7 +343,10 @@ const Carrito: React.FC = () => {
                     expand="block"
                     color="tertiary"
                     className={styles.buyNow}
-                    onClick={handleBuyNow}
+                    onClick={async () => {
+                      await handleBuyNow();
+                      clearCart();
+                    }}
                   >
                     Comprar Ya
                   </IonButton>
