@@ -47,9 +47,11 @@ import Laboratorios from "./Laboratorios";
 import Proveedores from "./Proveedores";
 import Carrito from "./Carrito";
 import Clientes from "./Clientes";
+import { useHistory } from 'react-router';
 
 const Menu: React.FC = () => {
   const navigation = useIonRouter();
+  const history = useHistory(); // Obtén el objeto history
 
   const doLogout = async () => {
     try {
@@ -82,6 +84,11 @@ const Menu: React.FC = () => {
     { name: "Venta", URL: "/menu/Venta", icon: storefrontOutline },
   ];
 
+  const handleClick = () => {
+    history.push('/menu/Inicio');  // Navega a la ruta
+    window.location.reload(); // Recarga la página
+  };
+
   return (
     <IonPage>
       <IonSplitPane contentId="main" when="false">
@@ -94,7 +101,7 @@ const Menu: React.FC = () => {
           <IonContent>
             {/* Inicio */}
             <IonMenuToggle>
-              <IonItem routerLink="/menu/Inicio" routerDirection="none">
+              <IonItem  button={true} onClick={handleClick}>
                 <IonIcon icon={homeOutline} slot="start" />
                 Inicio
               </IonItem>

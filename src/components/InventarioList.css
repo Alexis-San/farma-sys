@@ -37,5 +37,17 @@
   margin-top: 8px;
  }
 
+ .vencimientoBadge{
+  display: ruby;
+  justify-content: center;
+  align-items: center;
+  width: 20px;  /* Tamaño del ícono */
+  height: 15px; /* Tamaño del ícono */
+ }
+
+ .vencimiento{
+  justify-content: center;
+  align-items: center;
+ }
 
  
