@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IonCard, IonCardContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
+import "../../theme/ventas.css"; // Asegúrate de enlazar este archivo de estilos
 
 const PanelControl: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<string>("diciembre");
@@ -20,28 +21,34 @@ const PanelControl: React.FC = () => {
   const selectedData = salesData.find(item => item.mes === selectedMonth);
 
   return (
-    <IonCard>
-      <IonCardContent>
-        <h2>Total de Ventas</h2>
-        {/* Segmento para elegir el mes */}
+    <IonCard className="panel-card">
+      <IonCardContent className="panel-content">
+        <h2 className="title">TOTAL DE VENTAS</h2>
+        <h3 className="title">ULTIMO 3 MESES</h3>
         <IonSegment
           value={selectedMonth}
-          onIonChange={(e) => setSelectedMonth(e.detail.value as string)} // Asegura que sea string
+          onIonChange={(e) => setSelectedMonth(e.detail.value as string)}
+          className="month-selector"
         >
           {salesData.map((item, index) => (
-            <IonSegmentButton key={index} value={item.mes}>
-              <IonLabel>{item.mes}</IonLabel>
+            <IonSegmentButton key={index} value={item.mes} className="segment-button">
+              <IonLabel className="segment-label">{item.mes.toUpperCase()}</IonLabel>
             </IonSegmentButton>
           ))}
         </IonSegment>
 
-        {/* Muestra el monto del mes seleccionado */}
-        <p>{`₡${selectedData ? selectedData.total.toFixed(2) : 0.0}`}</p>
+        <div className="sales-total">
+          
+          <p className="total-amount">{selectedData ? selectedData.total: " 0 "}</p>
+          <p className="currency-symbol1">"</p>
+          <p className="currency-symbol"> Gs.</p>
+        </div>
       </IonCardContent>
     </IonCard>
   );
 };
 
 export default PanelControl;
+
 
 
