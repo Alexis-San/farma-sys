@@ -17,7 +17,6 @@ const Inventario: React.FC = () => {
       titulo="Inventario"
       contenido={<InventarioList />}
       searchbar
-      cartItemCount=""
     />
   );
 };
