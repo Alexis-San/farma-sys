@@ -123,3 +123,79 @@ ion-col {
   overflow-y: auto;  /* Activa el scroll vertical */
 }
 
+.chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.chart-wrapper {
+  flex: 1 1 45%;
+  min-width: 300px;
+  height: 400px;
+  position: relative;
+}
+
+
+
+/* PanelControl.css */
+.panel-card {
+  margin: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.panel-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.month-selector {
+  margin: 20px 0;
+}
+
+.segment-button {
+  padding: 10px;
+  color: #007bff;
+}
+
+.segment-button.ion-activated {
+  background-color: #007bff;
+  color: white;
+  border-radius: 20px;
+}
+
+.sales-total {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-top: 20px;
+}
+
+.currency-symbol {
+  font-size: 1.5rem;
+  color: #000000;
+  
+}
+
+.currency-symbol1 {
+  font-size: 1.5rem;
+  color: #ffffff;
+  
+}
+
+.total-amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-left: 5px;
+}
