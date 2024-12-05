@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText, IonBadge} from '@ionic/react';
 import styles from '../sccs/ProductoView.module.scss';
 import { addToCart } from '../store/CarritoStore'; // Importa la función para agregar al carrito
+import React, { useState, useRef } from 'react';
 
 interface Producto {
   id: number; // Asegúrate de que el producto tenga un ID único
@@ -20,6 +21,7 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
   console.log(producto); // Verifica qué datos estás recibiendo
 
   const [hover, setHover] = useState(false);
+  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleAddToCart = () => {
     const productToAdd = {
@@ -33,8 +35,24 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
     addToCart(productToAdd); // Agrega el producto al carrito
   };
 
+  const handleMouseEnter = () => {
+    // Limpiamos el timeout anterior si existe
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+    }
+    hoverTimeout.current = setTimeout(() => setHover(true), 500); // 300ms de espera antes de activar el hover
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current); // Limpiamos el timeout
+    }
+    setHover(false); // Desactivamos el hover inmediatamente
+  };
+
   return (
-<IonCard className={styles.productoCard} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+  <IonCard className={styles.productoCard} onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
   <IonCardHeader>
     <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
   </IonCardHeader>
