@@ -9,6 +9,10 @@ const GraficaVentas: React.FC = () => {
   const [inventario, setInventario] = useState<any[]>([]);
   const chartCircularRef = useRef<Chart<"pie", number[], string> | null>(null);
   const canvasCircularRef = useRef<HTMLCanvasElement>(null);
+  const [dataChart, setDataChart] = useState({
+    labels: [],
+    datasets: [],
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,6 +99,7 @@ const GraficaVentas: React.FC = () => {
       }
     };
   }, [productos, inventario]);
+  
 
   return (
     <div className="chart-container">
