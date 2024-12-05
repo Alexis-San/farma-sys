@@ -18,23 +18,26 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import {
-  appsOutline,
-  bagAddOutline,
-  cartOutline,
-  fileTrayFullOutline,
-  cogOutline,
-  logOutOutline,
-  personOutline,
+  homeOutline,
+  medkitOutline,
+  layersOutline,
+  storefrontOutline,
+  pricetagsOutline,
+  flaskOutline,
+  archiveOutline,
+  cashOutline,
   barChartOutline,
-  peopleOutline,
+  settingsOutline,
+  logOutOutline,
+  peopleCircleOutline,
   businessOutline,
-} from "ionicons/icons";
+  personCircleOutline,
+} from "ionicons/icons"; // Actualizamos los iconos
 import { Redirect, Route } from "react-router";
 import Inicio from "./Inicio";
 import Funcionarios from "./Funcionarios";
 import Configuracion from "./Conf";
 import Inventario from "./Inventario";
-
 import Productos from "./Productos";
 import Venta from "./Ventas";
 import menu from "./Menu.css";
@@ -44,6 +47,7 @@ import Laboratorios from "./Laboratorios";
 import Proveedores from "./Proveedores";
 import Carrito from "./Carrito";
 import Clientes from "./Clientes";
+
 const Menu: React.FC = () => {
   const navigation = useIonRouter();
 
@@ -67,20 +71,16 @@ const Menu: React.FC = () => {
   };
 
   const catalogo = [
-    { name: "Drogas", URL: "/menu/Drogas", icon: fileTrayFullOutline },
-    { name: "Categorías", URL: "/menu/Categorias", icon: fileTrayFullOutline },
-    { name: "Inventario", URL: "/menu/Inventario", icon: bagAddOutline },
-    {
-      name: "Laboratorios",
-      URL: "/menu/Laboratorios",
-      icon: fileTrayFullOutline,
-    },
-    { name: "Productos", URL: "/menu/Productos", icon: fileTrayFullOutline },
+    { name: "Drogas", URL: "/menu/Drogas", icon: medkitOutline },
+    { name: "Categorías", URL: "/menu/Categorias", icon: pricetagsOutline },
+    { name: "Inventario", URL: "/menu/Inventario", icon: archiveOutline },
+    { name: "Laboratorios", URL: "/menu/Laboratorios", icon: flaskOutline },
+    { name: "Productos", URL: "/menu/Productos", icon: layersOutline },
   ];
 
   const transacciones = [
-    { name: "Compra", URL: "/menu/Compra", icon: cartOutline },
-    { name: "Venta", URL: "/menu/Venta", icon: barChartOutline },
+    { name: "Compra", URL: "/menu/Compra", icon: cashOutline },
+    { name: "Venta", URL: "/menu/Venta", icon: storefrontOutline },
   ];
 
   return (
@@ -96,7 +96,7 @@ const Menu: React.FC = () => {
             {/* Inicio */}
             <IonMenuToggle>
               <IonItem routerLink="/menu/Inicio" routerDirection="none">
-                <IonIcon icon={appsOutline} slot="start" />
+                <IonIcon icon={homeOutline} slot="start" />
                 Inicio
               </IonItem>
             </IonMenuToggle>
@@ -104,13 +104,12 @@ const Menu: React.FC = () => {
             <IonAccordionGroup>
               <IonAccordion value="transacciones">
                 <IonItem slot="header">
-                  <IonIcon icon={cartOutline} slot="start" />
+                  <IonIcon icon={cashOutline} slot="start" />
                   <IonLabel>Transacciones</IonLabel>
                 </IonItem>
                 <div slot="content">
                   {transacciones.map((item, index) => (
                     <IonMenuToggle key={index}>
-                      {/* Aplicando sangría a cada item dentro del acordeón */}
                       <IonItem
                         style={{ paddingLeft: "20px" }}
                         routerLink={item.URL}
@@ -126,13 +125,12 @@ const Menu: React.FC = () => {
 
               <IonAccordion value="catalogo">
                 <IonItem slot="header">
-                  <IonIcon icon={fileTrayFullOutline} slot="start" />
+                  <IonIcon icon={layersOutline} slot="start" />
                   <IonLabel>Catálogo</IonLabel>
                 </IonItem>
                 <div slot="content">
                   {catalogo.map((item, index) => (
                     <IonMenuToggle key={index}>
-                      {/* Aplicando sangría a cada item dentro del acordeón */}
                       <IonItem
                         style={{ paddingLeft: "20px" }}
                         routerLink={item.URL}
@@ -150,7 +148,7 @@ const Menu: React.FC = () => {
             {/* Clientes */}
             <IonMenuToggle>
               <IonItem routerLink="/menu/Clientes" routerDirection="none">
-                <IonIcon icon={peopleOutline} slot="start" />
+                <IonIcon icon={peopleCircleOutline} slot="start" />
                 Clientes
               </IonItem>
             </IonMenuToggle>
@@ -166,7 +164,7 @@ const Menu: React.FC = () => {
             {/* Funcionarios */}
             <IonMenuToggle>
               <IonItem routerLink="/menu/Funcionarios" routerDirection="none">
-                <IonIcon icon={personOutline} slot="start" />
+                <IonIcon icon={personCircleOutline} slot="start" />
                 Funcionarios
               </IonItem>
             </IonMenuToggle>
@@ -174,7 +172,7 @@ const Menu: React.FC = () => {
             {/* Configuración */}
             <IonMenuToggle>
               <IonItem routerLink="/menu/Configuracion" routerDirection="none">
-                <IonIcon icon={cogOutline} slot="start" />
+                <IonIcon icon={settingsOutline} slot="start" />
                 Configuración
               </IonItem>
             </IonMenuToggle>
