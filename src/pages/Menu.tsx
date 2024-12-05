@@ -79,7 +79,6 @@ const Menu: React.FC = () => {
   ];
 
   const transacciones = [
-    { name: "Compra", URL: "/menu/Compra", icon: cashOutline },
     { name: "Venta", URL: "/menu/Venta", icon: storefrontOutline },
   ];
 
@@ -197,7 +196,6 @@ const Menu: React.FC = () => {
           <Route exact path="/menu/Inventario" component={Inventario} />
           <Route exact path="/menu/Laboratorios" component={Laboratorios} />
           <Route exact path="/menu/Productos" component={Productos} />
-          <Route exact path="/menu/Compra" component={Inicio} />
           <Route exact path="/menu/Venta" component={Venta} />
           <Route exact path="/menu">
             <Redirect to="/menu/Inicio" />
