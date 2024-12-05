@@ -50,7 +50,7 @@ const Login: React.FC = () => {
       console.log("Usuario logueado:", data);
 
       // Redirige al usuario a la página del menú si el login es exitoso
-      navigation.push("/menu", "forward", "replace");
+      navigation.push("/menu/inicio", "forward", "replace");
     } catch (error) {
       setError("Error al iniciar sesión. Por favor, intenta nuevamente.");
       console.error("Error en el login:", error);
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
 
       // Acción después de desloguear exitosamente
       console.log("Usuario deslogueado");
-      navigation.push("/login", "forward", "replace");
+      navigation.push("/", "forward", "replace");
     } catch (error) {
       console.error("Error en el logout:", error);
     }
