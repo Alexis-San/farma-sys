@@ -1,4 +1,3 @@
-//ESTE ES NUEVOO JEJEJE
 import React, { useState } from "react";
 import {
   IonItem,
@@ -6,6 +5,7 @@ import {
   IonInput,
   IonButton,
   IonContent,
+  IonText,
 } from "@ionic/react";
 import { ClientesType } from "../types/ClientesType";
 
@@ -17,14 +17,16 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
   onGuardarCliente,
 }) => {
   const [nuevoCliente, setNuevoCliente] = useState<ClientesType>({
-    id: 0,
+    id: 0, // Generado dinámicamente en el backend
     nombre: "",
     apellido: "",
     email: "",
     telefono: "",
     tipo_cliente: "",
-    ci: "", // Include 'ci' field
+    ci: "",
   });
+
+  const [error, setError] = useState<string>("");
 
   const manejarCambio = (e: CustomEvent) => {
     const { name, value } = e.target as HTMLInputElement;
@@ -35,6 +37,18 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
   };
 
   const guardarCliente = () => {
+    if (
+      !nuevoCliente.nombre ||
+      !nuevoCliente.apellido ||
+      !nuevoCliente.email ||
+      !nuevoCliente.telefono ||
+      !nuevoCliente.tipo_cliente ||
+      !nuevoCliente.ci
+    ) {
+      setError("Por favor completa todos los campos.");
+      return;
+    }
+    setError(""); // Limpia el error
     onGuardarCliente(nuevoCliente);
     setNuevoCliente({
       id: 0,
@@ -43,20 +57,23 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
       email: "",
       telefono: "",
       tipo_cliente: "",
-      ci: "", // Include 'ci' field
+      ci: "",
     }); // Limpia el formulario
   };
 
   return (
     <IonContent>
+      {error && (
+        <IonText color="danger">
+          <p>{error}</p>
+        </IonText>
+      )}
       <IonItem>
         <IonLabel position="stacked">CI</IonLabel>
         <IonInput
           name="ci"
           value={nuevoCliente.ci}
-          onIonChange={(e) =>
-            setNuevoCliente({ ...nuevoCliente, ci: e.detail.value! })
-          }
+          onIonChange={manejarCambio}
         />
       </IonItem>
       <IonItem>
@@ -79,6 +96,7 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
         <IonLabel position="stacked">Email</IonLabel>
         <IonInput
           name="email"
+          type="email"
           value={nuevoCliente.email}
           onIonChange={manejarCambio}
         />
@@ -87,6 +105,7 @@ const AgregarClienteForm: React.FC<AgregarClienteFormProps> = ({
         <IonLabel position="stacked">Teléfono</IonLabel>
         <IonInput
           name="telefono"
+          type="tel"
           value={nuevoCliente.telefono}
           onIonChange={manejarCambio}
         />

@@ -34,6 +34,7 @@ import { trashOutline } from "ionicons/icons";
 import { useHistory } from 'react-router';
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
+const API_CLIENTES_AGREGAR= "http://localhost:8000/api/clientes";
 const API_lOGIN = "http://localhost:8000/api/login/usuario";
 const API_VENTAS = "http://localhost:8000/api/ventas";
 const API_VENTASDETALLES = "http://localhost:8000/api/ventas/detalles";
@@ -47,7 +48,7 @@ const Carrito: React.FC = () => {
   const [idCliente, setIdCliente] = useState("");
   const [clientesSugeridos, setClientesSugeridos] = useState<any[]>([]);
   const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
-  const [data, setData] = useState<ClientesType[]>([]);
+  const [clientes, setClientes] = useState<ClientesType[]>([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory(); // Obtén el objeto history
 
@@ -60,7 +61,7 @@ const Carrito: React.FC = () => {
       console.error("Error buscando clientes:", error);
       setClientesSugeridos([]);
     }
-  }, 300);
+  }, 500);
 
   const buscarClientesPorCI = debounce(async (ci: string) => {
     try {
@@ -70,7 +71,7 @@ const Carrito: React.FC = () => {
       console.error("Error buscando clientes:", error);
       setClientesSugeridos([]);
     }
-  }, 300);
+  }, 500);
 
   // Calcular el total del carrito
   useEffect(() => {
@@ -90,7 +91,7 @@ const Carrito: React.FC = () => {
       try {
         const response = await axios.get(API_CLIENTES);
         console.log("Datos obtenidos:", response.data);
-        setData(response.data.clientes); // Asegúrate de usar la clave correcta
+        setClientes(response.data.clientes); // Asegúrate de usar la clave correcta
       } catch (error) {
         console.error("Error al cargar los datos:", error);
       } finally {
@@ -207,7 +208,18 @@ const Carrito: React.FC = () => {
     history.push('/menu/inicio');
     window.location.reload(); // Recarga la página si lo necesitas
   };
-  
+
+  //Agregar Clientes
+  const abrirModalAgregar = () => {
+    setMostrarModalAgregar(true);
+  };
+
+  const cerrarModalAgregar = () => {
+    setMostrarModalAgregar(false);
+  };
+
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -433,24 +445,24 @@ const Carrito: React.FC = () => {
                 </IonToolbar>
               </IonHeader>
               <IonContent>
-                <AgregarClienteForm
-                  onGuardarCliente={async (nuevoCliente) => {
-                    try {
-                      const response = await axios.post(
-                        API_CLIENTES,
-                        nuevoCliente
-                      );
-                      setData([...data, response.data]);
-                      setMostrarModalAgregar(false);
-                      console.log(
-                        "Cliente agregado exitosamente:",
-                        response.data
-                      );
-                    } catch (error) {
-                      console.error("Error al agregar el cliente:", error);
-                    }
-                  }}
-                />
+              <AgregarClienteForm
+              onGuardarCliente={async (nuevoCliente) => {
+                try {
+                  // Envía los datos a la API
+                  const response = await axios.post(API_CLIENTES_AGREGAR, nuevoCliente);
+                  
+                  // Actualiza la lista de clientes
+                  setClientes((prevClientes) => [...prevClientes, response.data]);
+                  
+                  // Cierra el modal
+                  cerrarModalAgregar();
+
+                  console.log("Cliente agregado exitosamente:", response.data);
+                } catch (error) {
+                  console.error("Error al agregar el cliente:", error);
+                }
+              }}
+            />
               </IonContent>
             </IonModal>
           </IonContent>
