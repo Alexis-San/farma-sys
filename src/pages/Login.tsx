@@ -27,7 +27,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState(""); // Estado para errores de login
 
   const doRegistro = () => {
-    navigation.push("/Registro", "forward", "replace");
+    navigation.push(`/Registro?key=${Date.now()}`, "forward", "replace");
   };
 
   const doLogin = async () => {

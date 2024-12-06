@@ -22,13 +22,16 @@ const HistorialVentas: React.FC = () => {
   useEffect(() => {
     const fetchVentas = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/informes/ventas");
+        const response = await fetch(
+          "http://localhost:8000/api/informes/ventas"
+        );
         const data = await response.json();
 
         if (data.ok) {
           // Ordenar por fecha de creación (más reciente primero)
           const sortedVentas = data.ventas.sort(
-            (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            (a: any, b: any) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
           setVentas(sortedVentas);
           setDisplayedVentas(sortedVentas.slice(0, itemsPerPage));
@@ -90,24 +93,43 @@ const HistorialVentas: React.FC = () => {
     <div className="table-container">
       <IonTitle className="table-title">HISTORIAL DE VENTAS</IonTitle>
       <IonGrid>
-      <div className="ventas-scroll">
-        {/* Header de la tabla */}
-        <IonRow className="header-row">
-          <IonCol size="2" className="header-text">ID</IonCol>
-          <IonCol size="4" className="header-text">Cliente</IonCol>
-          <IonCol size="3" className="header-text">Fecha</IonCol>
-          <IonCol size="3" className="header-text">Total</IonCol>
-        </IonRow>
+        <div className="ventas-scroll">
+          {/* Header de la tabla */}
+          <IonRow className="header-row">
+            <IonCol size="2" className="header-text">
+              ID
+            </IonCol>
+            <IonCol size="4" className="header-text">
+              Cliente
+            </IonCol>
+            <IonCol size="3" className="header-text">
+              Fecha
+            </IonCol>
+            <IonCol size="3" className="header-text">
+              Total
+            </IonCol>
+          </IonRow>
 
-        
-        
           {/* Contenido de la tabla */}
           {displayedVentas.map((venta, index) => (
-            <IonRow key={venta.id_venta} className={`data-row ${index % 2 === 0 ? "even" : "odd"}`}>
-              <IonCol size="2" className="letrita">{venta.id_venta}</IonCol>
-              <IonCol size="4" className="letrita">{`${venta.cliente.nombre} ${venta.cliente.apellido}`}</IonCol>
-              <IonCol size="3" className="letrita">{new Date(venta.createdAt).toLocaleDateString()}</IonCol>
-              <IonCol size="3" className="letrita">{`₡${venta.monto_final.toLocaleString()}`}</IonCol>
+            <IonRow
+              key={venta.id}
+              className={`data-row ${index % 2 === 0 ? "even" : "odd"}`}
+            >
+              <IonCol size="2" className="letrita">
+                {venta.id}
+              </IonCol>
+              <IonCol
+                size="4"
+                className="letrita"
+              >{`${venta.cliente.nombre} ${venta.cliente.apellido}`}</IonCol>
+              <IonCol size="3" className="letrita">
+                {new Date(venta.createdAt).toLocaleDateString()}
+              </IonCol>
+              <IonCol
+                size="3"
+                className="letrita"
+              >{`₡${venta.monto_final.toLocaleString()}`}</IonCol>
             </IonRow>
           ))}
         </div>
@@ -125,6 +147,3 @@ const HistorialVentas: React.FC = () => {
 };
 
 export default HistorialVentas;
-
-
-
