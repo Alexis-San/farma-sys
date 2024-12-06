@@ -1,11 +1,17 @@
 export interface ProductosType {
   id: number;
-  codigo_cafapar?: number;
   nombre_comercial: string;
   presentacion: string;
-  descripcion?: string;
   precio_venta: number;
   condicion_venta: "BAJO RECETA" | "VENTA LIBRE";
-  procedencia?: "NACIONAL" | "IMPORTADO";
-  laboratorioId?: number;
+  procedencia: "NACIONAL" | "IMPORTADO";
+  laboratioId?: number;
+  Laboratorio?: {
+    nombre: string;
+  };
+  Proveedores?: any[];
+  Actuadores?: any[];
+  Categorias?: any[];
+  codigo_cafapar?: number;
+  descripcion?: string;
 }
