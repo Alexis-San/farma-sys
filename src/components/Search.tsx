@@ -1,20 +1,15 @@
 //search
 import {
-  IonSearchbar,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonModal,
-  IonButton,
-  IonSpinner,
-  IonBadge,
+  IonSearchbar,IonList,IonItem,IonLabel,
+  IonModal,IonButton,IonSpinner,IonBadge,IonIcon
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { debounce } from 'lodash';
-import { addToCart } from '../store/CarritoStore'; // Importa la función para agregar al carrito
-import { image } from 'ionicons/icons';
+import { addToCart } from '../store/CarritoStore'; 
+import { cartOutline } from 'ionicons/icons';
 import { any } from 'cypress/types/bluebird';
+
 
 interface Producto {
   id: number;
@@ -151,7 +146,9 @@ export const SearchBar: React.FC = () => {
                   )}
                 </IonLabel>
                 {/* Botón para agregar al carrito */}
-                <IonButton onClick={() => handleAddToCart(item)}>Agregar</IonButton>
+                <IonButton onClick={() => handleAddToCart(item)}>Agregar
+                 <IonIcon icon={cartOutline} className="boton" />
+                </IonButton>
               </IonItem>
               ))
             ) : (
