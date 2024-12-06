@@ -1,18 +1,3 @@
-interface Actuador {
-  id: number;
-  nombre: string;
-}
-
-interface Categoria {
-  id: number;
-  nombre: string;
-}
-
-interface Proveedor {
-  id: number;
-  nombre: string;
-}
-
 export interface ProductosType {
   id: number;
   nombre_comercial: string;
@@ -20,12 +5,13 @@ export interface ProductosType {
   precio_venta: number;
   condicion_venta: "BAJO RECETA" | "VENTA LIBRE";
   procedencia: "NACIONAL" | "IMPORTADO";
+  laboratioId?: number;
   Laboratorio?: {
     nombre: string;
   };
-  Proveedores?: Proveedor[];
-  Actuadores?: Actuador[];
-  Categorias?: Categoria[];
+  Proveedores?: any[];
+  Actuadores?: any[];
+  Categorias?: any[];
   codigo_cafapar?: number;
   descripcion?: string;
 }
