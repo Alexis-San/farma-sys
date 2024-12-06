@@ -1,11 +1,10 @@
-
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText, IonBadge} from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText, IonBadge } from '@ionic/react';
 import styles from '../sccs/ProductoView.module.scss';
-import { addToCart } from '../store/CarritoStore'; // Importa la función para agregar al carrito
+import { addToCart } from '../store/CarritoStore'; 
 import React, { useState, useRef } from 'react';
 
 interface Producto {
-  id: number; // Asegúrate de que el producto tenga un ID único
+  id: number; 
   nombre: string;
   precio: number;
   imagen: string;
@@ -14,12 +13,10 @@ interface Producto {
 }
 
 interface ProdViewProps {
-  producto: Producto; // Cambia a singular
+  producto: Producto; 
 }
 
 const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
-  console.log(producto); // Verifica qué datos estás recibiendo
-
   const [hover, setHover] = useState(false);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -36,49 +33,52 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
   };
 
   const handleMouseEnter = () => {
-    // Limpiamos el timeout anterior si existe
     if (hoverTimeout.current) {
       clearTimeout(hoverTimeout.current);
     }
-    hoverTimeout.current = setTimeout(() => setHover(true), 500); // 300ms de espera antes de activar el hover
+    hoverTimeout.current = setTimeout(() => setHover(true), 300);
   };
 
   const handleMouseLeave = () => {
     if (hoverTimeout.current) {
-      clearTimeout(hoverTimeout.current); // Limpiamos el timeout
+      clearTimeout(hoverTimeout.current);
     }
-    setHover(false); // Desactivamos el hover inmediatamente
+    setHover(false);
+  };
+
+  const handleClick = () => {
+    setHover((prevHover) => !prevHover); // Alterna el estado de hover
   };
 
   return (
-  <IonCard className={styles.productoCard} onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
-  <IonCardHeader>
-    <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
-  </IonCardHeader>
-  <IonCardContent className={styles.productoContent}>
-    <IonText>
-      <h2>{producto.nombre}</h2>
-      <p>₲ {producto.precio}</p>
-      <p>Stock: {producto.stock || 'No disponible'}</p>
-    </IonText>
-    {/* Badge para indicar stock bajo */}
-    {producto.stock && producto.stock < 10 && (  /// STOCK BAJO INDICADOR///////
-      <IonBadge color="warning" className={styles.lowStockBadge}>
-        Stock bajo
-      </IonBadge>
-    )}
-    {hover && (
-      <IonButton expand="block" color="success" onClick={handleAddToCart}>
-        Agregar al carrito
-      </IonButton>
-    )}
-  </IonCardContent>
-</IonCard>
-
+    <IonCard
+      className={styles.productoCard}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick} // Maneja el clic en dispositivos móviles
+    >
+      <IonCardHeader>
+        <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
+      </IonCardHeader>
+      <IonCardContent className={styles.productoContent}>
+        <IonText>
+          <h2>{producto.nombre}</h2>
+          <p>₲ {producto.precio}</p>
+          <p>Stock: {producto.stock || 'No disponible'}</p>
+        </IonText>
+        {producto.stock && producto.stock < 10 && (
+          <IonBadge color="warning" className={styles.lowStockBadge}>
+            Stock bajo
+          </IonBadge>
+        )}
+        {hover && (
+          <IonButton expand="block" color="success" onClick={handleAddToCart}>
+            Agregar al carrito
+          </IonButton>
+        )}
+      </IonCardContent>
+    </IonCard>
   );
 };
 
-
 export default ProdView;
-  
