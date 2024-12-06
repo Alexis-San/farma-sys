@@ -14,43 +14,53 @@ interface CarritoState {
   cart: Product[];
 }
 
-// Creamos la tienda del carrito
+// Cargar el carrito inicial desde localStorage
+const loadCartFromLocalStorage = (): Product[] => {
+  const storedCart = localStorage.getItem("cart");
+  return storedCart ? JSON.parse(storedCart) : [];
+};
+
+// Crear la tienda del carrito
 const CarritoStore = new Store<CarritoState>({
-  cart: [],
+  cart: loadCartFromLocalStorage(), // Usar los datos de localStorage si existen
 });
+
+// Suscribirse a los cambios y guardar en localStorage
+CarritoStore.subscribe(
+  (s) => s.cart,
+  (cart) => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+);
 
 export default CarritoStore;
 
 // Método para agregar al carrito
 export const addToCart = (passedProduct: Product): boolean => {
-  // Primero verificamos si hay suficiente stock
   if (passedProduct.stock <= 0) {
     console.error(`No hay suficiente stock para ${passedProduct.title}`);
-    return false; // No se puede agregar si no hay stock
+    return false;
   }
 
-  // Verificamos si el producto ya está en el carrito
   const existingProduct = CarritoStore.getRawState().cart.find(
     (product) => product.id === passedProduct.id
   );
 
   if (existingProduct) {
-    // Si el producto ya está en el carrito, comprobamos el stock
     if (existingProduct.quantity < passedProduct.stock) {
-      // Si hay stock suficiente, aumentamos la cantidad
       CarritoStore.update((s) => {
-        // existingProduct.quantity += 1;
+        const product = s.cart.find((p) => p.id === passedProduct.id);
+        if (product) {
+          product.quantity += 1;
+          product.stock -= 1; // Reducir el stock disponible
+        }
       });
-      //passedProduct.stock -= 1; // Reducir stock
-      return true; // Producto agregado correctamente
+      return true;
     } else {
-      console.error(
-        `No hay suficiente stock para agregar más de ${passedProduct.title}`
-      );
-      return false; // No hay suficiente stock para añadir más
+      console.error(`No hay suficiente stock para agregar más de ${passedProduct.title}`);
+      return false;
     }
   } else {
-    // Si el producto no está en el carrito, lo agregamos con cantidad 1
     CarritoStore.update((s) => {
       s.cart.push({
         ...passedProduct,
@@ -58,10 +68,11 @@ export const addToCart = (passedProduct: Product): boolean => {
         stock: passedProduct.stock - 1,
       });
     });
-    return true; // Producto agregado correctamente
+    return true;
   }
 };
 
+// Método para eliminar del carrito
 export const removeFromCart = (productId: number) => {
   CarritoStore.update((s) => {
     s.cart = s.cart.filter((product) => product.id !== productId);
