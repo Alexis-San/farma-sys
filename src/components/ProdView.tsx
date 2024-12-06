@@ -1,10 +1,18 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonImg, IonText, IonBadge } from '@ionic/react';
-import styles from '../sccs/ProductoView.module.scss';
-import { addToCart } from '../store/CarritoStore'; 
-import React, { useState, useRef } from 'react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonImg,
+  IonText,
+  IonBadge,
+} from "@ionic/react";
+import styles from "../sccs/ProductoView.module.scss";
+import { addToCart } from "../store/CarritoStore";
+import React, { useState, useRef } from "react";
 
 interface Producto {
-  id: number; 
+  id: number;
   nombre: string;
   precio: number;
   imagen: string;
@@ -13,7 +21,7 @@ interface Producto {
 }
 
 interface ProdViewProps {
-  producto: Producto; 
+  producto: Producto;
 }
 
 const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
@@ -27,7 +35,7 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
       price: producto.precio,
       image: producto.imagen,
       stock: producto.stock,
-      quantity: producto.quantity
+      quantity: producto.quantity,
     };
     addToCart(productToAdd); // Agrega el producto al carrito
   };
@@ -47,7 +55,7 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
   };
 
   const handleClick = () => {
-    setHover((prevHover) => !prevHover); // Alterna el estado de hover
+    //setHover((prevHover) => !prevHover); // Alterna el estado de hover
   };
 
   return (
@@ -58,13 +66,17 @@ const ProdView: React.FC<ProdViewProps> = ({ producto }) => {
       onClick={handleClick} // Maneja el clic en dispositivos móviles
     >
       <IonCardHeader>
-        <IonImg src={producto.imagen} alt={producto.nombre} className={styles.productoImg} />
+        <IonImg
+          src={producto.imagen}
+          alt={producto.nombre}
+          className={styles.productoImg}
+        />
       </IonCardHeader>
       <IonCardContent className={styles.productoContent}>
         <IonText>
           <h2>{producto.nombre}</h2>
           <p>₲ {producto.precio}</p>
-          <p>Stock: {producto.stock || 'No disponible'}</p>
+          <p>Stock: {producto.stock || "No disponible"}</p>
         </IonText>
         {producto.stock && producto.stock < 10 && (
           <IonBadge color="warning" className={styles.lowStockBadge}>
