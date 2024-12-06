@@ -226,18 +226,30 @@ const RegistroView: React.FC<RegistroProps> = (props) => {
         </IonRow>
 
         <IonRow>
-          <IonCol size="2" offset="5">
-            <IonButton
-              id="RegistroButton"
-              onClick={handleSubmit}
-              expand="full"
-              className={`modificar-button ${loading ? "loading" : ""}`}
-              disabled={loading}
-            >
-              {loading ? "Cargando..." : "Aceptar"}
-            </IonButton>
-          </IonCol>
-        </IonRow>
+  <IonCol size="2" offset="5">
+    <IonButton
+      id="RegistroButton"
+      onClick={handleSubmit}
+      expand="full"
+      className={`modificar-button ${loading ? "loading" : ""}`}
+      disabled={loading}
+    >
+      {loading ? "Cargando..." : "Aceptar"}
+    </IonButton>
+  </IonCol>
+</IonRow>
+
+<IonRow>
+  <IonCol size="2" offset="5">
+    <IonButton
+      expand="full"
+      color="secondary"
+      onClick={goToLogin} // Redirige a la página de inicio de sesión
+    >
+      Ir a Inicio de Sesión
+    </IonButton>
+  </IonCol>
+</IonRow>
 
         {formErrors.general && (
           <IonRow>
@@ -268,6 +280,8 @@ const RegistroView: React.FC<RegistroProps> = (props) => {
           </IonRow>
         </IonGrid>
       </IonModal>
+   
+     
     </>
   );
 };

@@ -31,10 +31,10 @@ import PDFGenerator from "../components/PDFGenerator";
 import AgregarClienteForm from "../components/AgregarClienteForm";
 import { ClientesType } from "../types/ClientesType";
 import { trashOutline } from "ionicons/icons";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 
 const API_CLIENTES = "http://localhost:8000/api/clientes/buscar";
-const API_CLIENTES_AGREGAR= "http://localhost:8000/api/clientes";
+const API_CLIENTES_AGREGAR = "http://localhost:8000/api/clientes";
 const API_lOGIN = "http://localhost:8000/api/login/usuario";
 const API_VENTAS = "http://localhost:8000/api/ventas";
 const API_VENTASDETALLES = "http://localhost:8000/api/ventas/detalles";
@@ -145,8 +145,6 @@ const Carrito: React.FC = () => {
     });
   };
 
-
-  
   const handleBuyNow = async () => {
     if (cart.length === 0) {
       alert("El carrito está vacío, agrega productos antes de comprar.");
@@ -164,7 +162,7 @@ const Carrito: React.FC = () => {
         id_usuario: idUsuario,
       });
       console.log("Respuesta de la venta:", ventaResponse.data);
-      const idVenta = ventaResponse.data.venta.id_venta; // ID de la venta creada
+      const idVenta = ventaResponse.data.venta.id; // ID de la venta creada
       console.log("ID de la venta:", idVenta);
 
       // Step 2: Create sale details
@@ -193,19 +191,20 @@ const Carrito: React.FC = () => {
     removeFromCart(productId);
   };
 
-
   const limpiarInputs = () => {
     // Limpia los valores de los estados
-    setCustomerName('');
-    setCI('');
-  
+    setCustomerName("");
+    setCI("");
+
     // Limpia los valores directamente en los inputs con `clearInput`
-    document.querySelectorAll('ion-input').forEach((input: any) => input.value = '');
+    document
+      .querySelectorAll("ion-input")
+      .forEach((input: any) => (input.value = ""));
   };
 
   const handleAlertDismiss = async () => {
     // Redirige a las páginas deseadas y recarga si es necesario
-    history.push('/menu/inicio');
+    history.push("/menu/inicio");
     window.location.reload(); // Recarga la página si lo necesitas
   };
 
@@ -218,13 +217,16 @@ const Carrito: React.FC = () => {
     setMostrarModalAgregar(false);
   };
 
-
-
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start" onClick={async () => {handleAlertDismiss(); }} >
+          <IonButtons
+            slot="start"
+            onClick={async () => {
+              handleAlertDismiss();
+            }}
+          >
             <IonBackButton defaultHref="/" />
           </IonButtons>
           <IonTitle>Mi Carrito</IonTitle>
@@ -297,7 +299,9 @@ const Carrito: React.FC = () => {
                       <IonButton
                         expand="block"
                         fill="outline"
-                        onClick={async () => {handleAlertDismiss(); }}
+                        onClick={async () => {
+                          handleAlertDismiss();
+                        }}
                       >
                         Ver Productos
                       </IonButton>
@@ -376,7 +380,7 @@ const Carrito: React.FC = () => {
                     expand="block"
                     color="tertiary"
                     className={styles.buyNow}
-                    onClick={async () => { 
+                    onClick={async () => {
                       await handleBuyNow();
                       clearCart();
                       limpiarInputs(); // Llama a la función para limpiar los inputs
@@ -445,24 +449,33 @@ const Carrito: React.FC = () => {
                 </IonToolbar>
               </IonHeader>
               <IonContent>
-              <AgregarClienteForm
-              onGuardarCliente={async (nuevoCliente) => {
-                try {
-                  // Envía los datos a la API
-                  const response = await axios.post(API_CLIENTES_AGREGAR, nuevoCliente);
-                  
-                  // Actualiza la lista de clientes
-                  setClientes((prevClientes) => [...prevClientes, response.data]);
-                  
-                  // Cierra el modal
-                  cerrarModalAgregar();
+                <AgregarClienteForm
+                  onGuardarCliente={async (nuevoCliente) => {
+                    try {
+                      // Envía los datos a la API
+                      const response = await axios.post(
+                        API_CLIENTES_AGREGAR,
+                        nuevoCliente
+                      );
 
-                  console.log("Cliente agregado exitosamente:", response.data);
-                } catch (error) {
-                  console.error("Error al agregar el cliente:", error);
-                }
-              }}
-            />
+                      // Actualiza la lista de clientes
+                      setClientes((prevClientes) => [
+                        ...prevClientes,
+                        response.data,
+                      ]);
+
+                      // Cierra el modal
+                      cerrarModalAgregar();
+
+                      console.log(
+                        "Cliente agregado exitosamente:",
+                        response.data
+                      );
+                    } catch (error) {
+                      console.error("Error al agregar el cliente:", error);
+                    }
+                  }}
+                />
               </IonContent>
             </IonModal>
           </IonContent>

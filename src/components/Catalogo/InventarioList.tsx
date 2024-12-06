@@ -26,7 +26,6 @@ import {
   warningOutline,
   downloadOutline,
   alertCircleOutline,
-
 } from "ionicons/icons";
 import ModificarInventarioModal from "./ModificarInventarioModal";
 import AgregarInventarioModal from "./AgregarInventarioModal";
@@ -41,8 +40,10 @@ const InventarioList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [stockBajo, setStockBajo] = useState<InventarioType[]>([]); // Estado para productos con stock bajo
   const [showStockBajoModal, setShowStockBajoModal] = useState(false); // Control del modal
-  const[showProductosaVencer, setShowProductosaVencer]=useState(false); // Control del modal lista de vencer
-  const [productosProntoAVencer, setProductosProntoAVencer] = useState<InventarioType[]>([]);
+  const [showProductosaVencer, setShowProductosaVencer] = useState(false); // Control del modal lista de vencer
+  const [productosProntoAVencer, setProductosProntoAVencer] = useState<
+    InventarioType[]
+  >([]);
   // Estados para agregar productos
   const [showProductModal, setShowProductModal] = useState(false);
   const [productos, setProductos] = useState<ProductoType[]>([]);
@@ -116,9 +117,7 @@ const InventarioList: React.FC = () => {
       ...nuevoInventario,
       [name]: value,
     });
-
   };
-
 
   const handleInventarioChange = (e: CustomEvent) => {
     const { name, value } = e.target as HTMLInputElement;
@@ -132,7 +131,7 @@ const InventarioList: React.FC = () => {
 
   const convertirAISO = (fecha: string): string => {
     const [dia, mes, año] = fecha.split("/"); // dd/mm/yyyy
-    const fechaObj = new Date(Number(año), Number(mes) - 1, Number(dia) +1); // Mes - 1 porque los meses en JS comienzan desde 0
+    const fechaObj = new Date(Number(año), Number(mes) - 1, Number(dia) + 1); // Mes - 1 porque los meses en JS comienzan desde 0
     fechaObj.setHours(0, 0, 0, 0); // Asegura que la hora sea 00:00:00
     return fechaObj.toISOString().split("T")[0]; // Devuelve la fecha en formato yyyy-mm-dd
   };
@@ -141,16 +140,16 @@ const InventarioList: React.FC = () => {
     try {
       // Convertir fecha_vencimiento al formato ISO 8601
       const fechaISO = convertirAISO(nuevoInventario.fecha_vencimiento);
-  
+
       // Crear un nuevo objeto con la fecha convertida
       const inventarioConFechaISO = {
         ...nuevoInventario,
         fecha_vencimiento: fechaISO,
       };
-  
+
       // Enviar los datos al backend
       const response = await axios.post(URI, inventarioConFechaISO);
-  
+
       // Agregar el nuevo registro a la lista
       const nuevoRegistro = {
         ...response.data,
@@ -197,7 +196,7 @@ const InventarioList: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<InventarioType[]>(URI);
-        console.log('Datos del inventario:', response.data); // Verificar datos iniciales
+        console.log("Datos del inventario:", response.data); // Verificar datos iniciales
         setData(response.data);
         filtrarStockBajo(response.data);
         filtrarProductosProntoAVencer(response.data, 60);
@@ -207,36 +206,33 @@ const InventarioList: React.FC = () => {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
-  const filtrarProductosProntoAVencer = (productos: InventarioType[], dias: number) => {
+  const filtrarProductosProntoAVencer = (
+    productos: InventarioType[],
+    dias: number
+  ) => {
     const fechaActual = new Date();
     const fechaLimite = new Date();
     fechaLimite.setDate(fechaActual.getDate() + dias);
-  
+
     const fechaInicio = new Date();
     fechaInicio.setDate(fechaActual.getDate() - 730); // 7 días atrás
-  
+
     const productosProntoAVencer = productos.filter((item) => {
       const fechaVencimiento = new Date(item.fecha_vencimiento);
-      return (
-        fechaVencimiento <= fechaLimite && 
-        fechaVencimiento >= fechaInicio
-      );
+      return fechaVencimiento <= fechaLimite && fechaVencimiento >= fechaInicio;
     });
-  
-    console.log('Productos a vencer filtrados:', productosProntoAVencer);
+
+    console.log("Productos a vencer filtrados:", productosProntoAVencer);
     setProductosProntoAVencer(productosProntoAVencer);
   };
-  
- 
+
   useEffect(() => {
-    console.log('Estado de productos a vencer:', productosProntoAVencer);
+    console.log("Estado de productos a vencer:", productosProntoAVencer);
   }, [productosProntoAVencer]);
-  
 
   // Filtrar productos con stock bajo
   const filtrarStockBajo = (productos: InventarioType[]) => {
@@ -274,7 +270,6 @@ const InventarioList: React.FC = () => {
               <IonIcon slot="start" icon={alertCircleOutline} />
               PRODUCTOS A VENCER
             </IonButton>
-
           </IonToolbar>
         </IonHeader>
 
@@ -330,13 +325,17 @@ const InventarioList: React.FC = () => {
             </IonCol>
             <IonCol size="1.5">
               <IonText>
-                {new Date(item.fecha_vencimiento).toLocaleDateString()} 
+                {new Date(item.fecha_vencimiento).toLocaleDateString()}
               </IonText>
-                {/*CONDICION PARA PRODUCTOS A VENCER*/}
+              {/*CONDICION PARA PRODUCTOS A VENCER*/}
               {item.fecha_vencimiento &&
-                new Date(item.fecha_vencimiento) <= new Date(new Date().setDate(new Date().getDate() + 60)) && (
-                  <IonBadge color="danger" className="vencimientoBadge"> 
-                  <IonIcon className="vencimiento" icon={alertCircleOutline}></IonIcon>
+                new Date(item.fecha_vencimiento) <=
+                  new Date(new Date().setDate(new Date().getDate() + 60)) && (
+                  <IonBadge color="danger" className="vencimientoBadge">
+                    <IonIcon
+                      className="vencimiento"
+                      icon={alertCircleOutline}
+                    ></IonIcon>
                   </IonBadge>
                 )}
             </IonCol>
@@ -406,16 +405,15 @@ const InventarioList: React.FC = () => {
         </IonContent>
       </IonModal>
 
-            {/* Modal para informe de Vencimientos */}
-            <IonModal
+      {/* Modal para informe de Vencimientos */}
+      <IonModal
         isOpen={showProductosaVencer}
         onDidDismiss={() => setShowProductosaVencer(false)}
       >
         <IonHeader>
           <IonToolbar>
             <IonRow>
-              <IonCol size="3.7">
-              </IonCol>
+              <IonCol size="3.7"></IonCol>
               <IonCol size="6.3">
                 <IonTitle className="Texto">Productos a Vencer</IonTitle>
               </IonCol>
