@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IonGrid, IonRow, IonCol, IonSpinner, IonAlert, IonTitle, IonCard, IonCardContent} from "@ionic/react";
+import { IonGrid, IonRow, IonCol, IonSpinner, IonAlert, IonTitle, IonCard, IonCardContent, IonButton, IonButtons } from "@ionic/react";
 import "../../theme/ventas.css";
 
 const ClientesFrecuentes: React.FC = () => {
@@ -8,12 +8,12 @@ const ClientesFrecuentes: React.FC = () => {
   >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sortCriteria, setSortCriteria] = useState<"compras" | "totalGastado">("compras");
 
   useEffect(() => {
     const fetchClientesFrecuentes = async () => {
       setLoading(true);
       try {
-        // Obtener la lista de clientes
         const clientesResponse = await fetch("http://localhost:8000/api/clientes/");
         const clientesData = await clientesResponse.json();
 
@@ -21,12 +21,11 @@ const ClientesFrecuentes: React.FC = () => {
           throw new Error("No se pudieron cargar los clientes.");
         }
 
-        // Obtener las ventas por cliente y calcular estadísticas
         const clientesConEstadisticas = await Promise.all(
           clientesData.clientes.map(async (cliente: any) => {
             try {
               const ventasResponse = await fetch(
-                `http://localhost:8000/api/informes/ventas/buscar/${cliente.id}`
+                `http://localhost:8000/api/informes/ventas/cliente/${cliente.id}`
               );
               const ventasData = await ventasResponse.json();
 
@@ -69,6 +68,13 @@ const ClientesFrecuentes: React.FC = () => {
     fetchClientesFrecuentes();
   }, []);
 
+  const sortedClientes = [...clientesFrecuentes].sort((a, b) => {
+    if (sortCriteria === "compras") {
+      return b.compras - a.compras;
+    }
+    return b.totalGastado - a.totalGastado;
+  });
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -92,22 +98,25 @@ const ClientesFrecuentes: React.FC = () => {
   return (
     <div className="table-clientes">
       <IonTitle className="table-title">CLIENTES FRECUENTES</IonTitle>
+      <IonButtons className="sort-buttons">
+        <IonButton onClick={() => setSortCriteria("compras")} color={sortCriteria === "compras" ? "primary" : "medium"}>
+          Ordenar por Compras
+        </IonButton>
+        <IonButton onClick={() => setSortCriteria("totalGastado")} color={sortCriteria === "totalGastado" ? "primary" : "medium"}>
+          Ordenar por Total Gastado
+        </IonButton>
+      </IonButtons>
       <IonGrid>
-        {/* Header de la tabla */}
         <IonCard>
-          <IonCardContent >
-          <div className="clientes-scroll">
-            <IonRow className="header-row">
-              <IonCol size="4"><strong>Cliente</strong></IonCol>
-              <IonCol size="3"><strong>Tipo</strong></IonCol>
-              <IonCol size="2"><strong>Compras</strong></IonCol>
-              <IonCol size="3"><strong>Total Gastado</strong></IonCol>
-            </IonRow>
-            
-            {/* Contenedor con scroll */}
-            
-              {/* Contenido de la tabla */}
-              {clientesFrecuentes.map((cliente, index) => (
+          <IonCardContent>
+            <div className="clientes-scroll">
+              <IonRow className="header-row">
+                <IonCol size="4"><strong>Cliente</strong></IonCol>
+                <IonCol size="3"><strong>Tipo</strong></IonCol>
+                <IonCol size="2"><strong>Compras</strong></IonCol>
+                <IonCol size="3"><strong>Total Gastado</strong></IonCol>
+              </IonRow>
+              {sortedClientes.map((cliente, index) => (
                 <IonRow key={cliente.id} className={`data-row ${index % 2 === 0 ? "even" : "odd"}`}>
                   <IonCol size="4" className="letrita">{cliente.nombreCompleto}</IonCol>
                   <IonCol size="3" className="letrita">{cliente.tipoCliente}</IonCol>
@@ -124,5 +133,3 @@ const ClientesFrecuentes: React.FC = () => {
 };
 
 export default ClientesFrecuentes;
-
-

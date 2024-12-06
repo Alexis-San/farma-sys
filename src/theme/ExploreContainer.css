@@ -36,6 +36,15 @@
   font-weight: bold;
 }
 
+.custom-border {
+  border: 2px solid #0e9aeb; /* Cambia el color y el grosor del borde */
+  border-radius: 10px; /* Si quieres bordes redondeados */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
 ion-button {
   color: rgb(0, 4, 7);
   padding-right: 8px;

@@ -34,10 +34,10 @@ const CustomPage: React.FC<Parametros> = (parametros) => {
         <IonToolbar>
           <IonMenuButton slot="start" autoHide={false} className="boton-a" />
           <IonRow>
-            <IonCol sizeLg="2" sizeMd="5" className="container-inicio">
+            <IonCol sizeLg="2" sizeMd="5" className="custom-border">
               <IonTitle className="container-inicio">{parametros.titulo}</IonTitle>
             </IonCol>
-            <IonCol sizeLg="10" sizeMd="7">
+            <IonCol sizeLg="10" sizeMd="7" className="custom-border">
               {parametros.searchbar && <SearchBar />}
             </IonCol>
           </IonRow>
