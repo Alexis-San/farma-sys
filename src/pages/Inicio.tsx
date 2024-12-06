@@ -1,11 +1,18 @@
 import { IonContent, IonPage } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import CustomPage from '../components/CustomPage';
-import ProductosView from '../components/ProductosView'; // Asegúrate de importar ProductosView
-
+import ProductosView from '../components/ProductosView'; 
+import React from 'react';
 
 const Inicio: React.FC = () => {
-  //const cartItemCount = useStoreState(selectCartItemCount);
+  React.useEffect(() => {
+    // Verifica si ya se ha recargado
+    const hasReloaded = sessionStorage.getItem('hasReloaded');
+    if (!hasReloaded) {
+      sessionStorage.setItem('hasReloaded', 'true'); // Marca que ya se recargó
+      window.location.reload(); // Recarga la página solo una vez
+    }
+  }, []);
 
   return (
     <CustomPage 
@@ -13,7 +20,7 @@ const Inicio: React.FC = () => {
       contenido={
         <>
           <ExploreContainer />
-          <ProductosView /> {/* Renderiza ProductosView sin pasar props */}
+          <ProductosView />
         </>
       }
       searchbar 
