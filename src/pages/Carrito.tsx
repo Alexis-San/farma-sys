@@ -208,6 +208,15 @@ const Carrito: React.FC = () => {
     window.location.reload(); // Recarga la página si lo necesitas
   };
 
+  const handleBackAndReload = () => {
+    // Regresa hacia atrás
+    history.goBack();
+    // Luego recarga la página actual
+    setTimeout(() => {
+      window.location.reload();
+    }, 50); // Un pequeño retraso para asegurarse de que la navegación haya ocurrido
+  };
+
   //Agregar Clientes
   const abrirModalAgregar = () => {
     setMostrarModalAgregar(true);
@@ -221,14 +230,9 @@ const Carrito: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons
-            slot="start"
-            onClick={async () => {
-              handleAlertDismiss();
-            }}
-          >
-            <IonBackButton defaultHref="/" />
-          </IonButtons>
+        <IonButtons slot="start">
+          <IonButton onClick={handleBackAndReload}>Volver</IonButton>
+        </IonButtons>
           <IonTitle>Mi Carrito</IonTitle>
         </IonToolbar>
       </IonHeader>
