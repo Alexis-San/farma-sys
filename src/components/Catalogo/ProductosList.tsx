@@ -35,6 +35,9 @@ interface ProductosType {
   Laboratorio?: any;
   Actuadores?: any[];
   Categorias?: any[];
+  proveedores?: any[];
+  actuadores?: any[];
+  categorias?: any[];
   Proveedores?: any[];
 }
 
@@ -53,9 +56,9 @@ const ProductosList: React.FC = () => {
     condicion_venta: "VENTA LIBRE",
     procedencia: "NACIONAL",
     laboratorioId: undefined,
-    Actuadores: [],
-    Categorias: [],
-    Proveedores: [],
+    actuadores: [],
+    categorias: [],
+    proveedores: [],
   });
 
   // 2. Agregar estados para las listas
@@ -161,6 +164,10 @@ const ProductosList: React.FC = () => {
       precio_venta: 0,
       condicion_venta: "VENTA LIBRE",
       procedencia: "NACIONAL",
+      laboratorioId: undefined,
+      Actuadores: [],
+      Categorias: [],
+      Proveedores: [],
     });
     setMostrarModalAgregar(true);
   };
@@ -184,9 +191,9 @@ const ProductosList: React.FC = () => {
     try {
       const productoData = {
         ...nuevoProducto,
-        actuadores_ids: nuevoProducto.Actuadores,
-        categorias_ids: nuevoProducto.Categorias,
-        proveedores_ids: nuevoProducto.Proveedores,
+        actuadores: nuevoProducto.Actuadores,
+        categorias: nuevoProducto.Categorias,
+        proveedores: nuevoProducto.Proveedores,
       };
 
       const response = await axios.post(URI, productoData);
@@ -372,8 +379,74 @@ const ProductosList: React.FC = () => {
                   <IonSelectOption value="IMPORTADO">IMPORTADO</IonSelectOption>
                 </IonSelect>
               </IonItem>
+              <IonItem>
+                <IonLabel>Laboratorio</IonLabel>
+                <IonSelect
+                  name="laboratorioId"
+                  value={productoSeleccionado.laboratorioId}
+                  onIonChange={manejarCambioModificar}
+                >
+                  {laboratorios.map((lab) => (
+                    <IonSelectOption key={lab.id} value={lab.id}>
+                      {lab.nombre}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Actuadores</IonLabel>
+                <IonSelect
+                  name="actuadores"
+                  multiple={true}
+                  value={productoSeleccionado.actuadores}
+                  onIonChange={manejarCambioModificar}
+                >
+                  {actuadores.map((act) => (
+                    <IonSelectOption key={act.id} value={act.id}>
+                      {act.nombre}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Categorías</IonLabel>
+                <IonSelect
+                  name="categorias"
+                  multiple={true}
+                  value={productoSeleccionado.categorias}
+                  onIonChange={manejarCambioModificar}
+                >
+                  {categorias.map((cat) => (
+                    <IonSelectOption key={cat.id} value={cat.id}>
+                      {cat.nombre}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>Proveedores</IonLabel>
+                <IonSelect
+                  name="proveedores"
+                  multiple={true}
+                  value={productoSeleccionado.proveedores}
+                  onIonChange={manejarCambioModificar}
+                >
+                  {proveedores.map((prov) => (
+                    <IonSelectOption key={prov.id} value={prov.id}>
+                      {prov.nombre}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
               {/* Agrega más campos si es necesario */}
-              <IonButton expand="full" onClick={guardarCambiosModificar}>
+              <IonButton
+                expand="full"
+                onClick={async () => {
+                  await guardarCambiosModificar();
+                  window.location.reload();
+                }}
+              >
                 Guardar Cambios
               </IonButton>
             </>
@@ -519,7 +592,13 @@ const ProductosList: React.FC = () => {
           </IonItem>
           {/* Repetir para categorías y proveedores */}
 
-          <IonButton expand="full" onClick={guardarNuevoProducto}>
+          <IonButton
+            expand="full"
+            onClick={async () => {
+              await guardarNuevoProducto();
+              window.location.reload();
+            }}
+          >
             Guardar Nuevo Producto
           </IonButton>
         </IonContent>
