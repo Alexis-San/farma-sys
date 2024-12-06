@@ -40,7 +40,6 @@ const ProductosList: React.FC = () => {
     procedencia: "NACIONAL",
     codigo_cafapar: undefined,
     descripcion: "",
-    laboratorioId: undefined,
   });
 
   useEffect(() => {
@@ -127,7 +126,6 @@ const ProductosList: React.FC = () => {
       procedencia: "NACIONAL",
       codigo_cafapar: undefined,
       descripcion: "",
-      laboratorioId: undefined,
     });
     setMostrarModalAgregar(true);
   };
@@ -189,12 +187,16 @@ const ProductosList: React.FC = () => {
           }}
         >
           <IonCol size="0.5">ID</IonCol>
-          <IonCol size="2">Nombre Comercial</IonCol>
-          <IonCol size="2">Presentación</IonCol>
+          <IonCol size="1.5">Nombre Comercial</IonCol>
+          <IonCol size="1.5">Presentación</IonCol>
           <IonCol size="1">Precio</IonCol>
-          <IonCol size="2">Condición</IonCol>
-          <IonCol size="2">Procedencia</IonCol>
-          <IonCol size="2">Acciones</IonCol>
+          <IonCol size="1">Condición</IonCol>
+          <IonCol size="1">Procedencia</IonCol>
+          <IonCol size="1">Laboratorio</IonCol>
+          <IonCol size="1.5">Actuadores</IonCol>
+          <IonCol size="1.5">Categorías</IonCol>
+          <IonCol size="1.5">Proveedores</IonCol>
+          <IonCol size="1">Acciones</IonCol>
         </IonRow>
 
         {/* Mostrar mensaje de carga */}
@@ -215,23 +217,41 @@ const ProductosList: React.FC = () => {
             <IonCol size="0.5">
               <IonText>{producto.id}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="1.5">
               <IonText>{producto.nombre_comercial}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="1.5">
               <IonText>{producto.presentacion}</IonText>
             </IonCol>
             <IonCol size="1">
               <IonText>{producto.precio_venta}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="1">
               <IonText>{producto.condicion_venta}</IonText>
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="1">
               <IonText>{producto.procedencia}</IonText>
             </IonCol>
-            <IonCol size="2">
-              {/* Bot��n Modificar */}
+            <IonCol size="1">
+              <IonText>{producto.Laboratorio?.nombre || "-"}</IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {producto.Actuadores?.map((a) => a.nombre).join(", ") || "-"}
+              </IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {producto.Categorias?.map((c) => c.nombre).join(", ") || "-"}
+              </IonText>
+            </IonCol>
+            <IonCol size="1.5">
+              <IonText>
+                {producto.Proveedores?.map((p) => p.nombre).join(", ") || "-"}
+              </IonText>
+            </IonCol>
+            <IonCol size="1">
+              {/* Botón Modificar */}
               <IonButton
                 color="primary"
                 size="small"
