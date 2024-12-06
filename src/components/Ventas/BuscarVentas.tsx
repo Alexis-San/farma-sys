@@ -35,10 +35,12 @@ const BuscarVentas: React.FC = () => {
       />
       <IonList>
         {ventas.map((venta) => (
-          <IonItem key={venta.id_venta}>
+          <IonItem key={venta.id}>
             <IonLabel>
-              <h2>{venta.cliente.nombre} {venta.cliente.apellido}</h2>
-              <p>ID Venta: {venta.id_venta}</p>
+              <h2>
+                {venta.cliente.nombre} {venta.cliente.apellido}
+              </h2>
+              <p>ID Venta: {venta.id}</p>
               <p>Monto Final: {venta.monto_final}</p>
             </IonLabel>
           </IonItem>
@@ -49,5 +51,3 @@ const BuscarVentas: React.FC = () => {
 };
 
 export default BuscarVentas;
-
-
